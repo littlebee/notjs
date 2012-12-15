@@ -1,0 +1,215 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+  <meta name="viewport" content="width=device-width">
+  <!--<link rel="icon" href="docs/images/favicon.ico" />-->
+  <link rel='stylesheet' type="text/css" href="index.css"/>
+  <title>Notjs</title>
+</head>
+<body>
+
+  <div id="sidebar" class="interface">
+    <a class="toc-title" href="#">
+      Notjs <span class="version">(0.0.1)</span>
+    </a>
+    <ul class="toc-section">
+      <li>&raquo; <a href="http://github.com/documentcloud/backbone">GitHub Repository</a></li>
+      <li>&raquo; <a href="docs/backbone.html">Annotated Source</a></li>
+    </ul>
+
+    <a class="toc-title" href="#introduction">
+      Introduction
+    </a>
+
+    <div id="methodsTocTemplate" class="not-partial">
+      <ul class="method repl-template">
+        <li><a class='method-short-link' href="#">MethodName</a>()</li>
+      </ul>
+    </div>
+
+    <div id="moduleTemplate">
+      <div class="module">
+        <a class="toc-title module-name" href="#">
+          Module Name
+        </a>
+        <div class="classes">
+          Classes
+          <div class="class repl-template">
+            <ul class="toc-section">
+              <li>
+                &nbsp;&nbsp;- <a class='class-short-link' href="#">ClassName</a>
+              </li>
+              <div class="methods" data-not_partial="#methodsTocTemplate"></div>
+            </ul>
+          </div>
+        </div>
+        <div class="files">
+          Files
+          <div class='file repl-template'>
+            <ul class="toc-section">
+              <li>
+                &nbsp;&nbsp;- <a class='file-short-link' href="#">FileName</a>
+              </li>
+              <div class="methods" data-not_partial="#methodsTocTemplate"></div>
+            </ul>
+          </div>
+        </div>
+        <div class="methods">
+          Methods
+          <div data-not_partial="#methodsTocTemplate"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <p>
+      Notjs - No Templates, please
+    </p>
+
+    <p>
+      Notjs is a set of components that permits developing rich, restful pages without the need for
+      server side or client side template rendering.
+    </p>
+
+    <p>
+      The project is <a href="http://github.com/bee-hub/notjs/">hosted on GitHub</a>.
+      Notjs is available for use under the <a href="http://github.com/documentcloud/backbone/blob/master/LICENSE">
+      MIT software license</a>.
+    </p>
+
+    <p>
+      You can report bugs and discuss features on the
+      <a href="http://github.com/bee-hub/notjs/issues">GitHub issues page</a>,
+    </p>
+
+    <h2 id="downloads">
+      Downloads
+      <span style="padding-left: 7px; font-size:11px; font-weight: normal;" class="interface">(Right-click, and use "Save As")</span>
+    </h2>
+
+    <table>
+      <tr>
+        <td><a class="punch" href="notjs.basics.js">Notjs.basics Development Version (0.0.1)</a></td>
+        <td class="text">Unminified, commented source</td>
+      </tr>
+      <tr>
+        <td><a class="punch" href="notjs.basics.min.js">Notjs.basics Production Version (0.0.1)</a></td>
+        <td class="text"><i>Minified and gzipped</i></td>
+      </tr>
+    </table>
+
+    <h2 id="dependencies">Dependencies</h2>
+    <p>
+      Notjs.basics Dependencies:
+      <ul>
+        <li><a href="http://underscorejs.org/">Underscore.js</a> <small>( > 1.3.3)</small></li>
+        <li><a href="http://jquery.com">jQuery</a> <small>( > 1.7.2)</small></li>
+      </ul>
+    </p>
+
+    <h2 id="introduction">Introduction</h2>
+    <p><b>Not = No Templates</b></p>
+    <p>
+      Notjs is a set of components that enable easy development of rich, restful web pages without
+      the need for server or client side template rendering.
+    </p>
+    <p>
+      That is not to say that there are no templates, nor is it fair to say that the components generate
+      a lot of DOM.  Our feeling is that all HTML belongs together.  Notjs tries to not generate excessive
+      amounts of DOM, the components will generate DOM elements mostly from HTML5 elements in the page that you
+      are using the Notjs components on.
+    </p>
+
+    <div id="apiDocs">
+      <div class="module">
+        <p class="module-bookmark"></p>
+        <h1><span class="module-name">Module Name</span></h1>
+        <div class="classes">
+          <h3>Classes</h3>
+          <div class="class repl-template">
+            <div>
+              <p class="class-bookmark"></p>
+              <div><h4>Class</h4><span class='class-name header'>Class Name</span></div>
+              <code class='class-code'>Class Code</code>
+              <pre class='class-comment comment'>Class Comment</pre>
+              <div class="methods">
+                <h3>Methods</h3>
+                <div class="method repl-template">
+                  <div>
+                    <p class="method-bookmark"></p>
+                    <div><h4>Method</h4><span class='method-name header' href="#">MethodName</span></div>
+                    <pre><code class='method-code'></code></pre>
+                    <pre class="method-comment comment"></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="vendor/underscore-1.4.2.js"></script>
+  <script src="vendor/jquery-1.8.3.min.js"></script>
+  <script src="notjs.basics.js"></script>
+  <script src="documentorData.js"></script>
+
+  <script>
+    console.log("documentorData from .js: ")
+    console.log(documentorData)
+
+    injectData = function($el, selectorPrefix, obj){
+      $el.find(selectorPrefix + "short-link").attr('href', '#' + obj.id).html(obj.shortName)
+      $el.find(selectorPrefix + "name").html(obj.name)
+      $el.find(selectorPrefix + "bookmark").attr('id', obj.id)
+      if( obj.code )  $el.find(selectorPrefix + "code").html(obj.code.join('\n   '))
+      if( obj.comment ) $el.find(selectorPrefix + "comment").html(obj.comment.join('\n'))
+    }
+
+    replicatePart = function($element, array, tmplSelector, hideParent, method) {
+      $template = $element.find(tmplSelector)
+      if(array && array.length > 0)
+        notjs.basics.Replicator.replicate($template, array, method);
+      else if( hideParent )
+        $element.find(hideParent).delay(0).hide()
+    }
+
+    replicateMethod = function($element, method){
+      injectData($element, '.method-', method)
+      return true;
+    }
+
+    replicateClass = function($element, klass){
+      injectData($element, '.class-', klass)
+      replicatePart($element,  klass.methods, '.method.repl-template', '.methods', replicateMethod);
+      return true;
+    }
+
+    replicateFile = function($element, file){
+      injectData($element, '.file-', file)
+      replicatePart($element, file.methods, '.method.repl-template', '.methods', replicateMethod);
+      return true;
+    }
+
+    replicateModule = function($element, module){
+      injectData($element, '.module-', module)
+      replicatePart($element, module.classes, '.class.repl-template', '.classes', replicateClass);
+      replicatePart($element, module.files,   '.file.repl-template', '.files', replicateFile);
+      replicatePart($element, module.methods, '.methods:last .method.repl-template', '.methods:last', replicateMethod);
+      return true;
+    }
+
+    $(document).ready(function(){
+      // resolve partial templates first because some of them are replicator templates too
+      notjs.basics.Partials.resolve()
+      notjs.basics.Replicator.replicate('#moduleTemplate', documentorData, replicateModule)
+      notjs.basics.Replicator.replicate('#apiDocs', documentorData, replicateModule)
+    })
+  </script>
+
+</body>
+</html>

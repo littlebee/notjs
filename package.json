@@ -1,0 +1,23 @@
+{
+  "name": "notjs",
+  "version": "1.0.0",
+  "description": "notjs = no templates, please",
+  "author": "abeille.hubbard@yahoo.com",
+  "license": "bsd",
+
+  "dependencies": {
+    "commander":  "1.1.1",
+    "coffee-script": "1.4.0",
+    "underscore": "1.4.2",
+    "jquery": "1.8.3",
+    "findit": "0.1.2",
+    "string": "1.1.0",
+    "node-html-encoder": "0.0.1",
+    "glob": "3.1.4",
+    "fs-extra": "0.3.2"
+  },
+  "devDependencies": {
+    "node-minify": "0.6.1",
+    "exec-sync":   "0.1.5"
+  }
+}
