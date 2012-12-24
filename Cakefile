@@ -37,7 +37,10 @@ DOCUMENTATION_TARGETS = [
 ]
 DOCUMENTOR_DATA = 'public/documentorData.js'
 
+DEPLOY_TARGET = 'bee@beehub.xen.prgmr.com:/home/bee/notjs'
+
 task 'test', 'Runs all specs in spec/ folder', ->
+  invoke 'build'
   # run tests
 
 task 'build', 'build the public/.js build targets', ->
@@ -73,6 +76,13 @@ task 'docs', 'collect API docs from srcs and create or update public/documentorD
     console.log 'collecting api docs for ' + docTarget.name
     execSync "scripts/documentor.coffee #{docTarget.srcDir} -n #{docTarget.name} -o public/documentorData.js"
 
+task 'deploy', 'deploy public/* and demo rest server components to public notjs.org VPS', ->
+  invoke 'build'
+  invoke 'docs'
+  console.log "deploying to #{DEPLOY_TARGET}"
+  execSync("scp -r ./public #{DEPLOY_TARGET}")
+  # for now, just deploying public,  this will get more involved when we get to the backbone module
+  # and need to update the demo REST server
 
 handleError = (error) ->
   return unless error
