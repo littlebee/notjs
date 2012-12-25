@@ -69,7 +69,7 @@
     </p>
 
     <p>
-      Notjs is a set of components that permits developing rich, restful pages without the need for
+      Notjs is a set of components that enhances development of rich, RESTful web pages without the need for
       server side or client side template rendering.
     </p>
 
@@ -111,14 +111,14 @@
     <h2 id="introduction">Introduction</h2>
     <p><b>Not = No Templates</b></p>
     <p>
-      Notjs is a set of components that enable easy development of rich, restful web pages without
+      Notjs is a set of components that enhance and simplify development of rich, RESTful web pages without
       the need for server or client side template rendering.
     </p>
     <p>
       That is not to say that there are no templates, nor is it fair to say that the components generate
       a lot of html DOM elements.  I think that all HTML belongs together as much as possible and all content should also
       be together.  Using the Notjs components, that content and HTML can reside in static HTML files and be served
-      like any of your other assets.  That means you can localize and edge cache your templates on a CDN.
+      like any of your other static assets.  That means you can localize and edge cache your templates on a CDN.
     </p><p>
       Notjs tries to not generate excessive amounts of html, the components will generate DOM elements mostly
       from HTML5 elements in the page that you are using the Notjs components on.  We will additionally
@@ -126,13 +126,14 @@
       that you can style your page, your way, using css.  These principles are just guidelines, the only way the resizer
       component can work is to update the height and width via the tag style, but I'll try to avoid it as a
       general practice.
-    </p
+    </p>
     <h4>Where to Start?</h4>
     <p>
       Replicator and Partials are the two most basic components in the notjs.basics module.  These two classes
       are used to construct this page.   The API docs below and the table of contents for the API on the left
       are constructed by notjs using in page partials and replicated DOM.  scripts/documentor.coffee walks
-      the source tree and creates public/documentorData.js.  See docs task in Cakefile.
+      the source tree and creates public/documentorData.js which is included in this page via a script tag.
+      See docs task in Cakefile.
     </p>
     <b>View the source of this page and find this at the bottom:</b>
     <pre><code>
@@ -179,7 +180,7 @@
     </div>
   </div>
 
-  <script src="vendor/underscore-1.4.2.js"></script>
+  <script src="vendor/underscore-1.4.2.min.js"></script>
   <script src="vendor/jquery-1.8.3.min.js"></script>
   <script src="notjs.basics.js"></script>
   <script src="documentorData.js"></script>
