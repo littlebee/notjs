@@ -5,6 +5,10 @@
   "author": "abeille.hubbard@yahoo.com",
   "license": "bsd",
 
+  "scripts": {
+    "test": "cake test"
+  },
+
   "dependencies": {
     "commander":  "1.1.1",
     "coffee-script": "1.4.0",
@@ -18,6 +22,11 @@
   },
   "devDependencies": {
     "node-minify": "0.6.1",
-    "exec-sync":   "0.1.5"
+    "exec-sync":   "0.1.5",
+    "chai": "*",
+    "chai-jquery": "*",
+    "mocha": "*",
+    "jquery": "*"
+
   }
 }

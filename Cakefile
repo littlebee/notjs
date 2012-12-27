@@ -36,12 +36,24 @@ DOCUMENTATION_TARGETS = [
 
 ]
 DOCUMENTOR_DATA = 'public/documentorData.js'
-
 DEPLOY_TARGET = 'bee@beehub.xen.prgmr.com:/home/bee/notjs'
+TEST_REPORTER = 'spec'
 
-task 'test', 'Runs all specs in spec/ folder', ->
+task 'test', 'Runs all specs in test/ folder', ->
   invoke 'build'
+  testCmd = "NODE_ENV=test
+  ./node_modules/.bin/mocha
+  --compilers coffee:coffee-script
+  --reporter #{TEST_REPORTER}
+  --require coffee-script
+  --require test/testHelper.coffee
+  --colors
+  "
+  console.log "Running tests.\n" + testCmd
   # run tests
+  exec testCmd, (err, output) ->
+    throw err if err
+    console.log output
 
 task 'build', 'build the public/.js build targets', ->
   for buildTarget in BUILD_TARGETS
