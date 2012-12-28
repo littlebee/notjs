@@ -1,4 +1,4 @@
-Notjs.namespace 'notjs.basics', (x) ->
+Notjs.namespace 'basics', (x) ->
 
   class x.Partials
     ###
@@ -88,7 +88,7 @@ Notjs.namespace 'notjs.basics', (x) ->
       @options = _.defaults options,
         removePartials:  true    # remove partial templates?  $('.not-partial').remove()
         hidePartials:    false   # hide partial templates? $('.not-partial').hide()
-        $el:             $(document) # scope this Partials object to part of the DOM
+        $el:             $('body') # scope this Partials object to part of the DOM
       ###
         Constructs a new Partials object
       ###
@@ -124,9 +124,11 @@ Notjs.namespace 'notjs.basics', (x) ->
 
         Note that any content within the data-not_partial element is replaced.
       ###
-      $places = @options.$el.find('[data-not_partial]')
+      $places = @options.$el.find('div')
+
       for placeEl in $places
-        partial = placeEl.dataset['not_partial']
+        $place = $(placeEl)
+        partial = $place.attr('data-not_partial')
         hashIndex = partial.indexOf '#'
         if hashIndex >= 0    # in page partial found
           partialId = partial.slice(hashIndex+1)

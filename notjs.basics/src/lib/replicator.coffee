@@ -1,4 +1,4 @@
-Notjs.namespace 'notjs.basics', (x) ->
+Notjs.namespace 'basics', (x) ->
 
   class x.Replicator
     ###

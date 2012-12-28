@@ -39,16 +39,21 @@ DOCUMENTOR_DATA = 'public/documentorData.js'
 DEPLOY_TARGET = 'bee@beehub.xen.prgmr.com:/home/bee/notjs'
 TEST_REPORTER = 'spec'
 
-task 'test', 'Runs all specs in test/ folder', ->
+option '-f', '--file [FILE_TO_RUN_TESTS_FROM]', 'Run tests from one file'
+task 'test', 'Runs all specs in test/ folder', (options)->
   invoke 'build'
-  testCmd = "NODE_ENV=test
-  ./node_modules/.bin/mocha
-  --compilers coffee:coffee-script
-  --reporter #{TEST_REPORTER}
-  --require coffee-script
-  --require test/testHelper.coffee
-  --colors
-  "
+  options.file ||= (process.env.FILE || "")
+
+  testCmd = "NODE_ENV=test ./node_modules/.bin/mocha
+    --compilers coffee:coffee-script
+    --reporter #{TEST_REPORTER}
+    --require coffee-script
+    --require test/testHelper.coffee
+    --colors
+    --recursive
+    #{options.file}
+    "
+
   console.log "Running tests.\n" + testCmd
   # run tests
   exec testCmd, (err, output) ->
@@ -61,7 +66,7 @@ task 'build', 'build the public/.js build targets', ->
     console.log "creating build dir (#{thisBuildDir})"
     fsx.mkdirsSync "./" + thisBuildDir
     console.log "compiling coffeescripts..."
-    exec "coffee -c -o #{thisBuildDir} #{buildTarget.srcDir}", (error) ->
+    execSync "coffee -c -o #{thisBuildDir} #{buildTarget.srcDir}", (error) ->
       handleError error
 
     console.log "creating #{buildTarget.target}.js"
