@@ -1,13 +1,3 @@
-fs = require 'fs'
-fsx = require 'fs-extra'
-path = require 'path'
-{spawn, exec} = require 'child_process'
-util = require 'util'
-glob = require 'glob'
-compressor = require('node-minify')
-execSync = require("exec-sync")
-
-BUILD_DIR = './build'
 BUILD_TARGETS = [
   {
     name: 'notjs.basics'
@@ -38,6 +28,16 @@ DOCUMENTATION_TARGETS = [
 DOCUMENTOR_DATA = 'public/documentorData.js'
 DEPLOY_TARGET = 'bee@beehub.xen.prgmr.com:/home/bee/notjs'
 TEST_REPORTER = 'spec'
+BUILD_DIR = './build'
+
+fs = require 'fs'
+fsx = require 'fs-extra'
+path = require 'path'
+{spawn, exec} = require 'child_process'
+util = require 'util'
+glob = require 'glob'
+compressor = require('node-minify')
+execSync = require("exec-sync")
 
 option '-f', '--file [FILE_TO_RUN_TESTS_FROM]', 'Run tests from one file'
 task 'test', 'Runs all specs in test/ folder', (options)->

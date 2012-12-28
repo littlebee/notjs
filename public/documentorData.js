@@ -8,7 +8,7 @@ base.documentorData = [
       {
         "id": "dd_1",
         "shortName": "x.Partials",
-        "name": "notjs.basics.Partials",
+        "name": "basics.Partials",
         "code": [
           "  class x.Partials"
         ],
@@ -91,7 +91,7 @@ base.documentorData = [
           {
             "id": "dd_2",
             "shortName": "@resolve",
-            "name": "notjs.basics.Partials.@resolve",
+            "name": "basics.Partials.@resolve",
             "code": [
               "    @resolve: (options = {}) ->",
               "      new this(options).initialize().resolve()"
@@ -103,13 +103,13 @@ base.documentorData = [
           {
             "id": "dd_3",
             "shortName": "constructor",
-            "name": "notjs.basics.Partials.constructor",
+            "name": "basics.Partials.constructor",
             "code": [
               "    constructor: (options = {}) ->",
               "      @options = _.defaults options,",
               "        removePartials:  true    # remove partial templates?  $('.not-partial').remove()",
               "        hidePartials:    false   # hide partial templates? $('.not-partial').hide()",
-              "        $el:             $(document) # scope this Partials object to part of the DOM"
+              "        $el:             $('body') # scope this Partials object to part of the DOM"
             ],
             "comment": [
               "        Constructs a new Partials object"
@@ -118,7 +118,7 @@ base.documentorData = [
           {
             "id": "dd_4",
             "shortName": "initialize",
-            "name": "notjs.basics.Partials.initialize",
+            "name": "basics.Partials.initialize",
             "code": [
               "    initialize: () =>"
             ],
@@ -129,7 +129,7 @@ base.documentorData = [
           {
             "id": "dd_5",
             "shortName": "resolve",
-            "name": "notjs.basics.Partials.resolve",
+            "name": "basics.Partials.resolve",
             "code": [
               "    resolve: () =>"
             ],
@@ -158,7 +158,7 @@ base.documentorData = [
       {
         "id": "dd_6",
         "shortName": "x.Replicator",
-        "name": "notjs.basics.Replicator",
+        "name": "basics.Replicator",
         "code": [
           "  class x.Replicator"
         ],
@@ -197,7 +197,7 @@ base.documentorData = [
           {
             "id": "dd_7",
             "shortName": "@replicate",
-            "name": "notjs.basics.Replicator.@replicate",
+            "name": "basics.Replicator.@replicate",
             "code": [
               "    @replicate: (selector, data, callback, options) =>",
               "      new this(selector, options).initialize().replicate(data, callback)"
@@ -215,7 +215,7 @@ base.documentorData = [
           {
             "id": "dd_8",
             "shortName": "constructor",
-            "name": "notjs.basics.Replicator.constructor",
+            "name": "basics.Replicator.constructor",
             "code": [
               "    constructor: (@selector, options={}) ->",
               "      @options = _.defaults options,",
@@ -228,7 +228,7 @@ base.documentorData = [
           {
             "id": "dd_9",
             "shortName": "initialize",
-            "name": "notjs.basics.Replicator.initialize",
+            "name": "basics.Replicator.initialize",
             "code": [
               "    initialize: () =>"
             ],
@@ -239,7 +239,7 @@ base.documentorData = [
           {
             "id": "dd_10",
             "shortName": "getTemplate",
-            "name": "notjs.basics.Replicator.getTemplate",
+            "name": "basics.Replicator.getTemplate",
             "code": [
               "    getTemplate: () =>"
             ],
@@ -252,7 +252,7 @@ base.documentorData = [
           {
             "id": "dd_11",
             "shortName": "replicate",
-            "name": "notjs.basics.Replicator.replicate",
+            "name": "basics.Replicator.replicate",
             "code": [
               "    replicate: (array, callback) =>"
             ],
@@ -333,7 +333,9 @@ base.documentorData = [
             ],
             "comment": [
               "      this method is used to create a namespace for Notjs.",
-              "      See (https://github.com/jashkenas/coffee-script/wiki/FAQ)"
+              "      See (https://github.com/jashkenas/coffee-script/wiki/FAQ)",
+              "      MODIFIED!  - if we are using namespaces let's let everything work the same in node and just add our",
+              "              namespace to global namespace"
             ]
           }
         ]
