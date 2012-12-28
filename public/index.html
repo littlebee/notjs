@@ -200,7 +200,7 @@
     replicatePart = function($element, array, tmplSelector, hideParent, method) {
       $template = $element.find(tmplSelector)
       if(array && array.length > 0)
-        notjs.basics.Replicator.replicate($template, array, method);
+        Notjs.basics.Replicator.replicate($template, array, method);
       else if( hideParent )
         $element.find(hideParent).delay(0).hide()
     }
@@ -232,14 +232,14 @@
 
     $(document).ready(function(){
       // resolve partial templates first because some of them are replicator templates too
-      notjs.basics.Partials.resolve()
+      Notjs.basics.Partials.resolve()
       // documentorData is declared and initialized in documentorData.js file loaded by script tag above
       // it is an array of objects each representing one module of documentation which happens to correspond
       // to one tree of source.  Each module can have many classes, files and methods and, additionally,
       // classes and files can also each have many methods.   See also ./scripts/documentor.coffee and
       // ./Cakefile ("docs" task)
-      notjs.basics.Replicator.replicate('#moduleTemplate', documentorData, replicateModule)
-      notjs.basics.Replicator.replicate('#apiDocs', documentorData, replicateModule)
+      Notjs.basics.Replicator.replicate('#moduleTemplate', documentorData, replicateModule)
+      Notjs.basics.Replicator.replicate('#apiDocs', documentorData, replicateModule)
     })
   </script>
 

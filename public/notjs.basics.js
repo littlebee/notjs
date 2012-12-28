@@ -197,7 +197,7 @@
         */
 
         var $place, $places, hashIndex, partial, partialElement, partialId, placeEl, _i, _len, _ref;
-        $places = this.options.$el.find('div');
+        $places = this.options.$el.find('[data-not_partial]');
         for (_i = 0, _len = $places.length; _i < _len; _i++) {
           placeEl = $places[_i];
           $place = $(placeEl);

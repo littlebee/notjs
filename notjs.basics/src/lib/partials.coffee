@@ -124,7 +124,7 @@ Notjs.namespace 'basics', (x) ->
 
         Note that any content within the data-not_partial element is replaced.
       ###
-      $places = @options.$el.find('div')
+      $places = @options.$el.find('[data-not_partial]')
 
       for placeEl in $places
         $place = $(placeEl)
