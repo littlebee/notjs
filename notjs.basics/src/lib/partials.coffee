@@ -140,7 +140,8 @@ Notjs.namespace 'basics', (x) ->
             console.error placeEl
 
         else # external partial
-          console.error 'sorry external partial template resolution not yet supported.  soon'
+          unless partial.trim() == ""
+            console.error 'sorry external partial template resolution not yet supported.  soon'
 
       return @
 

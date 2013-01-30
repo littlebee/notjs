@@ -32,8 +32,8 @@ Notjs.namespace 'basics', (x) ->
 
     The example above will generate one li for each of authors array
     ###
-    @replicate: (selector, data, callback, options) =>
-      new this(selector, options).initialize().replicate(data, callback)
+    @replicate: (selector, data, callback) =>
+      new this(selector).initialize().replicate(data, callback)
       ###
       This class method is convenient, but note that it is effectively one shot only
       as the inner html template is removed.  If you are going to be updating the underlying
@@ -126,6 +126,7 @@ Notjs.namespace 'basics', (x) ->
       @$element.html("")
       for arrayMember, index in array
         $newElement = $(@$template.html())
-        if callback($newElement, arrayMember, index)
+        if !callback || callback($newElement, arrayMember, index)
           @$element.append($newElement)
+
       @

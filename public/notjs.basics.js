@@ -213,7 +213,9 @@
               console.error(placeEl);
             }
           } else {
-            console.error('sorry external partial template resolution not yet supported.  soon');
+            if (partial.trim() !== "") {
+              console.error('sorry external partial template resolution not yet supported.  soon');
+            }
           }
         }
         return this;
@@ -265,8 +267,8 @@
           The example above will generate one li for each of authors array
       */
 
-      Replicator.replicate = function(selector, data, callback, options) {
-        return new Replicator(selector, options).initialize().replicate(data, callback);
+      Replicator.replicate = function(selector, data, callback) {
+        return new Replicator(selector).initialize().replicate(data, callback);
         /*
               This class method is convenient, but note that it is effectively one shot only
               as the inner html template is removed.  If you are going to be updating the underlying
@@ -380,7 +382,7 @@
         for (index = _i = 0, _len = array.length; _i < _len; index = ++_i) {
           arrayMember = array[index];
           $newElement = $(this.$template.html());
-          if (callback($newElement, arrayMember, index)) {
+          if (!callback || callback($newElement, arrayMember, index)) {
             this.$element.append($newElement);
           }
         }
