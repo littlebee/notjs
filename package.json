@@ -27,7 +27,7 @@
     "chai-jquery": "*",
     "mocha": "*",
     "jquery": "*",
-    "jsdom": "*"
-
+    "jsdom": "*",
+    "node-fakeweb": "*"
   }
 }

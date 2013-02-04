@@ -129,7 +129,7 @@ Notjs.namespace 'basics', (x) ->
       for placeEl in $places
         $place = $(placeEl)
         partial = $place.attr('data-not_partial')
-        hashIndex = partial.indexOf '#'
+        hashIndex = partial.startsWith '#'
         if hashIndex >= 0    # in page partial found
           partialId = partial.slice(hashIndex+1)
           partialElement = @inPagePartials[partialId]?[0]
@@ -138,10 +138,10 @@ Notjs.namespace 'basics', (x) ->
           else
             console.error "In page partial not found by id #{partialId} for element: "
             console.error placeEl
-
         else # external partial
-          unless partial.trim() == ""
-            console.error 'sorry external partial template resolution not yet supported.  soon'
+          return if partial.trim() == ""
+
+
 
       return @
 

@@ -3,10 +3,103 @@ base.documentorData = [
   {
     "id": "dd_0",
     "name": "notjs.basics",
-    "files": [],
-    "classes": [
+    "files": [
       {
         "id": "dd_1",
+        "name": "array.coffee",
+        "code": [],
+        "comment": [
+          "  javascript Array class extensions and monkeys"
+        ],
+        "methods": [
+          {
+            "id": "dd_2",
+            "code": [
+              "Notjs.addPrototypeUnlessExists Array, \"remove\", (from, to) ->"
+            ],
+            "comment": [],
+            "shortName": "Array.remove",
+            "name": "Array.remove(from, to)"
+          }
+        ]
+      },
+      {
+        "id": "dd_14",
+        "name": "string.coffee",
+        "code": [],
+        "comment": [
+          "  javascript String class extensions and monkeys"
+        ],
+        "methods": [
+          {
+            "id": "dd_15",
+            "code": [
+              "Notjs.addPrototypeUnlessExists String, \"startsWith\", (anotherString) ->"
+            ],
+            "comment": [],
+            "shortName": "String.startsWith",
+            "name": "String.startsWith(anotherString)"
+          },
+          {
+            "id": "dd_16",
+            "code": [
+              "Notjs.addPrototypeUnlessExists String, \"endsWith\", (anotherString) ->"
+            ],
+            "comment": [],
+            "shortName": "String.endsWith",
+            "name": "String.endsWith(anotherString)"
+          },
+          {
+            "id": "dd_17",
+            "code": [
+              "Notjs.addPrototypeUnlessExists String, \"isBlank\", () ->"
+            ],
+            "comment": [],
+            "shortName": "String.isBlank",
+            "name": "String.isBlank()"
+          },
+          {
+            "id": "dd_18",
+            "code": [
+              "Notjs.addPrototypeUnlessExists String, \"trim\", () ->"
+            ],
+            "comment": [],
+            "shortName": "String.trim",
+            "name": "String.trim()"
+          },
+          {
+            "id": "dd_19",
+            "code": [
+              "Notjs.addPrototypeUnlessExists String, \"elipsize\",  (maxLength) ->"
+            ],
+            "comment": [],
+            "shortName": "String.elipsize",
+            "name": "String.elipsize(maxLength)"
+          },
+          {
+            "id": "dd_20",
+            "code": [
+              "Notjs.addPrototypeUnlessExists String, \"decamelize\", () ->"
+            ],
+            "comment": [],
+            "shortName": "String.decamelize",
+            "name": "String.decamelize()"
+          },
+          {
+            "id": "dd_21",
+            "code": [
+              "Notjs.addPrototypeUnlessExists String, \"dropCamelize\", () ->"
+            ],
+            "comment": [],
+            "shortName": "String.dropCamelize",
+            "name": "String.dropCamelize()"
+          }
+        ]
+      }
+    ],
+    "classes": [
+      {
+        "id": "dd_3",
         "shortName": "x.Partials",
         "name": "basics.Partials",
         "code": [
@@ -83,27 +176,21 @@ base.documentorData = [
           "            &lt;div id=&quot;currentFavAuthor&quot; class=&quot;favorite&quot; data-not_partial=&quot;/elements/authorTemplate.html&quot;/&gt;",
           "      </code>",
           "",
-          "      The example above will do a get request type text/html to the server to get the",
-          "      html fragment that get's duplicated into the div with data-not_partial attribute",
-          ""
+          "      The example above will do a get request type text/html to the server to get the"
         ],
         "methods": [
           {
-            "id": "dd_2",
-            "shortName": "@resolve",
-            "name": "basics.Partials.@resolve",
+            "id": "dd_4",
             "code": [
               "    @resolve: (options = {}) ->",
               "      new this(options).initialize().resolve()"
             ],
-            "comment": [
-              "        Class method for one shot convienence.  See .resolve instance method"
-            ]
+            "comment": [],
+            "shortName": "@resolve",
+            "name": "basics.Partials.@resolve"
           },
           {
-            "id": "dd_3",
-            "shortName": "constructor",
-            "name": "basics.Partials.constructor",
+            "id": "dd_5",
             "code": [
               "    constructor: (options = {}) ->",
               "      @options = _.defaults options,",
@@ -111,52 +198,32 @@ base.documentorData = [
               "        hidePartials:    false   # hide partial templates? $('.not-partial').hide()",
               "        $el:             $('body') # scope this Partials object to part of the DOM"
             ],
-            "comment": [
-              "        Constructs a new Partials object"
-            ]
+            "comment": [],
+            "shortName": "constructor",
+            "name": "basics.Partials.constructor"
           },
           {
-            "id": "dd_4",
-            "shortName": "initialize",
-            "name": "basics.Partials.initialize",
+            "id": "dd_6",
             "code": [
               "    initialize: () =>"
             ],
-            "comment": [
-              "        Initialize should be called inside of a $(document).ready block"
-            ]
+            "comment": [],
+            "shortName": "initialize",
+            "name": "basics.Partials.initialize"
           },
           {
-            "id": "dd_5",
-            "shortName": "resolve",
-            "name": "basics.Partials.resolve",
+            "id": "dd_7",
             "code": [
               "    resolve: () =>"
             ],
-            "comment": [
-              "        Replaces contents of divs with data-not_partial attribute with the html of the partial",
-              "        referenced in the data-not_partial attribute value.",
-              "",
-              "        data-not_partial attribute may refer to an in page partial template denoted by a hash",
-              "        mark at the beginning of the attribute value",
-              "        <code>",
-              "          &lt;div data-not_partial=&quot;#anotherElementId&quot;/&gt;",
-              "        </code>",
-              "        would mean that there is another div on the page with the id=\"anotherElementId\" whose",
-              "        contents used.",
-              "",
-              "        data-not_partial can also reference server sourced data.",
-              "        <code>",
-              "          &lt;div data-not_partial=&quot;/someController/someElement.html&quot;/&gt;",
-              "        </code>",
-              "",
-              "        Note that any content within the data-not_partial element is replaced."
-            ]
+            "comment": [],
+            "shortName": "resolve",
+            "name": "basics.Partials.resolve"
           }
         ]
       },
       {
-        "id": "dd_6",
+        "id": "dd_8",
         "shortName": "x.Replicator",
         "name": "basics.Replicator",
         "code": [
@@ -189,154 +256,85 @@ base.documentorData = [
           "          $newElement.find(&#39;.genre&#39;).html(author.genre);",
           "        });",
           "      &lt;/script&gt;",
-          "    </pre></code>",
-          "",
-          "    The example above will generate one li for each of authors array"
+          "    </pre></code>"
         ],
         "methods": [
           {
-            "id": "dd_7",
-            "shortName": "@replicate",
-            "name": "basics.Replicator.@replicate",
+            "id": "dd_9",
             "code": [
-              "    @replicate: (selector, data, callback, options) =>",
-              "      new this(selector, options).initialize().replicate(data, callback)"
+              "    @replicate: (selector, data, callback) =>",
+              "      new this(selector).initialize().replicate(data, callback)"
             ],
-            "comment": [
-              "      This class method is convenient, but note that it is effectively one shot only",
-              "      as the inner html template is removed.  If you are going to be updating the underlying",
-              "      data and want those changes, you should either contruct and initialize an instance of",
-              "      notjs.basics.replicator or you should save the return value of this method",
-              "",
-              "      see replicate instance method for more information",
-              ""
-            ]
+            "comment": [],
+            "shortName": "@replicate",
+            "name": "basics.Replicator.@replicate"
           },
           {
-            "id": "dd_8",
-            "shortName": "constructor",
-            "name": "basics.Replicator.constructor",
+            "id": "dd_10",
             "code": [
               "    constructor: (@selector, options={}) ->",
               "      @options = _.defaults options,",
               "        data: null   # you can optionally pass in the initial data to render"
             ],
-            "comment": [
-              "        I wonder if coffee doc will pickup my option defaults?  :( no, but scripts/documentor will! :)"
-            ]
-          },
-          {
-            "id": "dd_9",
-            "shortName": "initialize",
-            "name": "basics.Replicator.initialize",
-            "code": [
-              "    initialize: () =>"
-            ],
-            "comment": [
-              "        call this method in a document.ready block or code path"
-            ]
-          },
-          {
-            "id": "dd_10",
-            "shortName": "getTemplate",
-            "name": "basics.Replicator.getTemplate",
-            "code": [
-              "    getTemplate: () =>"
-            ],
-            "comment": [
-              "        this method returns the 'template' (whatever was in the html() of the",
-              "        passed in element.  it also clears the element's html in prep for",
-              "        replication"
-            ]
+            "comment": [],
+            "shortName": "constructor",
+            "name": "basics.Replicator.constructor"
           },
           {
             "id": "dd_11",
-            "shortName": "replicate",
-            "name": "basics.Replicator.replicate",
+            "code": [
+              "    initialize: () =>"
+            ],
+            "comment": [],
+            "shortName": "initialize",
+            "name": "basics.Replicator.initialize"
+          },
+          {
+            "id": "dd_12",
+            "code": [
+              "    getTemplate: () =>"
+            ],
+            "comment": [],
+            "shortName": "getTemplate",
+            "name": "basics.Replicator.getTemplate"
+          },
+          {
+            "id": "dd_13",
             "code": [
               "    replicate: (array, callback) =>"
             ],
-            "comment": [
-              "        this method is passed an <i>array</i> for which <i>callback</i> (also passed) will be called",
-              "        once for each element in <i>array</i>.",
-              "",
-              "        Callback method:",
-              "            <code><pre>     callback($newElement, arrayMember, index)</pre></code>",
-              "        where <code>",
-              "          <b>$newElement</b> - newly created element for this array member",
-              "          <b>arrayMember</b> - the array member",
-              "          <b>index</b> - zero based index of the array member being called for",
-              "        </code>",
-              "",
-              "        If the callback method returns true,  the $newElement will be appended to the",
-              "        selector element.   If the callback method returns false, the newElement",
-              "        will <b>not</b> be appended to the selector element",
-              "",
-              "        Note that this method can also be called any number of times during the page",
-              "        life to \"regenerate\" the elements replicated into the selector passed to constructor",
-              "",
-              "        Implementation note:   avoid text directly in the replicator element.  For example,",
-              "        <code>",
-              "          &lt;div id=&quot;replicationTemplate&gt;",
-              "           Some text to be cloned",
-              "           &lt;h1&gt;Whatever&lt;/h1&gt;",
-              "           &lt;h2&gt;Wherever&lt;/h2&gt;",
-              "          &lt;/div&gt;",
-              "          &lt;script&gt;",
-              "            repl = new notjs.basics.replicator(&#39;#replicationTemplate&#39;).initialize()",
-              "            repl.replicate [1,2,3]",
-              "          &lt;/script&gt;",
-              "        </code>",
-              "        results in:",
-              "        <code>",
-              "          &lt;div id=&quot;replicationTemplate&gt;",
-              "           &lt;h1&gt;Whatever&lt;/h1&gt;",
-              "           &lt;h2&gt;Wherever&lt;/h2&gt;",
-              "           &lt;h1&gt;Whatever&lt;/h1&gt;",
-              "           &lt;h2&gt;Wherever&lt;/h2&gt;",
-              "           &lt;h1&gt;Whatever&lt;/h1&gt;",
-              "           &lt;h2&gt;Wherever&lt;/h2&gt;",
-              "          &lt;/div&gt;",
-              "        </code>",
-              "        ...without \"Some text to be cloned\".  To avoid that, put text in an inner element,",
-              "        like this:",
-              "        <code>",
-              "          &lt;div id=&quot;replicationTemplate&gt;",
-              "           &lt;span&gt;Some text to be cloned&lt;/span&gt;",
-              "           &lt;h1&gt;Whatever&lt;/h1&gt;",
-              "           &lt;h2&gt;Wherever&lt;/h2&gt;",
-              "          &lt;/div&gt;",
-              "        </code>"
-            ]
+            "comment": [],
+            "shortName": "replicate",
+            "name": "basics.Replicator.replicate"
           }
         ]
       },
       {
-        "id": "dd_12",
+        "id": "dd_22",
         "shortName": "Notjs",
         "name": "Notjs",
         "code": [
           "class Notjs"
         ],
-        "comment": [
-          "    This is the top level Notjs class",
-          "",
-          "    One instance per application use is instantiated and added to the global namespace"
-        ],
+        "comment": [],
         "methods": [
           {
-            "id": "dd_13",
-            "shortName": "namespace",
-            "name": "Notjs.namespace",
+            "id": "dd_23",
             "code": [
               "  namespace: (target, name, block) ->"
             ],
-            "comment": [
-              "      this method is used to create a namespace for Notjs.",
-              "      See (https://github.com/jashkenas/coffee-script/wiki/FAQ)",
-              "      MODIFIED!  - if we are using namespaces let's let everything work the same in node and just add our",
-              "              namespace to global namespace"
-            ]
+            "comment": [],
+            "shortName": "namespace",
+            "name": "Notjs.namespace"
+          },
+          {
+            "id": "dd_24",
+            "code": [
+              "  addPrototypeUnlessExists: (klass, protoName, method) ->"
+            ],
+            "comment": [],
+            "shortName": "addPrototypeUnlessExists",
+            "name": "Notjs.addPrototypeUnlessExists"
           }
         ]
       }

@@ -88,6 +88,7 @@ task 'build', 'build the public/.js build targets', ->
       callback: handleError
 
 task 'docs', 'collect API docs from srcs and create or update public/documentorData.js (used by public/index.html)', ->
+  invoke 'build'
   fsx.deleteSync(DOCUMENTOR_DATA)
   for docTarget in DOCUMENTATION_TARGETS
     console.log 'collecting api docs for ' + docTarget.name

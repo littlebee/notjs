@@ -118,6 +118,7 @@ moduleData =
   "classes": []
   "methods": []
 
+monkeyRegex = /^Notjs\.addPrototypeUnlessExists\s*\(?(\w*)\,\s*\"(\w*)\"\,\s*(\([^)]*\)).*/
 methodRegex = /^\s*((this\.|\@)?\w*)\s*\:\s*\(.*\).*/
 classRegex = /^\s*class\s*([\w\.]*)\s*(extends.*)?\s*$/
 blockCommentRegex = /^\s*\#\#\#.*/
@@ -148,7 +149,11 @@ processFile = (file) =>
         comment
     commentsOut
 
+  getComment = () ->
+    preprocessComment lines.slice(commentStartIndex + 1, lineNumber - commentStartIndex + 1)
+
   # modules have classes, files and methods.  Classes and files have methods.
+
 
   createFileComment = () ->
     fileCommentFound = true
@@ -156,7 +161,7 @@ processFile = (file) =>
       id: _.uniqueId("dd_")
       name:    file.replace(/^.*[\\\/]/, '')
       code:    lines.slice(0, commentStartIndex - 1)
-      comment: preprocessComment lines.slice(commentStartIndex + 1, lineNumber - commentStartIndex)
+      comment: getComment()
       methods: []
     moduleData.files.push currentFile
 
@@ -172,21 +177,27 @@ processFile = (file) =>
       shortName: nameMatch[1]
       name:    name
       code:    lines.slice(lastClassIndex, commentStartIndex)
-      comment: preprocessComment lines.slice(commentStartIndex + 1, lineNumber)
+      comment: getComment()
       methods: []
     moduleData.classes.push currentClass
     lastClassIndex = null
 
   createMethodComment = () ->
+    monkeyMatch = monkeyRegex.exec(lines[lastMethodIndex])
     nameMatch = methodRegex.exec(lines[lastMethodIndex]);
-    throw "createMethodComment: no match on name" unless nameMatch
-    name = if currentClass then "#{currentClass.name}.#{nameMatch[1]}" else nameMatch[1]
+    throw "createMethodComment: no match on name" unless nameMatch || monkeyMatch
+
     method =
       id: _.uniqueId("dd_")
-      shortName: nameMatch[1]
-      name:    name
       code:    lines.slice(lastMethodIndex, commentStartIndex)
-      comment: preprocessComment lines.slice(commentStartIndex + 1, lineNumber)
+      comment: getComment()
+    if monkeyMatch
+      method.shortName = "#{monkeyMatch[1]}.#{monkeyMatch[2]}"
+      method.name = method.shortName + monkeyMatch[3]
+    else
+      method.shortName = nameMatch[1]
+      method.name = if currentClass then "#{currentClass.name}.#{nameMatch[1]}" else nameMatch[1]
+
     if currentClass
       currentClass.methods.push method
     else if currentFile
@@ -205,7 +216,7 @@ processFile = (file) =>
       currentNamespaceSymbol = match[2]
     else if string.match(classRegex)
       lastClassIndex = lineNumber
-    else if string.match(methodRegex)
+    else if string.match(methodRegex) || string.match(monkeyRegex)
       lastMethodIndex = lineNumber
     else if string.match(blockCommentRegex)
       if !commentStartIndex

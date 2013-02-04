@@ -8,6 +8,7 @@ class Notjs
     One instance per application use is instantiated and added to the global namespace
   ###
   # put utility functions that you want to call directly on the Notjs global instance
+
   namespace: (target, name, block) ->
     ###
       this method is used to create a namespace for Notjs.
@@ -20,10 +21,21 @@ class Notjs
     target = target[item] or= {} for item in name.split '.'
     block target, top
 
-# TODO : reinvestigate if this is still necessary
-## and now instantiate and add our namespace to the global name space
-#if (typeof module != 'undefined' && module.exports)
-#  global.Notjs = new Notjs()
-#else
-#  window.Notjs = new Notjs()
+  addPrototypeUnlessExists: (klass, protoName, method) ->
+    ###
+      convenience method for adding a prototype to a class if it doesn't exist.   Useful for things
+      like adding methods to String and Array that another library may have already loaded.
+
+      example:
+      |  Notjs.addPrototypeUnlessExists(String, 'startsWith', function('str'){
+      |    this.slice(0, str.length) == str;
+      |  });
+    ###
+    proto = klass.prototype[protoName] || (klass.prototype[protoName] = method)
+    proto
+
+
 ROOT_NAMESPACE.Notjs = new Notjs()
+
+
+
