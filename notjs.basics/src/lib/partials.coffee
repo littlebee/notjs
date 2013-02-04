@@ -124,24 +124,27 @@ Notjs.namespace 'basics', (x) ->
 
         Note that any content within the data-not_partial element is replaced.
       ###
-      $places = @options.$el.find('[data-not_partial]')
+      @resolveInPage()
+      @resolveExternal()
 
+    resolveInPage: () =>
+      $places = @options.$el.find('[data-not_partial^="#"]')
       for placeEl in $places
         $place = $(placeEl)
         partial = $place.attr('data-not_partial')
-        hashIndex = partial.startsWith '#'
-        if hashIndex >= 0    # in page partial found
-          partialId = partial.slice(hashIndex+1)
-          partialElement = @inPagePartials[partialId]?[0]
-          if partialElement
-            $(placeEl).html($(partialElement).html())
-          else
-            console.error "In page partial not found by id #{partialId} for element: "
-            console.error placeEl
-        else # external partial
-          return if partial.trim() == ""
-
-
-
+        partialId = partial.slice(1)
+        partialElement = @inPagePartials[partialId]?[0]
+        if partialElement
+          $place.html($(partialElement).html())
+        else
+          console.error "In page partial not found by id #{partialId} for element: "
+          # console.error placeEl
       return @
+
+    resolveExternal: () =>
+      $places = @options.$el.find('[data-not_partial*="/"]')
+      # console.log "\nresolving external partials"
+      # console.log "length = #{$places.length}"
+      # $places.each (index, placeEl) ->
+      #  console.log "[#{index}] - #{$(placeEl).html()}"
 

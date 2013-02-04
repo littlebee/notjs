@@ -183,6 +183,10 @@
         if (options == null) {
           options = {};
         }
+        this.resolveExternal = __bind(this.resolveExternal, this);
+
+        this.resolveInPage = __bind(this.resolveInPage, this);
+
         this.resolve = __bind(this.resolve, this);
 
         this.initialize = __bind(this.initialize, this);
@@ -236,30 +240,36 @@
         
                 Note that any content within the data-not_partial element is replaced.
         */
+        this.resolveInPage();
+        return this.resolveExternal();
+      };
 
-        var $place, $places, hashIndex, partial, partialElement, partialId, placeEl, _i, _len, _ref;
-        $places = this.options.$el.find('[data-not_partial]');
+      Partials.prototype.resolveInPage = function() {
+        var $place, $places, partial, partialElement, partialId, placeEl, _i, _len, _ref;
+        $places = this.options.$el.find('[data-not_partial^="#"]');
         for (_i = 0, _len = $places.length; _i < _len; _i++) {
           placeEl = $places[_i];
           $place = $(placeEl);
           partial = $place.attr('data-not_partial');
-          hashIndex = partial.startsWith('#');
-          if (hashIndex >= 0) {
-            partialId = partial.slice(hashIndex + 1);
-            partialElement = (_ref = this.inPagePartials[partialId]) != null ? _ref[0] : void 0;
-            if (partialElement) {
-              $(placeEl).html($(partialElement).html());
-            } else {
-              console.error("In page partial not found by id " + partialId + " for element: ");
-              console.error(placeEl);
-            }
+          partialId = partial.slice(1);
+          partialElement = (_ref = this.inPagePartials[partialId]) != null ? _ref[0] : void 0;
+          if (partialElement) {
+            $place.html($(partialElement).html());
           } else {
-            if (partial.trim() === "") {
-              return;
-            }
+            console.error("In page partial not found by id " + partialId + " for element: ");
           }
         }
         return this;
+      };
+
+      Partials.prototype.resolveExternal = function() {
+        var $places;
+        $places = this.options.$el.find('[data-not_partial*="/"]');
+        console.log("\nresolving external partials");
+        console.log("length = " + $places.length);
+        return $places.each(function(index, placeEl) {
+          return console.log("[" + index + "] - " + ($(placeEl).html()));
+        });
       };
 
       return Partials;

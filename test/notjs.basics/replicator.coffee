@@ -31,7 +31,7 @@ describe 'notjs.basics.replicator', ->
 
   it 'should replicate via class method without callback', ->
     Notjs.basics.Replicator.replicate('#list', TEST_DATA[0])
-    console.log "\n#{$('body').html()}"
+    # console.log "\n#{$('body').html()}"
     _shouldHaveReplicatedFor(TEST_DATA[0])
 
   it 'should replicate via class method with callback', ->

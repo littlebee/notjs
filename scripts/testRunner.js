@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// this is for running the tests from the debugger
+HELP = "script for running the tests from the debugger"
 
 Mocha = require('mocha')
 path = require('path')
@@ -9,6 +9,13 @@ glob = require('glob')
 execSync = require("exec-sync")
 require('coffee-script')
 require('../test/testHelper.coffee')
+
+testFile = null
+options = require('commander')
+  .version('0.0.1')
+  .option('--no-build', 'do not build before running tests')
+  .on('--help', function(){(console.log(HELP))})
+  .parse(process.argv)
 
 mocha = new Mocha({
   reporter: 'spec',
@@ -36,19 +43,17 @@ runMocha = function() {
   })
 }
 
-console.log("Building...")
-execSync("cake build")
+if( options.build ){
+  console.log("Building...")
+  execSync("cake build")
+}
 
 console.log("Running...")
-if( process.argv.length > 2 ){
-  for(i = 2; i < process.argv.length; i++ ) {
-    processFile(process.argv[i])
-  }
-  runMocha()
-}
-else{
+if( options.args.length > 0 ){
+  options.args.forEach(processFile)
+} else {
   testDir = './test/**/*';
   files = glob.sync(testDir)
   files.forEach(processFile)
-  runMocha()
 }
+runMocha()

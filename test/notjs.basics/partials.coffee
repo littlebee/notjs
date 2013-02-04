@@ -19,10 +19,10 @@ INPAGE_HTML = """
 
 EXTERNAL_HTML = """
   <div id="externalPartial1">
-    <div data-not_partial="/test/externalPartial1.html"></div>
+    <div data-not_partial="/test/externalPartial1.html">should be replaced 1</div>
   </div>
   <div id="externalPartial1">
-    <div data-not_partial="/test/externalPartial2.html"></div>
+    <div data-not_partial="/test/externalPartial2.html">should be replaced 2</div>
   </div>
 """
 
@@ -50,7 +50,6 @@ describe 'notjs.partials', ->
         partials.resolve()
 
       it 'should resolve first time', ->
-        console.log $('body').html()
         _shouldHaveResolved()
 
       # the act of calling resolve() multiple times without any new dom being added should be benign
