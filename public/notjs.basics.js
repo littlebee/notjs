@@ -264,12 +264,7 @@
 
       Partials.prototype.resolveExternal = function() {
         var $places;
-        $places = this.options.$el.find('[data-not_partial*="/"]');
-        console.log("\nresolving external partials");
-        console.log("length = " + $places.length);
-        return $places.each(function(index, placeEl) {
-          return console.log("[" + index + "] - " + ($(placeEl).html()));
-        });
+        return $places = this.options.$el.find('[data-not_partial*="/"]');
       };
 
       return Partials;
@@ -432,7 +427,7 @@
         this.$element.html("");
         for (index = _i = 0, _len = array.length; _i < _len; index = ++_i) {
           arrayMember = array[index];
-          $newElement = $(this.$template.html());
+          $newElement = this.$template.clone();
           if (!callback || callback($newElement, arrayMember, index)) {
             this.$element.append($newElement);
           }

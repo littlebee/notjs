@@ -23,8 +23,8 @@
     </a>
 
     <div id="methodsTocTemplate" class="not-partial">
-      <ul class="method repl-template">
-        <li><a class='method-short-link' href="#">MethodName</a>()</li>
+      <ul class="methods">
+        <li class="method repl-template"><a class="method-short-link" href="#">MethodName</a>()</li>
       </ul>
     </div>
 
@@ -54,10 +54,6 @@
               <div class="methods" data-not_partial="#methodsTocTemplate"></div>
             </ul>
           </div>
-        </div>
-        <div class="methods">
-          Methods
-          <div data-not_partial="#methodsTocTemplate"></div>
         </div>
       </div>
     </div>
@@ -150,6 +146,15 @@
       })
     </code></pre>
 
+    <div id="methodsAPITemplate" class="not-partial">
+      <div class="method repl-template">
+        <p class="method-bookmark"></p>
+        <div><h4>Method</h4><span class='method-name header' href="#">MethodName</span></div>
+        <pre><code class='method-code'></code></pre>
+        <pre class="method-comment comment"></pre>
+      </div>
+    </div>
+
     <div id="apiDocs">
       <div class="module">
         <p class="module-bookmark"></p>
@@ -162,16 +167,23 @@
               <div><h4>Class</h4><span class='class-name header'>Class Name</span></div>
               <code class='class-code'>Class Code</code>
               <pre class='class-comment comment'>Class Comment</pre>
-              <div class="methods">
+              <div>
                 <h3>Methods</h3>
-                <div class="method repl-template">
-                  <div>
-                    <p class="method-bookmark"></p>
-                    <div><h4>Method</h4><span class='method-name header' href="#">MethodName</span></div>
-                    <pre><code class='method-code'></code></pre>
-                    <pre class="method-comment comment"></pre>
-                  </div>
-                </div>
+                <div class="methods" data-not_partial="#methodsAPITemplate"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="files">
+          <h3>Files</h3>
+          <div class="file repl-template">
+            <div>
+              <p class="file-bookmark"></p>
+              <div><h4>File</h4><span class='file-name header'>File Name</span></div>
+              <pre class='file-comment comment'>File Comment</pre>
+              <div>
+                <h3>Methods</h3>
+                <div class="methods" data-not_partial="#methodsAPITemplate"></div>
               </div>
             </div>
           </div>
@@ -190,11 +202,16 @@
     console.log(documentorData)
 
     injectData = function($el, selectorPrefix, obj){
-      $el.find(selectorPrefix + "short-link").attr('href', '#' + obj.id).html(obj.shortName)
+      console.log("injectData")
+      console.log($el.html())
+      $el.find(selectorPrefix + "short-link").attr('href', '#' + obj.id).html(obj.shortName||obj.name)
       $el.find(selectorPrefix + "name").html(obj.name)
       $el.find(selectorPrefix + "bookmark").attr('id', obj.id)
-      if( obj.code )  $el.find(selectorPrefix + "code").html(obj.code.join('\n   '))
-      if( obj.comment ) $el.find(selectorPrefix + "comment").html(obj.comment.join('\n'))
+      if( obj.code )
+        $el.find(selectorPrefix + "code").html(obj.code.join('\n   '))
+      if( obj.comment ){
+        $el.find(selectorPrefix + "comment").html(obj.comment.join('\n'))
+      }
     }
 
     replicatePart = function($element, array, tmplSelector, hideParent, method) {
@@ -224,9 +241,8 @@
 
     replicateModule = function($element, module){
       injectData($element, '.module-', module)
-      replicatePart($element, module.classes, '.class.repl-template', '.classes', replicateClass);
-      replicatePart($element, module.files,   '.file.repl-template', '.files', replicateFile);
-      replicatePart($element, module.methods, '.methods:last .method.repl-template', '.methods:last', replicateMethod);
+      replicatePart($element, module.classes, '.class.repl-template',  '.classes', replicateClass);
+      replicatePart($element, module.files,   '.file.repl-template',   '.files',   replicateFile);
       return true;
     }
 

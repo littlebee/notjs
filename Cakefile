@@ -18,12 +18,7 @@ DOCUMENTATION_TARGETS = [
   {
     name: 'notjs/scripts'
     srcDir: 'scripts'
-  },
-  {
-    name: 'empty directory'
-    srcDir: 'empty'
   }
-
 ]
 DOCUMENTOR_DATA = 'public/documentorData.js'
 DEPLOY_TARGET = 'bee@beehub.xen.prgmr.com:/home/bee/notjs'

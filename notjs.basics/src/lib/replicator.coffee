@@ -125,7 +125,7 @@ Notjs.namespace 'basics', (x) ->
       ###
       @$element.html("")
       for arrayMember, index in array
-        $newElement = $(@$template.html())
+        $newElement = @$template.clone()
         if !callback || callback($newElement, arrayMember, index)
           @$element.append($newElement)
 

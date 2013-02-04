@@ -1,5 +1,10 @@
 #!/usr/bin/env coffee
 
+###
+  Generates public/documentorData.js which is used for Notjs API docs
+###
+
+
 HELP = """
   This script walks a tree of coffeescript and pulls out any ### comments and
   associates them with the next indent level out and up.  A .js file containing
@@ -77,9 +82,6 @@ MORE_HELP = """
 
   see --help output for options
 """
-###
-  Shut the fudge factory! Use Documentor on itself.
-###
 
 options = require('commander')
   .version('0.0.1')
@@ -150,7 +152,8 @@ processFile = (file) =>
     commentsOut
 
   getComment = () ->
-    preprocessComment lines.slice(commentStartIndex + 1, lineNumber - commentStartIndex + 1)
+    commentLines = lines.slice(commentStartIndex + 1, lineNumber)
+    preprocessComment commentLines
 
   # modules have classes, files and methods.  Classes and files have methods.
 
@@ -186,7 +189,6 @@ processFile = (file) =>
     monkeyMatch = monkeyRegex.exec(lines[lastMethodIndex])
     nameMatch = methodRegex.exec(lines[lastMethodIndex]);
     throw "createMethodComment: no match on name" unless nameMatch || monkeyMatch
-
     method =
       id: _.uniqueId("dd_")
       code:    lines.slice(lastMethodIndex, commentStartIndex)
