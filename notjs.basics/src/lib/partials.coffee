@@ -73,7 +73,7 @@ Notjs.namespace 'basics', (x) ->
       </code>
 
       The example above will do a get request type text/html to the server to get the
-      html fragment that get's duplicated into the div with data-not_partial attribute
+      html fragment that get's duplicated into the div with the data-not_partial attribute
 
     ###
 
@@ -86,25 +86,32 @@ Notjs.namespace 'basics', (x) ->
 
     constructor: (options = {}) ->
       @options = _.defaults options,
-        removePartials:  true    # remove partial templates?  $('.not-partial').remove()
-        hidePartials:    false   # hide partial templates? $('.not-partial').hide()
-        $el:             $('body') # scope this Partials object to part of the DOM
+        removePartials:      true      # remove partial templates?  $('.not-partial').remove()
+        hidePartials:        false     # hide partial templates? $('.not-partial').hide()
+        selector:            'body'    # scope this Partials object to part of the DOM
+        onPartialsResolved:  null      # function() called after all inpage and external partials are resolved
+        onPartialRendered:   null      # function($newElement) - called after a partial is rendered into the DOM
       ###
         Constructs a new Partials object
       ###
       @inPagePartials = {}
+      @outstandingExternalRequests = 0
 
     initialize: () =>
       ###
         Initialize should be called inside of a $(document).ready block
       ###
-      $partials = @options.$el.find('.not-partial')
+      @$el = $(@options.selector)
+      $partials = @$el.find('.not-partial')
       @inPagePartials = _.groupBy($partials, 'id')
       $partials.remove() if @options.removePartials
       $partials.hide() if @options.hidePartials
       return @
 
-    resolve: () =>
+    resolve: (options={}) =>
+      options = _.defaults options,
+        onPartialsResolved: null  # optional callback method on completion
+
       ###
         Replaces contents of divs with data-not_partial attribute with the html of the partial
         referenced in the data-not_partial attribute value.
@@ -124,27 +131,74 @@ Notjs.namespace 'basics', (x) ->
 
         Note that any content within the data-not_partial element is replaced.
       ###
-      @resolveInPage()
-      @resolveExternal()
+      @resolveExternal onComplete: () =>
+        @resolveInPage()
+        @onPartialsResolved(options.onPartialsResolved)
+      return @
 
     resolveInPage: () =>
-      $places = @options.$el.find('[data-not_partial^="#"]')
+      $places = @$el.find('[data-not_partial^="#"]')
       for placeEl in $places
         $place = $(placeEl)
         partial = $place.attr('data-not_partial')
         partialId = partial.slice(1)
         partialElement = @inPagePartials[partialId]?[0]
         if partialElement
-          $place.html($(partialElement).html())
+          @renderPartial $place, $(partialElement).html()
         else
           console.error "In page partial not found by id #{partialId} for element: "
           # console.error placeEl
       return @
 
-    resolveExternal: () =>
-      $places = @options.$el.find('[data-not_partial*="/"]')
+    resolveExternal: (options={}) =>
+      options = _.defaults options,
+        onComplete: null  # optional callback method on completion
+
+      @externalsRes
+
+      $places = @$el.find('[data-not_partial*="/"]')
       # console.log "\nresolving external partials"
       # console.log "length = #{$places.length}"
       # $places.each (index, placeEl) ->
       #  console.log "[#{index}] - #{$(placeEl).html()}"
+      if $places.length <= 0
+        options.onComplete?()
+
+      for placeEl in $places
+        $place = $(placeEl)
+        uri = $place.attr('data-not_partial')
+        @fetchExternalPartial($place, uri, options)
+
+      return @
+
+
+    fetchExternalPartial: ($place, uri, options={}) =>
+      options = _.defaults options,
+        onComplete: null  # optional callback method on completion
+
+      return if uri.isBlank()
+      @outstandingExternalRequests += 1
+      $.ajax uri,
+        dataType: "html"
+        complete: () =>
+          options.onComplete?() if (@outstandingExternalRequests -= 1) <= 0
+        success: (data) =>
+          @renderPartial($place, data)
+        error: (jqXHR, textStatus, errorText) =>
+          console.log "Notjs.basics.Partial: Failed to fetch external partial at #{uri}. " +
+                        "error: #{errorText}. status: #{status}"
+
+
+    # called when the external partial is successfully fetched
+    renderPartial: ($place, data) =>
+      $place.html(data)
+      @onPartialRendered($place)
+
+    onPartialRendered: ($newPartial) =>
+      @options.onPartialRendered?($newPartial)
+
+    onPartialsResolved: (overrideOnPartialsResolved) =>
+      overrideOnPartialsResolved?() || @options.onPartialsResolved?()
+
+
 

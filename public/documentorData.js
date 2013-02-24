@@ -216,7 +216,7 @@ base.documentorData = [
           "      </code>",
           "",
           "      The example above will do a get request type text/html to the server to get the",
-          "      html fragment that get's duplicated into the div with data-not_partial attribute",
+          "      html fragment that get's duplicated into the div with the data-not_partial attribute",
           ""
         ],
         "methods": [
@@ -237,9 +237,11 @@ base.documentorData = [
             "code": [
               "    constructor: (options = {}) ->",
               "      @options = _.defaults options,",
-              "        removePartials:  true    # remove partial templates?  $('.not-partial').remove()",
-              "        hidePartials:    false   # hide partial templates? $('.not-partial').hide()",
-              "        $el:             $('body') # scope this Partials object to part of the DOM"
+              "        removePartials:      true      # remove partial templates?  $('.not-partial').remove()",
+              "        hidePartials:        false     # hide partial templates? $('.not-partial').hide()",
+              "        selector:            'body'    # scope this Partials object to part of the DOM",
+              "        onPartialsResolved:  null      # function() called after all inpage and external partials are resolved",
+              "        onPartialRendered:   null      # function($newElement) - called after a partial is rendered into the DOM"
             ],
             "comment": [
               "        Constructs a new Partials object"
@@ -261,7 +263,10 @@ base.documentorData = [
           {
             "id": "dd_7",
             "code": [
-              "    resolve: () =>"
+              "    resolve: (options={}) =>",
+              "      options = _.defaults options,",
+              "        onPartialsResolved: null  # optional callback method on completion",
+              ""
             ],
             "comment": [
               "        Replaces contents of divs with data-not_partial attribute with the html of the partial",

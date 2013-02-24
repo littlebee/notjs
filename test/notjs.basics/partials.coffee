@@ -98,18 +98,24 @@ describe 'notjs.partials', ->
         $('#authorTemplate').should.not.be.visible
 
   describe 'when resolving external partials', ->
-    fakeweb = require('node-fakeweb')
-    fakeweb.registerUri({uri: "/test/externalPartial1.html", body: EXTERNAL_PARTIAL_1})
-    fakeweb.registerUri({uri: "/test/externalPartial2.html", body: EXTERNAL_PARTIAL_2})
+    console.log "mocking that shit"
+    $.mockjax
+      url: '/test/externalPartial1.html',
+      responseTime: 0,
+      responseText: EXTERNAL_PARTIAL_1
+    $.mockjax
+      url: '/test/externalPartial2.html',
+      responseTime: 0,
+      responseText: EXTERNAL_PARTIAL_2
 
     beforeEach ->
       $('body').html(EXTERNAL_HTML)
-      partials = new Notjs.basics.Partials().initialize()
-      partials.resolve()
 
     it 'should resolve', ->
-      $('span.external1').should.be.of.length(1)
-      $('span.external2').should.be.of.length(1)
+      partials = new Notjs.basics.Partials().initialize()
+      partials.resolve onPartialsResolved: () ->
+        $('span.external1').should.be.of.length(1)
+        $('span.external2').should.be.of.length(1)
 
 
 _shouldHaveResolved = () ->

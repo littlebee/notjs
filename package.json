@@ -28,6 +28,5 @@
     "mocha": "*",
     "jquery": "*",
     "jsdom": "*",
-    "node-fakeweb": "*"
   }
 }

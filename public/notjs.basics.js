@@ -165,7 +165,7 @@
             </code>
       
             The example above will do a get request type text/html to the server to get the
-            html fragment that get's duplicated into the div with data-not_partial attribute
+            html fragment that get's duplicated into the div with the data-not_partial attribute
       */
 
       Partials.resolve = function(options) {
@@ -183,6 +183,14 @@
         if (options == null) {
           options = {};
         }
+        this.onPartialsResolved = __bind(this.onPartialsResolved, this);
+
+        this.onPartialRendered = __bind(this.onPartialRendered, this);
+
+        this.renderPartial = __bind(this.renderPartial, this);
+
+        this.fetchExternalPartial = __bind(this.fetchExternalPartial, this);
+
         this.resolveExternal = __bind(this.resolveExternal, this);
 
         this.resolveInPage = __bind(this.resolveInPage, this);
@@ -194,13 +202,16 @@
         this.options = _.defaults(options, {
           removePartials: true,
           hidePartials: false,
-          $el: $('body')
+          selector: 'body',
+          onPartialsResolved: null,
+          onPartialRendered: null
         });
         /*
                 Constructs a new Partials object
         */
 
         this.inPagePartials = {};
+        this.outstandingExternalRequests = 0;
       }
 
       Partials.prototype.initialize = function() {
@@ -209,7 +220,8 @@
         */
 
         var $partials;
-        $partials = this.options.$el.find('.not-partial');
+        this.$el = $(this.options.selector);
+        $partials = this.$el.find('.not-partial');
         this.inPagePartials = _.groupBy($partials, 'id');
         if (this.options.removePartials) {
           $partials.remove();
@@ -220,7 +232,14 @@
         return this;
       };
 
-      Partials.prototype.resolve = function() {
+      Partials.prototype.resolve = function(options) {
+        var _this = this;
+        if (options == null) {
+          options = {};
+        }
+        options = _.defaults(options, {
+          onPartialsResolved: null
+        });
         /*
                 Replaces contents of divs with data-not_partial attribute with the html of the partial
                 referenced in the data-not_partial attribute value.
@@ -240,13 +259,19 @@
         
                 Note that any content within the data-not_partial element is replaced.
         */
-        this.resolveInPage();
-        return this.resolveExternal();
+
+        this.resolveExternal({
+          onComplete: function() {
+            _this.resolveInPage();
+            return _this.onPartialsResolved(options.onPartialsResolved);
+          }
+        });
+        return this;
       };
 
       Partials.prototype.resolveInPage = function() {
         var $place, $places, partial, partialElement, partialId, placeEl, _i, _len, _ref;
-        $places = this.options.$el.find('[data-not_partial^="#"]');
+        $places = this.$el.find('[data-not_partial^="#"]');
         for (_i = 0, _len = $places.length; _i < _len; _i++) {
           placeEl = $places[_i];
           $place = $(placeEl);
@@ -254,7 +279,7 @@
           partialId = partial.slice(1);
           partialElement = (_ref = this.inPagePartials[partialId]) != null ? _ref[0] : void 0;
           if (partialElement) {
-            $place.html($(partialElement).html());
+            this.renderPartial($place, $(partialElement).html());
           } else {
             console.error("In page partial not found by id " + partialId + " for element: ");
           }
@@ -262,9 +287,71 @@
         return this;
       };
 
-      Partials.prototype.resolveExternal = function() {
-        var $places;
-        return $places = this.options.$el.find('[data-not_partial*="/"]');
+      Partials.prototype.resolveExternal = function(options) {
+        var $place, $places, placeEl, uri, _i, _len;
+        if (options == null) {
+          options = {};
+        }
+        options = _.defaults(options, {
+          onComplete: null
+        });
+        this.externalsRes;
+        $places = this.$el.find('[data-not_partial*="/"]');
+        if ($places.length <= 0) {
+          if (typeof options.onComplete === "function") {
+            options.onComplete();
+          }
+        }
+        for (_i = 0, _len = $places.length; _i < _len; _i++) {
+          placeEl = $places[_i];
+          $place = $(placeEl);
+          uri = $place.attr('data-not_partial');
+          this.fetchExternalPartial($place, uri, options);
+        }
+        return this;
+      };
+
+      Partials.prototype.fetchExternalPartial = function($place, uri, options) {
+        var _this = this;
+        if (options == null) {
+          options = {};
+        }
+        options = _.defaults(options, {
+          onComplete: null
+        });
+        if (uri.isBlank()) {
+          return;
+        }
+        this.outstandingExternalRequests += 1;
+        return $.ajax(uri, {
+          dataType: "html",
+          complete: function() {
+            if ((_this.outstandingExternalRequests -= 1) <= 0) {
+              return typeof options.onComplete === "function" ? options.onComplete() : void 0;
+            }
+          },
+          success: function(data) {
+            return _this.renderPartial($place, data);
+          },
+          error: function(jqXHR, textStatus, errorText) {
+            return console.log(("Notjs.basics.Partial: Failed to fetch external partial at " + uri + ". ") + ("error: " + errorText + ". status: " + status));
+          }
+        });
+      };
+
+      Partials.prototype.renderPartial = function($place, data) {
+        $place.html(data);
+        return this.onPartialRendered($place);
+      };
+
+      Partials.prototype.onPartialRendered = function($newPartial) {
+        var _base;
+        return typeof (_base = this.options).onPartialRendered === "function" ? _base.onPartialRendered($newPartial) : void 0;
+      };
+
+      Partials.prototype.onPartialsResolved = function(overrideOnPartialsResolved) {
+        var _base;
+        return (typeof overrideOnPartialsResolved === "function" ? overrideOnPartialsResolved() : void 0) || (typeof (_base = this.options).onPartialsResolved === "function" ? _base.onPartialsResolved() : void 0);
       };
 
       return Partials;
