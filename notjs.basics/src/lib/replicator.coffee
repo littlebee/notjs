@@ -61,9 +61,8 @@ Notjs.namespace 'basics', (x) ->
 
     getTemplate: () =>
       ###
-        this method returns the 'template' (whatever was in the html() of the
-        passed in element.  it also clears the element's html in prep for
-        replication
+        this method returns the a jQuery clone of the template (whatever was in the html of the
+        selector passed on construction)
       ###
       return @$template if @$template
       @$template = @$element.clone()

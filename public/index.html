@@ -134,15 +134,19 @@
     <b>View the source of this page and find this at the bottom:</b>
     <pre><code>
       $(document).ready(function(){
-        // resolve partial templates first because some of them are replicator templates too
-        notjs.basics.Partials.resolve()
+        // resolve partial templates first because some of them are replicator templates too.
+        // NOTE:  not using onPartialsResolved option because there are no external partials in
+        //        this page.  Yet.  If there are and the replicators below are relying on them,
+        //        then we would hang the two replicate calls off of the onPartialsResolved option
+        //        to .resolve()
+        Notjs.basics.Partials.resolve()
         // documentorData is declared and initialized in documentorData.js file loaded by script tag above
         // it is an array of objects each representing one module of documentation which happens to correspond
         // to one tree of source.  Each module can have many classes, files and methods and, additionally,
         // classes and files can also each have many methods.   See also ./scripts/documentor.coffee and
         // ./Cakefile ("docs" task)
-        notjs.basics.Replicator.replicate('#moduleTemplate', documentorData, replicateModule)
-        notjs.basics.Replicator.replicate('#apiDocs', documentorData, replicateModule)
+        Notjs.basics.Replicator.replicate('#moduleTemplate', documentorData, replicateModule)
+        Notjs.basics.Replicator.replicate('#apiDocs', documentorData, replicateModule)
       })
     </code></pre>
 
@@ -180,6 +184,7 @@
             <div>
               <p class="file-bookmark"></p>
               <div><h4>File</h4><span class='file-name header'>File Name</span></div>
+              <code><pre class='file-code'>File Code</pre></code>
               <pre class='file-comment comment'>File Comment</pre>
               <div>
                 <h3>Methods</h3>
@@ -247,7 +252,11 @@
     }
 
     $(document).ready(function(){
-      // resolve partial templates first because some of them are replicator templates too
+      // resolve partial templates first because some of them are replicator templates too.
+      // NOTE:  not using onPartialsResolved option because there are no external partials in
+      //        this page.  Yet.  If there are and the replicators below are relying on them,
+      //        then we would hang the two replicate calls off of the onPartialsResolved option
+      //        to .resolve()
       Notjs.basics.Partials.resolve()
       // documentorData is declared and initialized in documentorData.js file loaded by script tag above
       // it is an array of objects each representing one module of documentation which happens to correspond

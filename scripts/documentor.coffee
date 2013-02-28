@@ -1,10 +1,5 @@
 #!/usr/bin/env coffee
 
-###
-  Generates public/documentorData.js which is used for Notjs API docs
-###
-
-
 HELP = """
   This script walks a tree of coffeescript and pulls out any ### comments and
   associates them with the next indent level out and up.  A .js file containing
@@ -48,30 +43,7 @@ MORE_HELP = """
     |      "moduleName": "optional name given when running documentor or the path given to document",
     |      // both files and classes only have information in here if they are documented (have ###
     |      // comments at the same indentation level
-    |      "files": [
-    |        {
-    |          "name": "somefile.coffee",
-    |          "code": "          # if I want to show something like the delaration of constant, e.g.\n          HELP = \"this is a really neat script that does bla\"\n          # I can just put it above the block comment and it will get sucked up into that things declaration\n# (these single # comments also get sucked up).\n",
-    |          "comment": "  This block comment gets associated with the file"
-    |        }
-    |      ],
-    |      "classes": [
-    |        {
-    |          "fileName": "srcDir/somefile.coffee",
-    |          "name": "myAwesomeClass",
-    |          "code": "     class myAwesomeClass extends myAwesomeBaseClass",
-    |          "comment": "  This block comment gets associated with the class",
-    |          "methods": [
-    |            {
-    |              "name": "constructor",
-    |              "code": "      constructor: (options={}) =>\n        @options = _.defaults options,\n          beAwesome: true                   # will this instance be awesome?\n          extendAwesomeness: true           # push awesomeness outward\n          forcedAwesome: false              # can we fake it if all else fails?\n          awesomeIcon: \"/img/awesome.icon\"",
-    |              "comment": "  this block comment gets associated with the constructor method.  putting it after\n  the defaulting of options makes the options self documenting no?\n"
-    |            }
-    |          ]
-    |       }
-    |     ]
-    |   }
-    | ]
+    ...
 
   the output js file can then be loaded for a documentation page and a notjs script can pick it up and spit out the
   API documentation (see index.html in notjs root)
@@ -82,6 +54,14 @@ MORE_HELP = """
 
   see --help output for options
 """
+
+###
+
+  Generates public/documentorData.js which is used for Notjs API docs.
+
+  ...and...  shut the front door!... Generates documentation for itself too.   I'm pretty sure this is how Skynet starts.
+###
+
 
 options = require('commander')
   .version('0.0.1')

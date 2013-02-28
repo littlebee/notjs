@@ -153,8 +153,9 @@
       
           <b>External partials</b>
       
-            External partials are fetched from the server on resolve().  They are denoted from
-            in page partials by the lack of a '#' prefix on the data-not_partial attribute.
+            External partials are fetched asynchronously from the server on resolve().  They are
+            denoted from in page partials by the lack of a '#' prefix on the data-not_partial
+            attribute.
       
             Example:
             <code>
@@ -257,7 +258,17 @@
                 |  <div data-not_partial="/someController/someElement.html"/>
                 </code>
         
-                Note that any content within the data-not_partial element is replaced.
+                Notes:
+                  - any content within the data-not_partial element is replaced.
+                  - external partials are retrieved asynchronously (as one might expect).  If you have
+                    other client code depending on resolved partials you should use the
+                    onPartialsResolved option to this method like this:
+                    <code>
+                    Notjs.basics.Partials.resolve({onPartialsResolved: function(){
+                      Notjs.basics.Replicator.replicate('#moduleTemplate', documentorData, replicateModule)
+                      Notjs.basics.Replicator.replicate('#apiDocs', documentorData, replicateModule)
+                    }});
+                    </code>
         */
 
         this.resolveExternal({
@@ -444,9 +455,8 @@
 
       Replicator.prototype.getTemplate = function() {
         /*
-                this method returns the 'template' (whatever was in the html() of the
-                passed in element.  it also clears the element's html in prep for
-                replication
+                this method returns the a jQuery clone of the template (whatever was in the html of the
+                selector passed on construction)
         */
         if (this.$template) {
           return this.$template;
