@@ -28,7 +28,7 @@ base.documentorData = [
         ]
       },
       {
-        "id": "dd_14",
+        "id": "dd_29",
         "name": "string.coffee",
         "code": [],
         "comment": [
@@ -36,7 +36,7 @@ base.documentorData = [
         ],
         "methods": [
           {
-            "id": "dd_15",
+            "id": "dd_30",
             "code": [
               "Notjs.addPrototypeUnlessExists String, \"startsWith\", (anotherString) ->"
             ],
@@ -51,7 +51,7 @@ base.documentorData = [
             "name": "String.startsWith(anotherString)"
           },
           {
-            "id": "dd_16",
+            "id": "dd_31",
             "code": [
               "Notjs.addPrototypeUnlessExists String, \"endsWith\", (anotherString) ->"
             ],
@@ -66,7 +66,7 @@ base.documentorData = [
             "name": "String.endsWith(anotherString)"
           },
           {
-            "id": "dd_17",
+            "id": "dd_32",
             "code": [
               "Notjs.addPrototypeUnlessExists String, \"isBlank\", () ->"
             ],
@@ -82,7 +82,7 @@ base.documentorData = [
             "name": "String.isBlank()"
           },
           {
-            "id": "dd_18",
+            "id": "dd_33",
             "code": [
               "Notjs.addPrototypeUnlessExists String, \"trim\", () ->"
             ],
@@ -93,7 +93,7 @@ base.documentorData = [
             "name": "String.trim()"
           },
           {
-            "id": "dd_19",
+            "id": "dd_34",
             "code": [
               "Notjs.addPrototypeUnlessExists String, \"elipsize\",  (maxLength) ->"
             ],
@@ -104,7 +104,7 @@ base.documentorData = [
             "name": "String.elipsize(maxLength)"
           },
           {
-            "id": "dd_20",
+            "id": "dd_35",
             "code": [
               "Notjs.addPrototypeUnlessExists String, \"decamelize\", () ->"
             ],
@@ -119,7 +119,7 @@ base.documentorData = [
             "name": "String.decamelize()"
           },
           {
-            "id": "dd_21",
+            "id": "dd_36",
             "code": [
               "Notjs.addPrototypeUnlessExists String, \"dropCamelize\", () ->"
             ],
@@ -134,11 +134,386 @@ base.documentorData = [
             "name": "String.dropCamelize()"
           }
         ]
+      },
+      {
+        "id": "dd_37",
+        "name": "utility.coffee",
+        "code": [
+          "###"
+        ],
+        "comment": [
+          "",
+          "",
+          "# I really wanted to extend Object.prototype and add the methods but jQuery clone and",
+          "# other things break if you modify Object like that see,",
+          "# <a href=\"http://stackoverflow.com/questions/9138161/javascript-clone-function-breaks-with-jquery\"> this stack overflow </a>",
+          "",
+          "Notjs.deepGet = (object, pathToAttribute) ->"
+        ],
+        "methods": []
       }
     ],
     "classes": [
       {
         "id": "dd_3",
+        "shortName": "x.Form",
+        "name": "basics.Form",
+        "code": [
+          "  class x.Form"
+        ],
+        "comment": [
+          "    The Notjs.basics.Form class is instantiated on a DOM element identifying the container",
+          "    of FormInput elements that will be used to display and take input.",
+          "",
+          "    Depending on the formMode option to the constructor, the data displayed in the form",
+          "    and the input data collected from the user are saved in a Javascript object called",
+          "    dataObject passed to the constructor.  There is also provision for notification",
+          "    of updates via an optional callback function (updateCallback).",
+          "",
+          "    Note that forms do not need to be in &lt;form&gt; tags.  The example below demonstrates",
+          "    a form constructed in a div.  If you do construct the notjs Form on a form tag, it",
+          "    will disable the form from posting back to the server and then update dataObject and",
+          "    call updateCallback.",
+          "",
+          "    Simplest Example:",
+          "      <code>",
+          "        &lt;html&gt;",
+          "          &lt;body&gt;",
+          "            &lt;div id=&quot;authorEditForm&quot;&gt;",
+          "              &lt;div data-not_attr=&quot;name&quot;&gt;&lt;/div&gt;",
+          "              &lt;div data-not_attr=&quot;genre&quot;&gt;&lt;/div&gt;",
+          "              &lt;div class=&#39;readonly&#39; data-not_attr=&quot;modifiedAt&quot;&gt;&lt;/div&gt;",
+          "              &lt;button class=&quot;success&quot;&gt;Save it!&lt;/button&gt;&lt;button class=&quot;cancel&quot;&gt;Nevermind&lt;/button&gt;",
+          "            &lt;/div&gt;",
+          "          &lt;/body&gt;",
+          "        &lt;/html&gt;",
+          "        &lt;script&gt;",
+          "          var dataObject = {name: &quot;Arthur C. Clark&quot;, genre: &quot;science fiction&quot;, modifiedAt: &quot;6/15/2012&quot;};",
+          "          var form = new Notjs.basics.Form(&quot;#authorEditForm&quot;, dataObject, {",
+          "              updateCallback: function(whatUpdated){ alert(&quot;You updated &quot; + whatUpdated + &quot;. I&#39;m telling&quot;);}",
+          "          });",
+          "          form.initialize();",
+          "      </code>",
+          "",
+          "    Produces this:",
+          "      <code>",
+          "        &lt;html&gt;",
+          "          &lt;body&gt;",
+          "            &lt;div id=&quot;authorEditForm&quot;&gt;",
+          "              &lt;div data-not_attr=&quot;name&quot;&gt;&lt;input type=&quot;text&quot; value=&quot;Arthur C. Clark&quot;&gt;&lt;/div&gt;",
+          "              &lt;div data-not_attr=&quot;genre&quot;&gt;&lt;input type=&quot;text&quot; value=&quot;science fiction&quot;&gt;&lt;/div&gt;",
+          "              &lt;div class=&#39;readonly&#39; data-not_attr=&quot;modifiedAt&quot;&gt;6/15/2012&lt;/div&gt;",
+          "              &lt;button class=&quot;success&quot;&gt;Save it!&lt;/button&gt;&lt;button class=&quot;cancel&quot;&gt;Nevermind&lt;/button&gt;",
+          "            &lt;/div&gt;",
+          "          &lt;/body&gt;",
+          "        &lt;/html&gt;",
+          "      </code>",
+          "",
+          "    Each element that identifies a FormInput object must, at a minimum, have",
+          "    a data-not_attr attribute that identifies where in the dataObject the value for",
+          "    this input lives.",
+          "",
+          "    Another often needed attribute is the data-not_type which is defaulted to \"text\".",
+          "    <code>",
+          "      &lt;div data-not_attr=&quot;wonHugoAward&quot; data-not_type=&quot;Checkbox&quot;&gt;&lt;/div&gt;",
+          "    </code>",
+          "    The example above would create a Notjs.basics.formInputs.Checkbox type that would",
+          "    display and allow input, as a checkbox.  By default the namespace to that class is",
+          "    Notjs.basics.formInputs.  You call also specify a fully namespaced class, e.g.",
+          "    <code>",
+          "       &lt;div data-not_attr=&quot;wonHugoAward&quot; data-not_type=&quot;Slick.Editors.Text&quot;&gt;&lt;/div&gt;",
+          "    </code>",
+          "    ... yes, you can!  Notjs FormInputs steal their creation mechanics and API from SlickGrid",
+          "    and are designed to be interchangable.",
+          "",
+          "    css class reactions:",
+          "      - \"readonly\"  # no input will be made available regardless of all other options and settings. this",
+          "                  css class can be used on either form element or the data-not_attr form inputs.",
+          "",
+          "    html5 data attributes and defaults:",
+          "      - data-not_attr=\"\"      # the name of the data or method attribute on dataobject",
+          "      - data-not_type=\"Text\"  # the FormInput class name to create.",
+          "",
+          "    Note the this class handles switching the FormInputs between display and input mode and navigation",
+          "    between inputs with the keyboard.",
+          ""
+        ],
+        "methods": [
+          {
+            "id": "dd_4",
+            "code": [
+              "    constructor: (@selector, @dataObject, options = {}) ->",
+              "      @options = _.defaults options,",
+              "        formMode:          \"fullInput\"    # See comment below",
+              "        # function(whatChanged) called on update with array of attribute names changed this call",
+              "        updateCallback:    @_defaultUpdateCallback"
+            ],
+            "comment": [
+              "      Constructs a new Form object",
+              "",
+              "      selector = css selector of DOM element containing formInputs",
+              "      dataObject = data object (hash) to get and set values on",
+              "",
+              "      The formMode constructor option supports several options that govern how the form",
+              "      will accept input and when the associated dataObject is updated and updateCallback",
+              "      is called.",
+              "",
+              "        <b>formMode: \"fullInput\"</b> - (default) Form will look and feel like a classic",
+              "          web form with all inputs turned on.  <b>The form must have either a clickable element",
+              "          with the css class 'success' or a traditional &lt;input type=\"submit\"&gt;.</b>",
+              "",
+              "          All clickable elements within the selector DOM with the class \"success\" will be",
+              "          overtaken (preventDefault and no propagation) by this instance of Form.",
+              "",
+              "          dataObject is updated and updateCallback is called when a \".success\" element is",
+              "          clicked.",
+              "",
+              "        <b>formMode: \"inlineEdit\"</b> - form will display data from dataObject",
+              "          and when the user clicks on the displayed data, it will switch to input mode.",
+              "          dataObject attribute associated with the single input that was taken is updated",
+              "          and updateCallback method is called with the attribute name updated.",
+              "",
+              "        <b>formMode: \"switchToEdit\"</b> - form inputs will initially be all display",
+              "          only and when any element in the form is clicked, the whole form becomes editable.",
+              "          The form must provide a submit button which is hidden until the user clicks",
+              "          to edit form.  Hidding of the button is provided by the addition and removal",
+              "          of the .hidden css class.",
+              "",
+              "        <b>formMode: \"readOnly\"</b> - Form will only display data.",
+              "",
+              "      Individual form inputs can additionally declare themselves to be read only by including",
+              "      the css class \"readonly\" as in the case of modifiedAt in the above example.",
+              "",
+              "      See also:   Notjs.basics.FormInput class"
+            ],
+            "shortName": "constructor",
+            "name": "basics.Form.constructor"
+          },
+          {
+            "id": "dd_5",
+            "code": [
+              "    initialize: () =>"
+            ],
+            "comment": [
+              "      The initialize() method looks in the DOM under the selector passed to the constructor",
+              "      for any elements with the data-not_attr attribute set and instantiates a",
+              "      Notjs.basics.FormInput object for element found."
+            ],
+            "shortName": "initialize",
+            "name": "basics.Form.initialize"
+          }
+        ]
+      },
+      {
+        "id": "dd_6",
+        "shortName": "x.FormInput",
+        "name": "basics.FormInput",
+        "code": [
+          "  class x.FormInput"
+        ],
+        "comment": [
+          "    The FormInput class is a abstract base class for all form input types.  The",
+          "    class factory method can be used to generate a specific type of FormInput class",
+          "    (an extension).",
+          "",
+          "    A specific type of FormInput is instantiated on a DOM element identifying a",
+          "    container where the value of the data attribute associated with this FormInput",
+          "    will be rendered on display, and a type of input control or other html will",
+          "    be rendered to take the user's input.",
+          "",
+          "    The FormInput classes provides an interface compatible to that of SlickGrid's",
+          "    Editor extentions and are intended to be used interchangably in that environment.",
+          "",
+          "    See <a href=\"https://github.com/mleibman/SlickGrid/wiki/Writing-custom-cell-editors\">SlickGrid: Writing custom cell editors</a> for more information.",
+          "",
+          "    For Notjs Forms, this class is the base class for all form inputs and provides defaults",
+          "    for some of the methods required by SlickGrid editors.   At a minimum, any extension",
+          "    of this class must provide the following methods:",
+          "      - a static class method called formatForDisplay (which can be used as SlickGrid",
+          "          formatter) which returns a string containing the html to render in the",
+          "          formInput element",
+          "      - an instance method called initialize() called on construction that creates the input",
+          "      - an instance method called loadValue(dataObject) that sets the current value of the",
+          "          input to the value of it's corresponding attribute in dataObject",
+          "      - an instance method called serializeValue() that returns the current value of the input",
+          "",
+          "    Simplest Example:",
+          "      <code>",
+          "        &lt;html&gt;",
+          "          &lt;body&gt;",
+          "            &lt;div id=&quot;authorEditForm&quot;&gt;",
+          "              &lt;div data-not_attr=&quot;name&quot;&gt;&lt;/div&gt;",
+          "              &lt;div data-not_attr=&quot;genre&quot;&gt;&lt;/div&gt;",
+          "              &lt;button class=&quot;success&quot;&gt;Save it!&lt;/button&gt;&lt;button class=&quot;cancel&quot;&gt;Nevermind&lt;/button&gt;",
+          "            &lt;/div&gt;",
+          "          &lt;/body&gt;",
+          "        &lt;/html&gt;",
+          "        &lt;script&gt;",
+          "          var dataObject = {name: &quot;Arthur C. Clark&quot;, genre: &quot;science fiction&quot;, modifiedAt: &quot;6/15/2012&quot;};",
+          "          var form = new Notjs.basics.Form(&quot;#authorEditForm&quot;, dataObject, {",
+          "              updateCallback: function(whatUpdated){ alert(&quot;You updated &quot; + whatUpdated + &quot;. I&#39;m telling&quot;);}",
+          "          });",
+          "          form.initialize();",
+          "      </code>",
+          "",
+          "    Produces this:",
+          "      <code>",
+          "        &lt;html&gt;",
+          "          &lt;body&gt;",
+          "            &lt;div id=&quot;authorEditForm&quot;&gt;",
+          "              &lt;div data-not_attr=&quot;name&quot;&gt;&lt;input type=&quot;text&quot; value=&quot;Arthur C. Clark&quot;&gt;&lt;/div&gt;",
+          "              &lt;div data-not_attr=&quot;genre&quot;&gt;&lt;input type=&quot;text&quot; value=&quot;science fiction&quot;&gt;&lt;/div&gt;",
+          "              &lt;div class=&#39;readonly&#39; data-not_attr=&quot;modifiedAt&quot;&gt;6/15/2012&lt;/div&gt;",
+          "              &lt;button class=&quot;success&quot;&gt;Save it!&lt;/button&gt;&lt;button class=&quot;cancel&quot;&gt;Nevermind&lt;/button&gt;",
+          "            &lt;/div&gt;",
+          "          &lt;/body&gt;",
+          "        &lt;/html&gt;",
+          "      </code>"
+        ],
+        "methods": [
+          {
+            "id": "dd_7",
+            "code": [
+              "    @formatForDisplay: (row, cell, value, columnDef, dataContext) =>"
+            ],
+            "comment": [
+              "        This is class method that gets called when the data needs to be displayed in the container element",
+              "        without allowing user input"
+            ],
+            "shortName": "@formatForDisplay",
+            "name": "basics.FormInput.@formatForDisplay"
+          },
+          {
+            "id": "dd_8",
+            "code": [
+              "    constructor: (@args) ->",
+              "      # I really don't like this argument passing model where optional args and required arguments",
+              "      # are mixed but for compat with SlickGrid... does it have a jquery object in amember named",
+              "      # container?   If so, we are being called by slick grid",
+              "      @$element = @args.container",
+              "      @attr = @args.column.field",
+              "      @options = @args.column"
+            ],
+            "comment": [
+              "      Constructs a new FormInput object",
+              "",
+              "      element = css selector of DOM element where input will be rendered",
+              "      attr = attribute in \"item\" parameter on call to loadValue or applyValue where data is read/written",
+              "",
+              "      See also:   Notjs.basics.FormInput class"
+            ],
+            "shortName": "constructor",
+            "name": "basics.FormInput.constructor"
+          },
+          {
+            "id": "dd_9",
+            "code": [
+              "    initialize: () =>"
+            ],
+            "comment": [
+              "      Creates the dom elements within @$element that will take input from the user"
+            ],
+            "shortName": "initialize",
+            "name": "basics.FormInput.initialize"
+          },
+          {
+            "id": "dd_10",
+            "code": [
+              "    loadValue: (dataObject) =>"
+            ],
+            "comment": [
+              "        displays or selects current value of the attribute associated with dataObject into",
+              "        the input element and update input UI"
+            ],
+            "shortName": "loadValue",
+            "name": "basics.FormInput.loadValue"
+          },
+          {
+            "id": "dd_11",
+            "code": [
+              "    serializeValue: () =>"
+            ],
+            "comment": [
+              "        returns the current value of user input"
+            ],
+            "shortName": "serializeValue",
+            "name": "basics.FormInput.serializeValue"
+          },
+          {
+            "id": "dd_12",
+            "code": [
+              "    applyValue: (dataObject, value) =>"
+            ],
+            "comment": [
+              "        called to update the attribute in dataObject with the value passed"
+            ],
+            "shortName": "applyValue",
+            "name": "basics.FormInput.applyValue"
+          },
+          {
+            "id": "dd_13",
+            "code": [
+              "    destroy: () =>"
+            ],
+            "comment": [
+              "        called when input is being removed from the DOM. remove all data, events & dom elements created in",
+              "        initialize"
+            ],
+            "shortName": "destroy",
+            "name": "basics.FormInput.destroy"
+          },
+          {
+            "id": "dd_14",
+            "code": [
+              "    focus: () =>"
+            ],
+            "comment": [
+              "        should set focus to first input control if any"
+            ],
+            "shortName": "focus",
+            "name": "basics.FormInput.focus"
+          },
+          {
+            "id": "dd_15",
+            "code": [
+              "    getDataObjectValue: (dataObject) =>"
+            ],
+            "comment": [
+              "        gets the value from the dataObject for the associated attribute"
+            ],
+            "shortName": "getDataObjectValue",
+            "name": "basics.FormInput.getDataObjectValue"
+          }
+        ]
+      },
+      {
+        "id": "dd_16",
+        "shortName": "x.Checkbox",
+        "name": "basics.formInputs.Checkbox",
+        "code": [
+          "  class x.Checkbox extends Notjs.basics.FormInput"
+        ],
+        "comment": [
+          "      This FormInput type displays the boolean or truthy value of the data attribute and",
+          "      presents an <input type='checkbox'...  type input on edit"
+        ],
+        "methods": []
+      },
+      {
+        "id": "dd_17",
+        "shortName": "x.Text",
+        "name": "basics.formInputs.Text",
+        "code": [
+          "  class x.Text extends Notjs.basics.FormInput"
+        ],
+        "comment": [
+          "      This FormInput type displays the string value of the data attribute and",
+          "      presents an <input type='text'...  type input on edit"
+        ],
+        "methods": []
+      },
+      {
+        "id": "dd_18",
         "shortName": "x.Partials",
         "name": "basics.Partials",
         "code": [
@@ -222,7 +597,7 @@ base.documentorData = [
         ],
         "methods": [
           {
-            "id": "dd_4",
+            "id": "dd_19",
             "code": [
               "    @resolve: (options = {}) ->",
               "      new this(options).initialize().resolve()"
@@ -234,7 +609,7 @@ base.documentorData = [
             "name": "basics.Partials.@resolve"
           },
           {
-            "id": "dd_5",
+            "id": "dd_20",
             "code": [
               "    constructor: (options = {}) ->",
               "      @options = _.defaults options,",
@@ -251,7 +626,7 @@ base.documentorData = [
             "name": "basics.Partials.constructor"
           },
           {
-            "id": "dd_6",
+            "id": "dd_21",
             "code": [
               "    initialize: () =>"
             ],
@@ -262,7 +637,7 @@ base.documentorData = [
             "name": "basics.Partials.initialize"
           },
           {
-            "id": "dd_7",
+            "id": "dd_22",
             "code": [
               "    resolve: (options={}) =>",
               "      options = _.defaults options,",
@@ -304,7 +679,7 @@ base.documentorData = [
         ]
       },
       {
-        "id": "dd_8",
+        "id": "dd_23",
         "shortName": "x.Replicator",
         "name": "basics.Replicator",
         "code": [
@@ -343,7 +718,7 @@ base.documentorData = [
         ],
         "methods": [
           {
-            "id": "dd_9",
+            "id": "dd_24",
             "code": [
               "    @replicate: (selector, data, callback) =>",
               "      new this(selector).initialize().replicate(data, callback)"
@@ -361,7 +736,7 @@ base.documentorData = [
             "name": "basics.Replicator.@replicate"
           },
           {
-            "id": "dd_10",
+            "id": "dd_25",
             "code": [
               "    constructor: (@selector, options={}) ->",
               "      @options = _.defaults options,",
@@ -374,7 +749,7 @@ base.documentorData = [
             "name": "basics.Replicator.constructor"
           },
           {
-            "id": "dd_11",
+            "id": "dd_26",
             "code": [
               "    initialize: () =>"
             ],
@@ -385,7 +760,7 @@ base.documentorData = [
             "name": "basics.Replicator.initialize"
           },
           {
-            "id": "dd_12",
+            "id": "dd_27",
             "code": [
               "    getTemplate: () =>"
             ],
@@ -397,7 +772,7 @@ base.documentorData = [
             "name": "basics.Replicator.getTemplate"
           },
           {
-            "id": "dd_13",
+            "id": "dd_28",
             "code": [
               "    replicate: (array, callback) =>"
             ],
@@ -459,7 +834,7 @@ base.documentorData = [
         ]
       },
       {
-        "id": "dd_22",
+        "id": "dd_38",
         "shortName": "Notjs",
         "name": "Notjs",
         "code": [
@@ -472,7 +847,7 @@ base.documentorData = [
         ],
         "methods": [
           {
-            "id": "dd_23",
+            "id": "dd_39",
             "code": [
               "  namespace: (target, name, block) ->"
             ],
@@ -486,7 +861,18 @@ base.documentorData = [
             "name": "Notjs.namespace"
           },
           {
-            "id": "dd_24",
+            "id": "dd_40",
+            "code": [
+              "  globalNamespace: () =>"
+            ],
+            "comment": [
+              "      returns the object representing the global namespace (window in browser and global in node.js"
+            ],
+            "shortName": "globalNamespace",
+            "name": "Notjs.globalNamespace"
+          },
+          {
+            "id": "dd_41",
             "code": [
               "  addPrototypeUnlessExists: (klass, protoName, method) ->"
             ],
