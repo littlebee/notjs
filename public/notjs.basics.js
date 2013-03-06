@@ -264,8 +264,8 @@
         
                 <b>formMode: "readOnly"</b> - Form will only display data.
         
-              Individual form inputs can additionally declare themselves to be read only by including
-              the css class "readonly" as in the case of modifiedAt in the above example.
+              Individual form input DOM elements can additionally declare themselves to be read only
+              by including the css class "readonly".  See modifiedAt in the above example.
         
               See also:   Notjs.basics.FormInput class
         */
@@ -444,23 +444,23 @@
   Notjs.namespace('basics', function(x) {
     return x.FormInput = (function() {
       /*
-          The FormInput class is a abstract base class for all form input types.  The
-          class factory method can be used to generate a specific type of FormInput class
-          (an extension).
+          The FormInput class is an abstract base class for all form input types.
       
           A specific type of FormInput is instantiated on a DOM element identifying a
-          container where the value of the data attribute associated with this FormInput
-          will be rendered on display, and a type of input control or other html will
-          be rendered to take the user's input.
+          container.  The value of the DOM element ($().html()) is then after controlled
+          by the FormInput type.   An outside party (Notjs.basics.Form or Slick.Grid)
+          tells the type when to display data by calling the formatForDisplay() class
+          method; and it also tells the FormInput type when to render html capable of
+          taking user input.
       
-          The FormInput classes provides an interface compatible to that of SlickGrid's
+          The FormInput classes provide an interface compatible to that of SlickGrid's
           Editor extentions and are intended to be used interchangably in that environment.
       
           See <a href="https://github.com/mleibman/SlickGrid/wiki/Writing-custom-cell-editors">SlickGrid: Writing custom cell editors</a> for more information.
       
-          For Notjs Forms, this class is the base class for all form inputs and provides defaults
-          for some of the methods required by SlickGrid editors.   At a minimum, any extension
-          of this class must provide the following methods:
+          The Form base class defined here provides defaults  for some of the methods required by
+          SlickGrid editors.   At a minimum, any extension of this class must provide the following methods:
+      
             - a static class method called formatForDisplay (which can be used as SlickGrid
                 formatter) which returns a string containing the html to render in the
                 formInput element
@@ -469,38 +469,12 @@
                 input to the value of it's corresponding attribute in dataObject
             - an instance method called serializeValue() that returns the current value of the input
       
-          Simplest Example:
-            <code>
-            |  <html>
-            |    <body>
-            |      <div id="authorEditForm">
-            |        <div data-not_attr="name"></div>
-            |        <div data-not_attr="genre"></div>
-            |        <button class="success">Save it!</button><button class="cancel">Nevermind</button>
-            |      </div>
-            |    </body>
-            |  </html>
-            |  <script>
-            |    var dataObject = {name: "Arthur C. Clark", genre: "science fiction", modifiedAt: "6/15/2012"};
-            |    var form = new Notjs.basics.Form("#authorEditForm", dataObject, {
-            |        updateCallback: function(whatUpdated){ alert("You updated " + whatUpdated + ". I'm telling");}
-            |    });
-            |    form.initialize();
-            </code>
+          See Notjs.basics.formInputs.Text for a simple example of creating a custom editor / formatter that can be
+          used with either Notjs.basics.Form or Slick.Grid.
       
-          Produces this:
-            <code>
-            |  <html>
-            |    <body>
-            |      <div id="authorEditForm">
-            |        <div data-not_attr="name"><input type="text" value="Arthur C. Clark"></div>
-            |        <div data-not_attr="genre"><input type="text" value="science fiction"></div>
-            |        <div class='readonly' data-not_attr="modifiedAt">6/15/2012</div>
-            |        <button class="success">Save it!</button><button class="cancel">Nevermind</button>
-            |      </div>
-            |    </body>
-            |  </html>
-            </code>
+          In most use cases, Notjs.basics.FormInputs and children are only instantiated by either Notjs.basics.Form
+          or SlickGrid.  Application code should rarely need to create an indivual FormInput.  See documentation
+          for Notjs.basics.Form for an example of how the are used there.
       */
 
       FormInput.formatForDisplay = function(row, cell, value, columnDef, dataContext) {

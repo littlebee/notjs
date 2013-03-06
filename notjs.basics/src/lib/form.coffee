@@ -117,8 +117,8 @@ Notjs.namespace 'basics', (x) ->
 
         <b>formMode: "readOnly"</b> - Form will only display data.
 
-      Individual form inputs can additionally declare themselves to be read only by including
-      the css class "readonly" as in the case of modifiedAt in the above example.
+      Individual form input DOM elements can additionally declare themselves to be read only
+      by including the css class "readonly".  See modifiedAt in the above example.
 
       See also:   Notjs.basics.FormInput class
       ###
