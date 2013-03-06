@@ -21,6 +21,12 @@ class Notjs
     target = target[item] or= {} for item in name.split '.'
     block target, top
 
+  globalNamespace: () =>
+    ###
+      returns the object representing the global namespace (window in browser and global in node.js
+    ###
+    return ROOT_NAMESPACE
+
   addPrototypeUnlessExists: (klass, protoName, method) ->
     ###
       convenience method for adding a prototype to a class if it doesn't exist.   Useful for things
@@ -34,6 +40,13 @@ class Notjs
     proto = klass.prototype[protoName] || (klass.prototype[protoName] = method)
     proto
 
+  errors:
+
+    pureVirtualMissing: (className, methodName) =>
+      throw "#{className} pure virtual method #{methodName} missing. Must override in subclass of FormInput."
+
+    invalidArgument: (argumentName) =>
+      throw "Invalid Argument: #{argumentName}"
 
 ROOT_NAMESPACE.Notjs = new Notjs()
 

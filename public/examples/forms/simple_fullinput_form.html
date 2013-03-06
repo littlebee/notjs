@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+  <meta name="viewport" content="width=device-width">
+  <!--<link rel="icon" href="docs/images/favicon.ico" />-->
+  <link rel='stylesheet' type="text/css" href="../examples.css"/>
+  <title>Notjs - simple fullinput form example</title>
+</head>
+<body>
+  <p>
+    This is a simple example that demonstrates a full input mode
+    form and a read only form that displays the last saved values
+    of the input form.
+
+    It also uses an inpage partial (Notjs.basics.Partial)
+  </p>
+  <br/>
+
+  <div id="authorTemplate" class="not-partial">
+    Name: <span data-not_attr="name"></span><br/>
+    Genre: <span data-not_attr="genre"></span><br/>
+    Won Hugo Award? <span data-not_attr="wonHugo" data-not_type="Checkbox"></span><br/>
+  </div>
+
+  <h2>Enter your favorite author here: </h2>
+  <div id="inputForm" class="form" data-not_partial="#authorTemplate"></div>
+
+  <h2>You said: </h2>
+  <div id="reflectionForm" class="form" data-not_partial="#authorTemplate"></div>
+
+
+  <script src="../../vendor/underscore-1.4.2.min.js"></script>
+  <script src="../../vendor/jquery-1.8.3.js"></script>
+  <script src="../../notjs.basics.js"></script>
+
+  <script>
+
+    $(document).ready(function(){
+      // NOTE:  not using onPartialsResolved option because there are no external partials
+      Notjs.basics.Partials.resolve()
+      dataObject = {
+        name: "Robert Heinlein",
+        genre: "Science Fiction",
+        wonHugo: true
+      }
+      reflectionForm = new Notjs.basics.Form("#reflectionForm", dataObject, {formMode: "readOnly"}).initialize()
+      inputForm = new Notjs.basics.Form('#inputForm', dataObject, {
+        updateCallback: function(){
+          // since reflectionForm is pointed at the same dataObject as inputForm, this is all you have to do!
+          reflectionForm.$element.show()
+          reflectionForm.refresh()
+        }
+      }).initialize();
+    })
+  </script>
+
+</body>
+</html>

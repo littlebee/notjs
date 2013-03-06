@@ -60,9 +60,14 @@ task 'build', 'build the public/.js build targets', ->
     thisBuildDir = path.join(BUILD_DIR, buildTarget.name)
     console.log "creating build dir (#{thisBuildDir})"
     fsx.mkdirsSync "./" + thisBuildDir
-    console.log "compiling coffeescripts..."
-    execSync "coffee -c -o #{thisBuildDir} #{buildTarget.srcDir}", (error) ->
-      handleError error
+    execSync "rm -Rf #{thisBuildDir}/*"
+
+    coffeeCmd = "coffee -c -o #{thisBuildDir} #{buildTarget.srcDir}"
+    console.log "compiling coffeescripts...  (#{coffeeCmd})"
+    result = execSync(coffeeCmd, handleError)
+    if result.stderr != ''
+      throw result.stderr
+
 
     console.log "creating #{buildTarget.target}.js"
     filesSeen = []
