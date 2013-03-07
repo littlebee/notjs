@@ -69,11 +69,16 @@ Notjs.namespace 'basics', (x) ->
     ... yes, you can!  Notjs FormInputs steal their creation mechanics and API from SlickGrid
     and are designed to be interchangable.
 
-    css class reactions:
+    CSS class interactions:
       - "readonly"  # no input will be made available regardless of all other options and settings. this
-                  css class can be used on either form element or the data-not_attr form input elements.
+                    # css class can be used on either form element or the individual data-not_attr form 
+                    # input elements.
+      - "hidden"    # added to submit / success buttons on form without any FormInputs in input mode
+      - "success"   # any element in the form with this class will be assumed clickable and mean save
+      - "cancel"    # any element in the form with this class will be assumed clickable and mean cancel edit
 
-    html5 data attributes and defaults:
+
+    HTML5 data attributes and defaults:
       - data-not_attr=""      # the name of the data or method attribute on <i>dataObject</i>
       - data-not_type="Text"  # the FormInput class name to create.
 
@@ -112,7 +117,7 @@ Notjs.namespace 'basics', (x) ->
           dataObject attribute associated with the single input that was taken is updated
           and updateCallback method is called with the attribute name updated.
 
-        <b>formMode: "switchToEdit"</b> - form inputs will initially be all display
+        <b>formMode: "switchToFullInput"</b> - form inputs will initially be all display
           only and when any element in the form is clicked, the whole form becomes editable.
           The form must provide a submit button which is hidden until the user clicks
           to edit form.  Hidding of the button is provided by the addition and removal
@@ -154,12 +159,14 @@ Notjs.namespace 'basics', (x) ->
     setFormMode:(mode) =>
       @options.formMode = mode
       switch mode
-        when "fullInput" then @_showAllInputs()
-        when "inlineEdit", "switchToEdit"
+        when "fullInput" 
+          @_showAllInputs()
+        when "inlineEdit", "switchToFullInput"
           @_displayDataForAll()
           @_installClickHandlers()
         when "readOnly" then @_displayDataForAll()
         else throw Notjs.errors.InvalidArgument("formMode")
+        
 
 
     _initializeFormInputs: () =>
@@ -179,7 +186,7 @@ Notjs.namespace 'basics', (x) ->
         formInput.$element.click () => @_editOnClick(formInput)
 
     _editOnClick: (formInput) =>
-      if @options.formMode == "switchToEdit"
+      if @options.formMode == "switchToFullInput"
         @_showAllInputs()
       else
         @_showInputFor(formInput)
@@ -206,6 +213,19 @@ Notjs.namespace 'basics', (x) ->
         commitChanges: @_commitChanges
 
       return new formInput.formInputClass args
+
+    _showSaveAndCancel: () =>
+
+
+    _hideSaveAndCancel: () =>
+
+
+    _findSaveButtons: () =>
+      @$element.find("input[type='submit'], .success")
+
+    _findCancelButtons: () =>
+
+
 
     _displayDataForAll: () =>
       for formInput in @formInputs

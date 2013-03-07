@@ -22,9 +22,10 @@
     Name: <span data-not_attr="name"></span><br/>
     Genre: <span data-not_attr="genre"></span><br/>
     Won Hugo Award? <span data-not_attr="wonHugo" data-not_type="Checkbox"></span><br/>
-    <!--<input type="submit" style="float: right"/>-->
-    <button class="success" style="float: right">Save it!</button>
-
+    <input type="button" class="cancel" value="Cancel input button"/>
+    <button class="cancel">Cancel button</button>
+    <input type="submit" value="submit input"/>
+    <button class="success">Save button</button>
   </div>
 
   <h2>Enter your favorite author here: </h2>
@@ -32,7 +33,7 @@
 
   <div id="reflect" class="hidden">>
     <h2>You said: </h2>
-    <div id="reflectionForm" class="form inline" data-not_partial="#authorTemplate"></div>
+    <div id="reflectionForm" class="inline readonly" data-not_partial="#authorTemplate"></div>
   </div>
 
   <script src="../../vendor/underscore-1.4.2.min.js"></script>
@@ -45,11 +46,11 @@
       // NOTE:  not using onPartialsResolved option because there are no external partials
       Notjs.basics.Partials.resolve()
       dataObject = {
-        name: "Robert Heinlein",
+        name: "Enter the Name of an",
         genre: "Science Fiction",
         wonHugo: true
       }
-      reflectionForm = new Notjs.basics.Form("#reflectionForm", dataObject, {formMode: "readOnly"}).initialize()
+      reflectionForm = new Notjs.basics.Form("#reflectionForm", dataObject).initialize()
       inputForm = new Notjs.basics.Form('#inputForm', dataObject, {
         updateCallback: function(){
           // since reflectionForm is pointed at the same dataObject as inputForm, this is all you have to do!
