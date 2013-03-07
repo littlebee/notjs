@@ -182,11 +182,16 @@
           ... yes, you can!  Notjs FormInputs steal their creation mechanics and API from SlickGrid
           and are designed to be interchangable.
       
-          css class reactions:
+          CSS class interactions:
             - "readonly"  # no input will be made available regardless of all other options and settings. this
-                        css class can be used on either form element or the data-not_attr form input elements.
+                          # css class can be used on either form element or the individual data-not_attr form 
+                          # input elements.
+            - "hidden"    # added to submit / success buttons on form without any FormInputs in input mode
+            - "success"   # any element in the form with this class will be assumed clickable and mean save
+            - "cancel"    # any element in the form with this class will be assumed clickable and mean cancel edit
       
-          html5 data attributes and defaults:
+      
+          HTML5 data attributes and defaults:
             - data-not_attr=""      # the name of the data or method attribute on <i>dataObject</i>
             - data-not_type="Text"  # the FormInput class name to create.
       
@@ -211,6 +216,14 @@
         this._displayDataFor = __bind(this._displayDataFor, this);
 
         this._displayDataForAll = __bind(this._displayDataForAll, this);
+
+        this._findCancelButtons = __bind(this._findCancelButtons, this);
+
+        this._findSaveButtons = __bind(this._findSaveButtons, this);
+
+        this._hideSaveAndCancel = __bind(this._hideSaveAndCancel, this);
+
+        this._showSaveAndCancel = __bind(this._showSaveAndCancel, this);
 
         this._instantiateFormInputFor = __bind(this._instantiateFormInputFor, this);
 
@@ -259,7 +272,7 @@
                   dataObject attribute associated with the single input that was taken is updated
                   and updateCallback method is called with the attribute name updated.
         
-                <b>formMode: "switchToEdit"</b> - form inputs will initially be all display
+                <b>formMode: "switchToFullInput"</b> - form inputs will initially be all display
                   only and when any element in the form is clicked, the whole form becomes editable.
                   The form must provide a submit button which is hidden until the user clicks
                   to edit form.  Hidding of the button is provided by the addition and removal
@@ -299,7 +312,7 @@
           case "fullInput":
             return this._showAllInputs();
           case "inlineEdit":
-          case "switchToEdit":
+          case "switchToFullInput":
             this._displayDataForAll();
             return this._installClickHandlers();
           case "readOnly":
@@ -344,7 +357,7 @@
       };
 
       Form.prototype._editOnClick = function(formInput) {
-        if (this.options.formMode === "switchToEdit") {
+        if (this.options.formMode === "switchToFullInput") {
           this._showAllInputs();
         } else {
           this._showInputFor(formInput);
@@ -384,6 +397,16 @@
         };
         return new formInput.formInputClass(args);
       };
+
+      Form.prototype._showSaveAndCancel = function() {};
+
+      Form.prototype._hideSaveAndCancel = function() {};
+
+      Form.prototype._findSaveButtons = function() {
+        return this.$element.find("input[type='submit'], .success");
+      };
+
+      Form.prototype._findCancelButtons = function() {};
 
       Form.prototype._displayDataForAll = function() {
         var formInput, _i, _len, _ref, _results;
