@@ -6,14 +6,13 @@ Notjs.namespace 'basics.formInputs', (x) ->
       presents an <input type='checkbox'...  type input on edit
     ###
     @formatForDisplay: (row, cell, value, columnDef, dataContext) =>
-      checked = if value then "check='checked'" else ""
-      return "<input type='checkbox' disabled='disabled' #{checked}/>"
+        @_renderInput value, true
 
     constructor: (args) ->
       super
 
     initialize: () =>
-      @$input = $("<INPUT type=checkbox/>")
+      @$input = $(x.Checkbox._renderInput(false, false))
       .appendTo(@$element)
       .focus()
       .select()
@@ -26,3 +25,11 @@ Notjs.namespace 'basics.formInputs', (x) ->
 
     serializeValue: () =>
       @$input.attr('checked') == 'checked'
+
+
+
+    @_renderInput: (checked=false, disabled=false) =>
+      checked = if checked then "checked='checked'" else ""
+      disabled = if disabled then "disabled='disabled'" else ""
+
+      return "<input type='checkbox' #{disabled} #{checked}/>"

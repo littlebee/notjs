@@ -22,14 +22,18 @@
     Name: <span data-not_attr="name"></span><br/>
     Genre: <span data-not_attr="genre"></span><br/>
     Won Hugo Award? <span data-not_attr="wonHugo" data-not_type="Checkbox"></span><br/>
+    <!--<input type="submit" style="float: right"/>-->
+    <button class="success" style="float: right">Save it!</button>
+
   </div>
 
   <h2>Enter your favorite author here: </h2>
-  <div id="inputForm" class="form" data-not_partial="#authorTemplate"></div>
+  <div id="inputForm" class="form inline" data-not_partial="#authorTemplate"></div>
 
-  <h2>You said: </h2>
-  <div id="reflectionForm" class="form" data-not_partial="#authorTemplate"></div>
-
+  <div id="reflect" class="hidden">>
+    <h2>You said: </h2>
+    <div id="reflectionForm" class="form inline" data-not_partial="#authorTemplate"></div>
+  </div>
 
   <script src="../../vendor/underscore-1.4.2.min.js"></script>
   <script src="../../vendor/jquery-1.8.3.js"></script>
@@ -49,7 +53,7 @@
       inputForm = new Notjs.basics.Form('#inputForm', dataObject, {
         updateCallback: function(){
           // since reflectionForm is pointed at the same dataObject as inputForm, this is all you have to do!
-          reflectionForm.$element.show()
+          $('#reflect').removeClass('hidden')
           reflectionForm.refresh()
         }
       }).initialize();

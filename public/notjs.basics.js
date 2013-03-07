@@ -1242,9 +1242,7 @@
 
 
       Checkbox.formatForDisplay = function(row, cell, value, columnDef, dataContext) {
-        var checked;
-        checked = value ? "check='checked'" : "";
-        return "<input type='checkbox' disabled='disabled' " + checked + "/>";
+        return Checkbox._renderInput(value, true);
       };
 
       function Checkbox(args) {
@@ -1257,7 +1255,7 @@
       }
 
       Checkbox.prototype.initialize = function() {
-        return this.$input = $("<INPUT type=checkbox/>").appendTo(this.$element).focus().select();
+        return this.$input = $(x.Checkbox._renderInput(false, false)).appendTo(this.$element).focus().select();
       };
 
       Checkbox.prototype.loadValue = function(dataObject) {
@@ -1270,6 +1268,18 @@
 
       Checkbox.prototype.serializeValue = function() {
         return this.$input.attr('checked') === 'checked';
+      };
+
+      Checkbox._renderInput = function(checked, disabled) {
+        if (checked == null) {
+          checked = false;
+        }
+        if (disabled == null) {
+          disabled = false;
+        }
+        checked = checked ? "checked='checked'" : "";
+        disabled = disabled ? "disabled='disabled'" : "";
+        return "<input type='checkbox' " + disabled + " " + checked + "/>";
       };
 
       return Checkbox;
