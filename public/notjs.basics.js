@@ -116,16 +116,19 @@
     return x.Form = (function() {
       /*
           The Notjs.basics.Form class is instantiated on a DOM element identifying the container
-          of FormInput elements that will be used to display and take input.
+          of FormInput elements that will be used to display and take input.  The constructor
+          parameter <i>@selector</i> identifies the DOM element and the <i>dataObject</i> parameter
+          has a javascript object that is bound to this form.  Each FormInput identified by a 
+          data-not_attr attribute represents an attribute within <i>dataObject</id>
       
           Depending on the formMode option to the constructor, the data displayed in the form
           and the input data collected from the user are saved in a Javascript object called
-          dataObject passed to the constructor.  There is also provision for notification
+          <i>dataObject</i> passed to the constructor.  There is also provision for notification
           of updates via an optional callback function (updateCallback).
       
           Note that forms do not need to be in &lt;form&gt; tags.  The example below demonstrates
           a form constructed in a div.  If you do construct the notjs Form on a form tag, it
-          will disable the form from posting back to the server and then update dataObject and
+          will disable the form from posting back to the server and then update <i>dataObject</i> and
           call updateCallback.
       
           Simplest Example:
@@ -163,10 +166,10 @@
             </code>
       
           Each element that identifies a FormInput object must, at a minimum, have
-          a data-not_attr attribute that identifies where in the dataObject the value for
+          a data-not_attr attribute that identifies where in the <i>dataObject</i> the value for
           this input lives.
       
-          Another often needed attribute is the data-not_type which is defaulted to "text".
+          Another often needed attribute is the data-not_type which is defaulted to "Text".
           <code>
            | <div data-not_attr="wonHugoAward" data-not_type="Checkbox"></div>
           </code>
@@ -181,14 +184,14 @@
       
           css class reactions:
             - "readonly"  # no input will be made available regardless of all other options and settings. this
-                        css class can be used on either form element or the data-not_attr form inputs.
+                        css class can be used on either form element or the data-not_attr form input elements.
       
           html5 data attributes and defaults:
-            - data-not_attr=""      # the name of the data or method attribute on dataobject
+            - data-not_attr=""      # the name of the data or method attribute on <i>dataObject</i>
             - data-not_type="Text"  # the FormInput class name to create.
       
-          Note the this class handles switching the FormInputs between display and input mode and navigation
-          between inputs with the keyboard.
+          Note the this class, Notjs.basics.Form, handles switching the FormInputs between display and input mode
+          and navigation between inputs with the keyboard and mouse.
       */
 
       function Form(selector, dataObject, options) {
