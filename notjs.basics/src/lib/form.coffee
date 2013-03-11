@@ -202,15 +202,20 @@ Notjs.namespace 'basics', (x) ->
       formInput.$element.focus().select()
 
 
+    #######  Input
+
+
     _showAllInputs: () =>
       for formInput in @formInputs
-        @_showInputFor formInput
-
+        # DOM Class 'readonly' overrides
+        if formInput.$element.hasClass('readonly')
+          @_displayDataFor formInput
+        else
+          @_showInputFor formInput
 
     _showInputFor: (formInput) =>
       formInput.formInputObject ||= @_instantiateFormInputFor(formInput)
       formInput.formInputObject.loadValue(@dataObject)
-
 
     _instantiateFormInputFor: (formInput) =>
       args =
@@ -224,6 +229,26 @@ Notjs.namespace 'basics', (x) ->
         commitChanges: @_commitChanges
 
       return new formInput.formInputClass args
+
+
+    ######### Display
+
+    _displayDataForAll: () =>
+      for formInput in @formInputs
+        @_displayDataFor formInput
+
+
+    _displayDataFor: (formInput) =>
+      $el = formInput.$element
+      klass = formInput.formInputClass
+      attr = formInput.attr
+      unless klass.formatForDisplay? and _.isFunction(klass.formatForDisplay)
+        console.warn "FormInput type #{formInput.type} for #{attr} doesn't have a " +
+                     "formatForDisplay class method. skipping"
+        return;
+      $el.html klass.formatForDisplay($el, $el, @dataObject[attr], null, @dataObject)
+
+
 
     _showSaveAndCancel: () =>
       @_findSaveButtons().removeClass('hidden').on 'click.notjs-form', @_commitChanges
@@ -241,22 +266,6 @@ Notjs.namespace 'basics', (x) ->
 
     _findCancelButtons: () =>
       @$element.find(".cancel")
-
-
-    _displayDataForAll: () =>
-      for formInput in @formInputs
-        @_displayDataFor formInput
-
-
-    _displayDataFor: (formInput) =>
-      $el = formInput.$element
-      klass = formInput.formInputClass
-      attr = formInput.attr
-      unless klass.formatForDisplay? and _.isFunction(klass.formatForDisplay)
-        console.warn "FormInput type #{formInput.type} for #{attr} doesn't have a " +
-                     "formatForDisplay class method. skipping"
-        return;
-      $el.html klass.formatForDisplay($el, $el, @dataObject[attr], null, @dataObject)
 
 
     _startInlineEdit: (formInput) =>
@@ -292,6 +301,7 @@ Notjs.namespace 'basics', (x) ->
 
       whatChanged = []
       for formInput in formInputs
+        continue unless formInput.formInputObject?
         formInput.formInputObject.applyValue(dataObject, formInput.formInputObject.serializeValue())
         whatChanged.push formInput.attr
 

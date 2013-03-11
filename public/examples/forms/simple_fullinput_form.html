@@ -20,7 +20,7 @@
 
   <div id="authorTemplate" class="not-partial">
     Name: <span data-not_attr="name"></span><br/>
-    Genre: <span data-not_attr="genre"></span><br/>
+    Genre: <span class='readonly' data-not_attr="genre"></span> (read only)<br/>
     Won Hugo Award? <span data-not_attr="wonHugo" data-not_type="Checkbox"></span><br/>
   </div>
 
@@ -51,7 +51,7 @@
       Notjs.basics.Partials.resolve()
       dataObject = {
         name: "...of Author",
-        genre: "ex, Science Fiction",
+        genre: "Science Fiction",
         wonHugo: false
       }
       reflectionForm = new Notjs.basics.Form("#reflectionForm", dataObject).initialize()

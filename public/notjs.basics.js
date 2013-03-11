@@ -215,10 +215,6 @@
 
         this._startInlineEdit = __bind(this._startInlineEdit, this);
 
-        this._displayDataFor = __bind(this._displayDataFor, this);
-
-        this._displayDataForAll = __bind(this._displayDataForAll, this);
-
         this._findCancelButtons = __bind(this._findCancelButtons, this);
 
         this._findSaveButtons = __bind(this._findSaveButtons, this);
@@ -226,6 +222,10 @@
         this._hideSaveAndCancel = __bind(this._hideSaveAndCancel, this);
 
         this._showSaveAndCancel = __bind(this._showSaveAndCancel, this);
+
+        this._displayDataFor = __bind(this._displayDataFor, this);
+
+        this._displayDataForAll = __bind(this._displayDataForAll, this);
 
         this._instantiateFormInputFor = __bind(this._instantiateFormInputFor, this);
 
@@ -380,7 +380,11 @@
         _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           formInput = _ref[_i];
-          _results.push(this._showInputFor(formInput));
+          if (formInput.$element.hasClass('readonly')) {
+            _results.push(this._displayDataFor(formInput));
+          } else {
+            _results.push(this._showInputFor(formInput));
+          }
         }
         return _results;
       };
@@ -407,24 +411,6 @@
         return new formInput.formInputClass(args);
       };
 
-      Form.prototype._showSaveAndCancel = function() {
-        this._findSaveButtons().removeClass('hidden').on('click.notjs-form', this._commitChanges);
-        return this._findCancelButtons().removeClass('hidden').on('click.notjs-form', this._cancelChanges);
-      };
-
-      Form.prototype._hideSaveAndCancel = function() {
-        this._findSaveButtons().addClass('hidden').off('click.notjs-form');
-        return this._findCancelButtons().addClass('hidden').off('click.notjs-form');
-      };
-
-      Form.prototype._findSaveButtons = function() {
-        return this.$element.find("input[type='submit'], .success");
-      };
-
-      Form.prototype._findCancelButtons = function() {
-        return this.$element.find(".cancel");
-      };
-
       Form.prototype._displayDataForAll = function() {
         var formInput, _i, _len, _ref, _results;
         _ref = this.formInputs;
@@ -446,6 +432,24 @@
           return;
         }
         return $el.html(klass.formatForDisplay($el, $el, this.dataObject[attr], null, this.dataObject));
+      };
+
+      Form.prototype._showSaveAndCancel = function() {
+        this._findSaveButtons().removeClass('hidden').on('click.notjs-form', this._commitChanges);
+        return this._findCancelButtons().removeClass('hidden').on('click.notjs-form', this._cancelChanges);
+      };
+
+      Form.prototype._hideSaveAndCancel = function() {
+        this._findSaveButtons().addClass('hidden').off('click.notjs-form');
+        return this._findCancelButtons().addClass('hidden').off('click.notjs-form');
+      };
+
+      Form.prototype._findSaveButtons = function() {
+        return this.$element.find("input[type='submit'], .success");
+      };
+
+      Form.prototype._findCancelButtons = function() {
+        return this.$element.find(".cancel");
       };
 
       Form.prototype._startInlineEdit = function(formInput) {
@@ -485,6 +489,9 @@
         whatChanged = [];
         for (_i = 0, _len = formInputs.length; _i < _len; _i++) {
           formInput = formInputs[_i];
+          if (formInput.formInputObject == null) {
+            continue;
+          }
           formInput.formInputObject.applyValue(dataObject, formInput.formInputObject.serializeValue());
           whatChanged.push(formInput.attr);
         }
