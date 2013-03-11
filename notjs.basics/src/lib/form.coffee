@@ -117,7 +117,7 @@ Notjs.namespace 'basics', (x) ->
           dataObject attribute associated with the single input that was taken is updated
           and updateCallback method is called with the attribute name updated.
 
-        <b>formMode: "switchToFullInput"</b> - form inputs will initially be all display
+        <b>formMode: "fullInputOnClick"</b> - form inputs will initially be all display
           only and when any element in the form is clicked, the whole form becomes editable.
           The form must provide a submit button which is hidden until the user clicks
           to edit form.  Hidding of the button is provided by the addition and removal
@@ -166,7 +166,7 @@ Notjs.namespace 'basics', (x) ->
         when "fullInput" 
           @_showAllInputs()
           @_showSaveAndCancel()
-        when "inlineEdit", "switchToFullInput"
+        when "inlineEdit", "fullInputOnClick"
           @_displayDataForAll()
           @_installClickHandlers()
           @_hideSaveAndCancel()
@@ -194,7 +194,7 @@ Notjs.namespace 'basics', (x) ->
         formInput.$element.click () => @_editOnClick(formInput)
 
     _editOnClick: (formInput) =>
-      if @options.formMode == "switchToFullInput"
+      if @options.formMode == "fullInputOnClick"
         @_showAllInputs()
       else
         @_startInlineEdit(formInput)

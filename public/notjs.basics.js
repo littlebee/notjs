@@ -105,6 +105,20 @@
     return this.push.apply(this, rest);
   });
 
+  Notjs.addPrototypeUnlessExists(Array, "englishJoin", function() {
+    /*
+        returns a string of items separated by comma except the last which is prefaced by "and"
+    */
+
+    var lastComma, out;
+    out = this.join(',');
+    lastComma = out.lastIndexOf(',');
+    if (lastComma <= 0) {
+      return out;
+    }
+    return out.slice(0, +(lastComma - 1) + 1 || 9e9) + ' and ' + out.slice(lastComma + 1);
+  });
+
 }).call(this);
 
 
@@ -274,7 +288,7 @@
                   dataObject attribute associated with the single input that was taken is updated
                   and updateCallback method is called with the attribute name updated.
         
-                <b>formMode: "switchToFullInput"</b> - form inputs will initially be all display
+                <b>formMode: "fullInputOnClick"</b> - form inputs will initially be all display
                   only and when any element in the form is clicked, the whole form becomes editable.
                   The form must provide a submit button which is hidden until the user clicks
                   to edit form.  Hidding of the button is provided by the addition and removal
@@ -319,7 +333,7 @@
             this._showAllInputs();
             return this._showSaveAndCancel();
           case "inlineEdit":
-          case "switchToFullInput":
+          case "fullInputOnClick":
             this._displayDataForAll();
             this._installClickHandlers();
             return this._hideSaveAndCancel();
@@ -366,7 +380,7 @@
       };
 
       Form.prototype._editOnClick = function(formInput) {
-        if (this.options.formMode === "switchToFullInput") {
+        if (this.options.formMode === "fullInputOnClick") {
           this._showAllInputs();
         } else {
           this._startInlineEdit(formInput);

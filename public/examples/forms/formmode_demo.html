@@ -1,0 +1,82 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+  <meta name="viewport" content="width=device-width">
+  <!--<link rel="icon" href="docs/images/favicon.ico" />-->
+  <link rel='stylesheet' type="text/css" href="../examples.css"/>
+  <title>Notjs - simple fullinput form example</title>
+</head>
+<style>
+#formModeSelect {
+  font-size: large;
+}
+</style>
+<body>
+
+  <p>
+    This demostates the different formModes and changing the
+    formMode in real time.
+
+    It also uses an inpage partial (Notjs.basics.Partial)
+  </p>
+  <br/>
+
+  <div id="authorTemplate" class="not-partial">
+    Name: <span data-not_attr="name"></span><br/>
+    Genre: <span class='readonly' data-not_attr="genre"></span> (read only)<br/>
+    Won Hugo Award? <span data-not_attr="wonHugo" data-not_type="Checkbox"></span><br/>
+  </div>
+
+  <div>
+    <h2 class="inline">Select the form mode:&nbsp;&nbsp;&nbsp;</h2>
+    <select id="formModeSelect" autofocus>
+      <option value="fullInput" selected>fullInput</option>
+      <option value="readOnly">readOnly</option>
+      <option value="inlineEdit">inlineEdit</option>
+      <option value="fullInputOnClick">fullInputOnClick</option>
+    </select>
+  </div>
+
+  <div id="inputForm" class="form inline">
+    <div id="inputFormInputs" data-not_partial="#authorTemplate"></div>
+
+    <button class="cancel">Cancel</button>
+    <button class="success">Save</button>
+  </div>
+  <br><br>
+  <div id="changeMessage" class="message hidden">
+    I saw you change <span id="changedAttrs"></span>
+  </div>
+
+  <script src="../../vendor/underscore-1.4.2.min.js"></script>
+  <script src="../../vendor/jquery-1.8.3.js"></script>
+  <script src="../../notjs.basics.js"></script>
+
+  <script>
+
+    $(document).ready(function(){
+      // NOTE:  not using onPartialsResolved option because there are no external partials
+      Notjs.basics.Partials.resolve()
+      dataObject = {
+        name: "Robert Heinlein",
+        genre: "Science Fiction",
+        wonHugo: true
+      }
+      inputForm = new Notjs.basics.Form('#inputForm', dataObject, {
+        updateCallback: function(whatChanged){
+          $changeMessage = $('#changeMessage')
+          $('#changedAttrs').html(whatChanged.englishJoin())
+          $changeMessage.removeClass('hidden').fadeIn().delay(2000).fadeOut()
+        }
+      }).initialize();
+      $select = $('#formModeSelect')
+      $select.change(function(){
+        inputForm.setFormMode($select.val())
+      })
+    })
+  </script>
+
+</body>
+</html>
