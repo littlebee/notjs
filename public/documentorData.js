@@ -28,7 +28,7 @@ base.documentorData = [
         ]
       },
       {
-        "id": "dd_29",
+        "id": "dd_30",
         "name": "string.coffee",
         "code": [],
         "comment": [
@@ -36,7 +36,7 @@ base.documentorData = [
         ],
         "methods": [
           {
-            "id": "dd_30",
+            "id": "dd_31",
             "code": [
               "Notjs.addPrototypeUnlessExists String, \"startsWith\", (anotherString) ->"
             ],
@@ -51,7 +51,7 @@ base.documentorData = [
             "name": "String.startsWith(anotherString)"
           },
           {
-            "id": "dd_31",
+            "id": "dd_32",
             "code": [
               "Notjs.addPrototypeUnlessExists String, \"endsWith\", (anotherString) ->"
             ],
@@ -66,7 +66,7 @@ base.documentorData = [
             "name": "String.endsWith(anotherString)"
           },
           {
-            "id": "dd_32",
+            "id": "dd_33",
             "code": [
               "Notjs.addPrototypeUnlessExists String, \"isBlank\", () ->"
             ],
@@ -82,7 +82,7 @@ base.documentorData = [
             "name": "String.isBlank()"
           },
           {
-            "id": "dd_33",
+            "id": "dd_34",
             "code": [
               "Notjs.addPrototypeUnlessExists String, \"trim\", () ->"
             ],
@@ -93,7 +93,7 @@ base.documentorData = [
             "name": "String.trim()"
           },
           {
-            "id": "dd_34",
+            "id": "dd_35",
             "code": [
               "Notjs.addPrototypeUnlessExists String, \"elipsize\",  (maxLength) ->"
             ],
@@ -104,7 +104,7 @@ base.documentorData = [
             "name": "String.elipsize(maxLength)"
           },
           {
-            "id": "dd_35",
+            "id": "dd_36",
             "code": [
               "Notjs.addPrototypeUnlessExists String, \"decamelize\", () ->"
             ],
@@ -119,7 +119,7 @@ base.documentorData = [
             "name": "String.decamelize()"
           },
           {
-            "id": "dd_36",
+            "id": "dd_37",
             "code": [
               "Notjs.addPrototypeUnlessExists String, \"dropCamelize\", () ->"
             ],
@@ -136,7 +136,7 @@ base.documentorData = [
         ]
       },
       {
-        "id": "dd_37",
+        "id": "dd_38",
         "name": "utility.coffee",
         "code": [
           "###"
@@ -229,11 +229,16 @@ base.documentorData = [
           "    ... yes, you can!  Notjs FormInputs steal their creation mechanics and API from SlickGrid",
           "    and are designed to be interchangable.",
           "",
-          "    css class reactions:",
+          "    CSS class interactions:",
           "      - \"readonly\"  # no input will be made available regardless of all other options and settings. this",
-          "                  css class can be used on either form element or the data-not_attr form input elements.",
+          "                    # css class can be used on either form element or the individual data-not_attr form ",
+          "                    # input elements.",
+          "      - \"hidden\"    # added to submit / success buttons on form without any FormInputs in input mode",
+          "      - \"success\"   # any element in the form with this class will be assumed clickable and mean save",
+          "      - \"cancel\"    # any element in the form with this class will be assumed clickable and mean cancel edit",
           "",
-          "    html5 data attributes and defaults:",
+          "",
+          "    HTML5 data attributes and defaults:",
           "      - data-not_attr=\"\"      # the name of the data or method attribute on <i>dataObject</i>",
           "      - data-not_type=\"Text\"  # the FormInput class name to create.",
           "",
@@ -276,7 +281,7 @@ base.documentorData = [
               "          dataObject attribute associated with the single input that was taken is updated",
               "          and updateCallback method is called with the attribute name updated.",
               "",
-              "        <b>formMode: \"switchToEdit\"</b> - form inputs will initially be all display",
+              "        <b>formMode: \"switchToFullInput\"</b> - form inputs will initially be all display",
               "          only and when any element in the form is clicked, the whole form becomes editable.",
               "          The form must provide a submit button which is hidden until the user clicks",
               "          to edit form.  Hidding of the button is provided by the addition and removal",
@@ -304,11 +309,57 @@ base.documentorData = [
             ],
             "shortName": "initialize",
             "name": "basics.Form.initialize"
+          },
+          {
+            "id": "dd_6",
+            "code": [
+              "    _editOnClick: (formInput) =>",
+              "      if @options.formMode == \"switchToFullInput\"",
+              "        @_showAllInputs()",
+              "      else",
+              "        @_startInlineEdit(formInput)",
+              "",
+              "      formInput.$element.focus().select()",
+              "",
+              ""
+            ],
+            "comment": [
+              "",
+              "",
+              "    _showAllInputs: () =>",
+              "      for formInput in @formInputs",
+              "        @_showInputFor formInput",
+              "",
+              "    _showInputFor: (formInput) =>",
+              "      # css Class 'readonly' overrides",
+              "      if formInput.$element.hasClass('readonly')",
+              "        @_displayDataFor formInput",
+              "      else",
+              "        formInput.formInputObject ||= @_instantiateFormInputFor(formInput)",
+              "        formInput.formInputObject.loadValue(@dataObject)",
+              "",
+              "    _instantiateFormInputFor: (formInput) =>",
+              "      args =",
+              "        container: formInput.$element",
+              "        column: {field: formInput.attr}",
+              "        grid: this",
+              "        gridPosition: 0",
+              "        position: 0",
+              "        item: dataObject",
+              "        cancelChanges: @_cancelChanges",
+              "        commitChanges: @_commitChanges",
+              "",
+              "      return new formInput.formInputClass args",
+              "",
+              ""
+            ],
+            "shortName": "_editOnClick",
+            "name": "basics.Form._editOnClick"
           }
         ]
       },
       {
-        "id": "dd_6",
+        "id": "dd_7",
         "shortName": "x.FormInput",
         "name": "basics.FormInput",
         "code": [
@@ -350,7 +401,7 @@ base.documentorData = [
         ],
         "methods": [
           {
-            "id": "dd_7",
+            "id": "dd_8",
             "code": [
               "    @formatForDisplay: (row, cell, value, columnDef, dataContext) =>"
             ],
@@ -362,7 +413,7 @@ base.documentorData = [
             "name": "basics.FormInput.@formatForDisplay"
           },
           {
-            "id": "dd_8",
+            "id": "dd_9",
             "code": [
               "    constructor: (@args) ->",
               "      # I really don't like this argument passing model where optional args and required arguments",
@@ -384,7 +435,7 @@ base.documentorData = [
             "name": "basics.FormInput.constructor"
           },
           {
-            "id": "dd_9",
+            "id": "dd_10",
             "code": [
               "    initialize: () =>"
             ],
@@ -395,7 +446,7 @@ base.documentorData = [
             "name": "basics.FormInput.initialize"
           },
           {
-            "id": "dd_10",
+            "id": "dd_11",
             "code": [
               "    loadValue: (dataObject) =>"
             ],
@@ -407,7 +458,7 @@ base.documentorData = [
             "name": "basics.FormInput.loadValue"
           },
           {
-            "id": "dd_11",
+            "id": "dd_12",
             "code": [
               "    serializeValue: () =>"
             ],
@@ -418,7 +469,7 @@ base.documentorData = [
             "name": "basics.FormInput.serializeValue"
           },
           {
-            "id": "dd_12",
+            "id": "dd_13",
             "code": [
               "    applyValue: (dataObject, value) =>"
             ],
@@ -429,7 +480,7 @@ base.documentorData = [
             "name": "basics.FormInput.applyValue"
           },
           {
-            "id": "dd_13",
+            "id": "dd_14",
             "code": [
               "    destroy: () =>"
             ],
@@ -441,7 +492,7 @@ base.documentorData = [
             "name": "basics.FormInput.destroy"
           },
           {
-            "id": "dd_14",
+            "id": "dd_15",
             "code": [
               "    focus: () =>"
             ],
@@ -452,7 +503,7 @@ base.documentorData = [
             "name": "basics.FormInput.focus"
           },
           {
-            "id": "dd_15",
+            "id": "dd_16",
             "code": [
               "    getDataObjectValue: (dataObject) =>"
             ],
@@ -465,7 +516,7 @@ base.documentorData = [
         ]
       },
       {
-        "id": "dd_16",
+        "id": "dd_17",
         "shortName": "x.Checkbox",
         "name": "basics.formInputs.Checkbox",
         "code": [
@@ -478,7 +529,7 @@ base.documentorData = [
         "methods": []
       },
       {
-        "id": "dd_17",
+        "id": "dd_18",
         "shortName": "x.Text",
         "name": "basics.formInputs.Text",
         "code": [
@@ -491,7 +542,7 @@ base.documentorData = [
         "methods": []
       },
       {
-        "id": "dd_18",
+        "id": "dd_19",
         "shortName": "x.Partials",
         "name": "basics.Partials",
         "code": [
@@ -575,7 +626,7 @@ base.documentorData = [
         ],
         "methods": [
           {
-            "id": "dd_19",
+            "id": "dd_20",
             "code": [
               "    @resolve: (options = {}) ->",
               "      new this(options).initialize().resolve()"
@@ -587,7 +638,7 @@ base.documentorData = [
             "name": "basics.Partials.@resolve"
           },
           {
-            "id": "dd_20",
+            "id": "dd_21",
             "code": [
               "    constructor: (options = {}) ->",
               "      @options = _.defaults options,",
@@ -604,7 +655,7 @@ base.documentorData = [
             "name": "basics.Partials.constructor"
           },
           {
-            "id": "dd_21",
+            "id": "dd_22",
             "code": [
               "    initialize: () =>"
             ],
@@ -615,7 +666,7 @@ base.documentorData = [
             "name": "basics.Partials.initialize"
           },
           {
-            "id": "dd_22",
+            "id": "dd_23",
             "code": [
               "    resolve: (options={}) =>",
               "      options = _.defaults options,",
@@ -657,7 +708,7 @@ base.documentorData = [
         ]
       },
       {
-        "id": "dd_23",
+        "id": "dd_24",
         "shortName": "x.Replicator",
         "name": "basics.Replicator",
         "code": [
@@ -696,7 +747,7 @@ base.documentorData = [
         ],
         "methods": [
           {
-            "id": "dd_24",
+            "id": "dd_25",
             "code": [
               "    @replicate: (selector, data, callback) =>",
               "      new this(selector).initialize().replicate(data, callback)"
@@ -714,7 +765,7 @@ base.documentorData = [
             "name": "basics.Replicator.@replicate"
           },
           {
-            "id": "dd_25",
+            "id": "dd_26",
             "code": [
               "    constructor: (@selector, options={}) ->",
               "      @options = _.defaults options,",
@@ -727,7 +778,7 @@ base.documentorData = [
             "name": "basics.Replicator.constructor"
           },
           {
-            "id": "dd_26",
+            "id": "dd_27",
             "code": [
               "    initialize: () =>"
             ],
@@ -738,7 +789,7 @@ base.documentorData = [
             "name": "basics.Replicator.initialize"
           },
           {
-            "id": "dd_27",
+            "id": "dd_28",
             "code": [
               "    getTemplate: () =>"
             ],
@@ -750,7 +801,7 @@ base.documentorData = [
             "name": "basics.Replicator.getTemplate"
           },
           {
-            "id": "dd_28",
+            "id": "dd_29",
             "code": [
               "    replicate: (array, callback) =>"
             ],
@@ -812,7 +863,7 @@ base.documentorData = [
         ]
       },
       {
-        "id": "dd_38",
+        "id": "dd_39",
         "shortName": "Notjs",
         "name": "Notjs",
         "code": [
@@ -825,7 +876,7 @@ base.documentorData = [
         ],
         "methods": [
           {
-            "id": "dd_39",
+            "id": "dd_40",
             "code": [
               "  namespace: (target, name, block) ->"
             ],
@@ -839,7 +890,7 @@ base.documentorData = [
             "name": "Notjs.namespace"
           },
           {
-            "id": "dd_40",
+            "id": "dd_41",
             "code": [
               "  globalNamespace: () =>"
             ],
@@ -850,7 +901,7 @@ base.documentorData = [
             "name": "Notjs.globalNamespace"
           },
           {
-            "id": "dd_41",
+            "id": "dd_42",
             "code": [
               "  addPrototypeUnlessExists: (klass, protoName, method) ->"
             ],

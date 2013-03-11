@@ -453,6 +453,9 @@
       };
 
       Form.prototype._startInlineEdit = function(formInput) {
+        if (formInput.$element.hasClass('readonly')) {
+          return;
+        }
         this._showInputFor(formInput);
         this._showSaveAndCancel();
         return this.inlineEditing = formInput;
