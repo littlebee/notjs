@@ -207,15 +207,15 @@ Notjs.namespace 'basics', (x) ->
 
     _showAllInputs: () =>
       for formInput in @formInputs
-        # DOM Class 'readonly' overrides
-        if formInput.$element.hasClass('readonly')
-          @_displayDataFor formInput
-        else
-          @_showInputFor formInput
+        @_showInputFor formInput
 
     _showInputFor: (formInput) =>
-      formInput.formInputObject ||= @_instantiateFormInputFor(formInput)
-      formInput.formInputObject.loadValue(@dataObject)
+      # css Class 'readonly' overrides
+      if formInput.$element.hasClass('readonly')
+        @_displayDataFor formInput
+      else
+        formInput.formInputObject ||= @_instantiateFormInputFor(formInput)
+        formInput.formInputObject.loadValue(@dataObject)
 
     _instantiateFormInputFor: (formInput) =>
       args =
@@ -269,6 +269,7 @@ Notjs.namespace 'basics', (x) ->
 
 
     _startInlineEdit: (formInput) =>
+      return if formInput.$element.hasClass('readonly')
       @_showInputFor(formInput)
       @_showSaveAndCancel()
       @inlineEditing = formInput

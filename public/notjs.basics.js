@@ -380,18 +380,18 @@
         _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           formInput = _ref[_i];
-          if (formInput.$element.hasClass('readonly')) {
-            _results.push(this._displayDataFor(formInput));
-          } else {
-            _results.push(this._showInputFor(formInput));
-          }
+          _results.push(this._showInputFor(formInput));
         }
         return _results;
       };
 
       Form.prototype._showInputFor = function(formInput) {
-        formInput.formInputObject || (formInput.formInputObject = this._instantiateFormInputFor(formInput));
-        return formInput.formInputObject.loadValue(this.dataObject);
+        if (formInput.$element.hasClass('readonly')) {
+          return this._displayDataFor(formInput);
+        } else {
+          formInput.formInputObject || (formInput.formInputObject = this._instantiateFormInputFor(formInput));
+          return formInput.formInputObject.loadValue(this.dataObject);
+        }
       };
 
       Form.prototype._instantiateFormInputFor = function(formInput) {
