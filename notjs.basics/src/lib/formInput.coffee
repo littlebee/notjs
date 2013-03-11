@@ -106,6 +106,9 @@ Notjs.namespace 'basics', (x) ->
       @$element.focus()
 
 
+
+    # notjs Proprietary
+
     getDataObjectValue: (dataObject) =>
       ###
         gets the value from the dataObject for the associated attribute

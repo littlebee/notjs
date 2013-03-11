@@ -213,6 +213,8 @@
 
         this._defaultUpdateCallback = __bind(this._defaultUpdateCallback, this);
 
+        this._startInlineEdit = __bind(this._startInlineEdit, this);
+
         this._displayDataFor = __bind(this._displayDataFor, this);
 
         this._displayDataForAll = __bind(this._displayDataForAll, this);
@@ -303,22 +305,29 @@
       };
 
       Form.prototype.refresh = function() {
-        return setFormMode(this.options.formMode);
+        return this.setFormMode(this.options.formMode);
       };
 
       Form.prototype.setFormMode = function(mode) {
+        if (this.$element.hasClass('readonly')) {
+          mode = "readOnly";
+        }
         this.options.formMode = mode;
+        this.inlineEditing = false;
         switch (mode) {
           case "fullInput":
-            return this._showAllInputs();
+            this._showAllInputs();
+            return this._showSaveAndCancel();
           case "inlineEdit":
           case "switchToFullInput":
             this._displayDataForAll();
-            return this._installClickHandlers();
+            this._installClickHandlers();
+            return this._hideSaveAndCancel();
           case "readOnly":
-            return this._displayDataForAll();
+            this._displayDataForAll();
+            return this._hideSaveAndCancel();
           default:
-            throw Notjs.errors.InvalidArgument("formMode");
+            return Notjs.errors.invalidArgument("formMode");
         }
       };
 
@@ -360,7 +369,7 @@
         if (this.options.formMode === "switchToFullInput") {
           this._showAllInputs();
         } else {
-          this._showInputFor(formInput);
+          this._startInlineEdit(formInput);
         }
         return formInput.$element.focus().select();
       };
@@ -398,15 +407,23 @@
         return new formInput.formInputClass(args);
       };
 
-      Form.prototype._showSaveAndCancel = function() {};
+      Form.prototype._showSaveAndCancel = function() {
+        this._findSaveButtons().removeClass('hidden').on('click.notjs-form', this._commitChanges);
+        return this._findCancelButtons().removeClass('hidden').on('click.notjs-form', this._cancelChanges);
+      };
 
-      Form.prototype._hideSaveAndCancel = function() {};
+      Form.prototype._hideSaveAndCancel = function() {
+        this._findSaveButtons().addClass('hidden').off('click.notjs-form');
+        return this._findCancelButtons().addClass('hidden').off('click.notjs-form');
+      };
 
       Form.prototype._findSaveButtons = function() {
         return this.$element.find("input[type='submit'], .success");
       };
 
-      Form.prototype._findCancelButtons = function() {};
+      Form.prototype._findCancelButtons = function() {
+        return this.$element.find(".cancel");
+      };
 
       Form.prototype._displayDataForAll = function() {
         var formInput, _i, _len, _ref, _results;
@@ -431,6 +448,12 @@
         return $el.html(klass.formatForDisplay($el, $el, this.dataObject[attr], null, this.dataObject));
       };
 
+      Form.prototype._startInlineEdit = function(formInput) {
+        this._showInputFor(formInput);
+        this._showSaveAndCancel();
+        return this.inlineEditing = formInput;
+      };
+
       Form.prototype._defaultUpdateCallback = function() {};
 
       Form.prototype._getClassFor = function(type) {
@@ -445,15 +468,33 @@
           if (current[part]) {
             current = current[part];
           } else {
-            thrown("Unable to find class for FormInput type " + type + ", specifically " + part);
+            throw "Unable to find class for FormInput type " + type + ", specifically " + part;
           }
         }
         return current;
       };
 
-      Form.prototype._commitChanges = function() {};
+      Form.prototype._commitChanges = function() {
+        var formInput, formInputs, whatChanged, _i, _len;
+        if (this.inlineEditing) {
+          formInputs = [this.inlineEditing];
+          this.inlineEditing = false;
+        } else {
+          formInputs = this.formInputs;
+        }
+        whatChanged = [];
+        for (_i = 0, _len = formInputs.length; _i < _len; _i++) {
+          formInput = formInputs[_i];
+          formInput.formInputObject.applyValue(dataObject, formInput.formInputObject.serializeValue());
+          whatChanged.push(formInput.attr);
+        }
+        return this.options.updateCallback(whatChanged);
+      };
 
-      Form.prototype._cancelChanges = function() {};
+      Form.prototype._cancelChanges = function() {
+        this.inlineEditing = false;
+        return this.refresh();
+      };
 
       return Form;
 
@@ -1218,13 +1259,15 @@
         current = null;
         break;
       }
-      value = part === lastPart ? current = _.isFunction(current[part]) ? current[part]() : current[part] : void 0;
+      if (part === lastPart) {
+        if (_.isFunction(current[part])) {
+          return current[part](value);
+        } else {
+          return current[part] = value;
+        }
+      }
     }
-    if (_.isFunction(current[lastPart])) {
-      return current[lastPart](value);
-    } else {
-      return current[lastPart] = value;
-    }
+    return current;
   };
 
   Notjs.keyCode = {

@@ -22,16 +22,20 @@
     Name: <span data-not_attr="name"></span><br/>
     Genre: <span data-not_attr="genre"></span><br/>
     Won Hugo Award? <span data-not_attr="wonHugo" data-not_type="Checkbox"></span><br/>
+  </div>
+
+  <h2>Enter your favorite author here: </h2>
+  <div id="inputForm" class="form inline">
+    <div id="inputFormInputs" data-not_partial="#authorTemplate"></div>
+
+    <h3>demonstrates 2 types of save and cancel buttons including a form submit to save.</h3>
     <input type="button" class="cancel" value="Cancel input button"/>
     <button class="cancel">Cancel button</button>
     <input type="submit" value="submit input"/>
     <button class="success">Save button</button>
   </div>
 
-  <h2>Enter your favorite author here: </h2>
-  <div id="inputForm" class="form inline" data-not_partial="#authorTemplate"></div>
-
-  <div id="reflect" class="hidden">>
+  <div id="reflect" class="hidden">
     <h2>You said: </h2>
     <div id="reflectionForm" class="inline readonly" data-not_partial="#authorTemplate"></div>
   </div>
@@ -46,9 +50,9 @@
       // NOTE:  not using onPartialsResolved option because there are no external partials
       Notjs.basics.Partials.resolve()
       dataObject = {
-        name: "Enter the Name of an",
-        genre: "Science Fiction",
-        wonHugo: true
+        name: "...of Author",
+        genre: "ex, Science Fiction",
+        wonHugo: false
       }
       reflectionForm = new Notjs.basics.Form("#reflectionForm", dataObject).initialize()
       inputForm = new Notjs.basics.Form('#inputForm', dataObject, {

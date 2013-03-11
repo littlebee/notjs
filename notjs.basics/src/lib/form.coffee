@@ -154,18 +154,26 @@ Notjs.namespace 'basics', (x) ->
 
     refresh: () =>
       # setting the form mode rerenders all displayed data and inputs
-      setFormMode(@options.formMode)
+      @setFormMode(@options.formMode)
 
     setFormMode:(mode) =>
+      mode = "readOnly" if @$element.hasClass 'readonly'
+
       @options.formMode = mode
+      @inlineEditing = false
+
       switch mode
         when "fullInput" 
           @_showAllInputs()
+          @_showSaveAndCancel()
         when "inlineEdit", "switchToFullInput"
           @_displayDataForAll()
           @_installClickHandlers()
-        when "readOnly" then @_displayDataForAll()
-        else throw Notjs.errors.InvalidArgument("formMode")
+          @_hideSaveAndCancel()
+        when "readOnly"
+          @_displayDataForAll()
+          @_hideSaveAndCancel()
+        else Notjs.errors.invalidArgument("formMode")
         
 
 
@@ -189,17 +197,20 @@ Notjs.namespace 'basics', (x) ->
       if @options.formMode == "switchToFullInput"
         @_showAllInputs()
       else
-        @_showInputFor(formInput)
+        @_startInlineEdit(formInput)
 
       formInput.$element.focus().select()
+
 
     _showAllInputs: () =>
       for formInput in @formInputs
         @_showInputFor formInput
 
+
     _showInputFor: (formInput) =>
       formInput.formInputObject ||= @_instantiateFormInputFor(formInput)
       formInput.formInputObject.loadValue(@dataObject)
+
 
     _instantiateFormInputFor: (formInput) =>
       args =
@@ -215,21 +226,27 @@ Notjs.namespace 'basics', (x) ->
       return new formInput.formInputClass args
 
     _showSaveAndCancel: () =>
+      @_findSaveButtons().removeClass('hidden').on 'click.notjs-form', @_commitChanges
+      @_findCancelButtons().removeClass('hidden').on 'click.notjs-form', @_cancelChanges
 
 
     _hideSaveAndCancel: () =>
+      @_findSaveButtons().addClass('hidden').off 'click.notjs-form'
+      @_findCancelButtons().addClass('hidden').off 'click.notjs-form'
 
 
     _findSaveButtons: () =>
       @$element.find("input[type='submit'], .success")
 
-    _findCancelButtons: () =>
 
+    _findCancelButtons: () =>
+      @$element.find(".cancel")
 
 
     _displayDataForAll: () =>
       for formInput in @formInputs
         @_displayDataFor formInput
+
 
     _displayDataFor: (formInput) =>
       $el = formInput.$element
@@ -239,8 +256,13 @@ Notjs.namespace 'basics', (x) ->
         console.warn "FormInput type #{formInput.type} for #{attr} doesn't have a " +
                      "formatForDisplay class method. skipping"
         return;
-
       $el.html klass.formatForDisplay($el, $el, @dataObject[attr], null, @dataObject)
+
+
+    _startInlineEdit: (formInput) =>
+      @_showInputFor(formInput)
+      @_showSaveAndCancel()
+      @inlineEditing = formInput
 
 
     _defaultUpdateCallback: () =>
@@ -248,7 +270,7 @@ Notjs.namespace 'basics', (x) ->
 
 
     _getClassFor: (type) =>
-      # does the type exists in Notjs.basics.formInputs namespace
+      # does the type exist in Notjs.basics.formInputs namespace
       return Notjs.basics.formInputs[type] if Notjs.basics.formInputs[type]
 
       current = Notjs.globalNamespace()
@@ -256,13 +278,25 @@ Notjs.namespace 'basics', (x) ->
         if current[part]
           current = current[part]
         else
-          thrown "Unable to find class for FormInput type #{type}, specifically #{part}"
+          throw "Unable to find class for FormInput type #{type}, specifically #{part}"
 
       return current
 
-    # these currently do nothing  not sure what they are suppose to do or why you have to pass them to
-    # slickgrid editors
+
     _commitChanges: () =>
-      #
+      if @inlineEditing
+        formInputs = [@inlineEditing]
+        @inlineEditing = false
+      else
+        formInputs = @formInputs
+
+      whatChanged = []
+      for formInput in formInputs
+        formInput.formInputObject.applyValue(dataObject, formInput.formInputObject.serializeValue())
+        whatChanged.push formInput.attr
+
+      @options.updateCallback(whatChanged);
+
     _cancelChanges: () =>
-      #
+      @inlineEditing = false
+      @refresh()    # restores input and display values to unmodified dataObject values

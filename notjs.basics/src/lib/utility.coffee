@@ -41,6 +41,7 @@ Notjs.deepGet = (object, pathToAttribute) ->
     current = if _.isFunction(current[part]) then current[part]() else current[part]
   return current
 
+
 Notjs.deepSet = (object, pathToAttribute, value) ->
   ###
     Performs a deep set on the the value of a attributed nested within this object
@@ -55,13 +56,11 @@ Notjs.deepSet = (object, pathToAttribute, value) ->
     unless current[part]?
       current = null
       break
-    value = if part == lastPart
-      current = if _.isFunction(current[part]) then current[part]() else current[part]
+    if part == lastPart
+      return if _.isFunction(current[part]) then current[part](value) else current[part] = value
 
-  return if _.isFunction(current[lastPart])
-    current[lastPart](value)
-  else
-    current[lastPart] = value
+  return current
+
 
 Notjs.keyCode =
   BACKSPACE: 8

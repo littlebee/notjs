@@ -3,6 +3,16 @@ body {
     line-height: 22px;
     font-family: Helvetica Neue, Helvetica, Arial;
     background: #f4f4f4;
+    max-width: 800px;
+}
+
+h3 {
+    font-family: Arial;
+    font-size: 14px;
+}
+
+.form h3 {
+    max-width: 350px;
 }
 
 .inline {
