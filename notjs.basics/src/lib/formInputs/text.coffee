@@ -20,6 +20,9 @@ Notjs.namespace 'basics.formInputs', (x) ->
       .focus()
       .select()
 
+    destroy: () =>
+      @$input.remove()
+
     loadValue: (dataObject) =>
       @$input.val(@getDataObjectValue(dataObject))
 

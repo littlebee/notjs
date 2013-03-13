@@ -148,6 +148,8 @@ Notjs.namespace 'basics', (x) ->
       @$element = $(@selector)
 
       @_initializeFormInputs()
+      @_initializeSaveAndCancel()
+
       @setFormMode(@options.formMode)
 
       return @
@@ -163,7 +165,8 @@ Notjs.namespace 'basics', (x) ->
       @inlineEditing = false
 
       switch mode
-        when "fullInput" 
+        when "fullInput"
+          @_removeClickHandlers()
           @_showAllInputs()
           @_showSaveAndCancel()
         when "inlineEdit", "fullInputOnClick"
@@ -172,6 +175,7 @@ Notjs.namespace 'basics', (x) ->
           @_hideSaveAndCancel()
         when "readOnly"
           @_displayDataForAll()
+          @_removeClickHandlers()
           @_hideSaveAndCancel()
         else Notjs.errors.invalidArgument("formMode")
         
@@ -189,17 +193,26 @@ Notjs.namespace 'basics', (x) ->
           formInputClass: @_getClassFor type
           formInputObject: null
 
+
     _installClickHandlers: () =>
+      # use each here and not a for formInput in formInputs because each passes formInput as a
+      # reference directly to the array element and not a local intermediate reference that is
+      # updated as it iterates accross the array :(  Otherwise by the time @_editOnClick is called,
+      # formInput passed to it will always be the last array element
+      _.each @formInputs, (formInput) =>
+        formInput.$element.on 'mouseup.notjs-form', () => @_editOnClick(formInput)
+
+    _removeClickHandlers: () =>
       for formInput in @formInputs
-        formInput.$element.click () => @_editOnClick(formInput)
+        formInput.$element.off 'mouseup.notjs-form'
 
     _editOnClick: (formInput) =>
       if @options.formMode == "fullInputOnClick"
         @_showAllInputs()
+        @_showSaveAndCancel()
       else
         @_startInlineEdit(formInput)
 
-      formInput.$element.focus().select()
 
 
     #######  Input
@@ -209,12 +222,16 @@ Notjs.namespace 'basics', (x) ->
       for formInput in @formInputs
         @_showInputFor formInput
 
+
     _showInputFor: (formInput) =>
       # css Class 'readonly' overrides
       if formInput.$element.hasClass('readonly')
         @_displayDataFor formInput
       else
-        formInput.formInputObject ||= @_instantiateFormInputFor(formInput)
+        unless formInput.formInputObject
+          formInput.$element.html("")
+          formInput.formInputObject = @_instantiateFormInputFor(formInput)
+
         formInput.formInputObject.loadValue(@dataObject)
 
     _instantiateFormInputFor: (formInput) =>
@@ -246,26 +263,40 @@ Notjs.namespace 'basics', (x) ->
         console.warn "FormInput type #{formInput.type} for #{attr} doesn't have a " +
                      "formatForDisplay class method. skipping"
         return;
+
+      @_destroyFormInputObject(formInput)
       $el.html klass.formatForDisplay($el, $el, @dataObject[attr], null, @dataObject)
 
 
+    _destroyFormInputObject: (formInput) =>
+      if formInput.formInputObject
+        formInput.formInputObject.destroy()
+        formInput.formInputObject = null
+
+
+    _initializeSaveAndCancel: () =>
+      @_findSaveButtons().on 'mouseup.notjsForm', @_commitChanges
+      @_findCancelButtons().on 'mouseup.notjsForm', @_cancelChanges
+
 
     _showSaveAndCancel: () =>
-      @_findSaveButtons().removeClass('hidden').on 'click.notjs-form', @_commitChanges
-      @_findCancelButtons().removeClass('hidden').on 'click.notjs-form', @_cancelChanges
+      @_findSaveButtons().removeClass('hidden')
+      @_findCancelButtons().removeClass('hidden')
 
 
     _hideSaveAndCancel: () =>
-      @_findSaveButtons().addClass('hidden').off 'click.notjs-form'
-      @_findCancelButtons().addClass('hidden').off 'click.notjs-form'
+      @_findSaveButtons().addClass('hidden')
+      @_findCancelButtons().addClass('hidden')
 
 
     _findSaveButtons: () =>
       @$element.find("input[type='submit'], .success")
 
-
     _findCancelButtons: () =>
       @$element.find(".cancel")
+
+
+
 
 
     _startInlineEdit: (formInput) =>
@@ -306,6 +337,7 @@ Notjs.namespace 'basics', (x) ->
         formInput.formInputObject.applyValue(dataObject, formInput.formInputObject.serializeValue())
         whatChanged.push formInput.attr
 
+      @refresh()
       @options.updateCallback(whatChanged);
 
     _cancelChanges: () =>

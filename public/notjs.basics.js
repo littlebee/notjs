@@ -237,6 +237,10 @@
 
         this._showSaveAndCancel = __bind(this._showSaveAndCancel, this);
 
+        this._initializeSaveAndCancel = __bind(this._initializeSaveAndCancel, this);
+
+        this._destroyFormInputObject = __bind(this._destroyFormInputObject, this);
+
         this._displayDataFor = __bind(this._displayDataFor, this);
 
         this._displayDataForAll = __bind(this._displayDataForAll, this);
@@ -248,6 +252,8 @@
         this._showAllInputs = __bind(this._showAllInputs, this);
 
         this._editOnClick = __bind(this._editOnClick, this);
+
+        this._removeClickHandlers = __bind(this._removeClickHandlers, this);
 
         this._installClickHandlers = __bind(this._installClickHandlers, this);
 
@@ -314,6 +320,7 @@
         */
         this.$element = $(this.selector);
         this._initializeFormInputs();
+        this._initializeSaveAndCancel();
         this.setFormMode(this.options.formMode);
         return this;
       };
@@ -330,6 +337,7 @@
         this.inlineEditing = false;
         switch (mode) {
           case "fullInput":
+            this._removeClickHandlers();
             this._showAllInputs();
             return this._showSaveAndCancel();
           case "inlineEdit":
@@ -339,6 +347,7 @@
             return this._hideSaveAndCancel();
           case "readOnly":
             this._displayDataForAll();
+            this._removeClickHandlers();
             return this._hideSaveAndCancel();
           default:
             return Notjs.errors.invalidArgument("formMode");
@@ -366,15 +375,21 @@
       };
 
       Form.prototype._installClickHandlers = function() {
-        var formInput, _i, _len, _ref, _results,
-          _this = this;
+        var _this = this;
+        return _.each(this.formInputs, function(formInput) {
+          return formInput.$element.on('mouseup.notjs-form', function() {
+            return _this._editOnClick(formInput);
+          });
+        });
+      };
+
+      Form.prototype._removeClickHandlers = function() {
+        var formInput, _i, _len, _ref, _results;
         _ref = this.formInputs;
         _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           formInput = _ref[_i];
-          _results.push(formInput.$element.click(function() {
-            return _this._editOnClick(formInput);
-          }));
+          _results.push(formInput.$element.off('mouseup.notjs-form'));
         }
         return _results;
       };
@@ -382,10 +397,10 @@
       Form.prototype._editOnClick = function(formInput) {
         if (this.options.formMode === "fullInputOnClick") {
           this._showAllInputs();
+          return this._showSaveAndCancel();
         } else {
-          this._startInlineEdit(formInput);
+          return this._startInlineEdit(formInput);
         }
-        return formInput.$element.focus().select();
       };
 
       Form.prototype._showAllInputs = function() {
@@ -403,7 +418,10 @@
         if (formInput.$element.hasClass('readonly')) {
           return this._displayDataFor(formInput);
         } else {
-          formInput.formInputObject || (formInput.formInputObject = this._instantiateFormInputFor(formInput));
+          if (!formInput.formInputObject) {
+            formInput.$element.html("");
+            formInput.formInputObject = this._instantiateFormInputFor(formInput);
+          }
           return formInput.formInputObject.loadValue(this.dataObject);
         }
       };
@@ -445,17 +463,30 @@
           console.warn(("FormInput type " + formInput.type + " for " + attr + " doesn't have a ") + "formatForDisplay class method. skipping");
           return;
         }
+        this._destroyFormInputObject(formInput);
         return $el.html(klass.formatForDisplay($el, $el, this.dataObject[attr], null, this.dataObject));
       };
 
+      Form.prototype._destroyFormInputObject = function(formInput) {
+        if (formInput.formInputObject) {
+          formInput.formInputObject.destroy();
+          return formInput.formInputObject = null;
+        }
+      };
+
+      Form.prototype._initializeSaveAndCancel = function() {
+        this._findSaveButtons().on('mouseup.notjsForm', this._commitChanges);
+        return this._findCancelButtons().on('mouseup.notjsForm', this._cancelChanges);
+      };
+
       Form.prototype._showSaveAndCancel = function() {
-        this._findSaveButtons().removeClass('hidden').on('click.notjs-form', this._commitChanges);
-        return this._findCancelButtons().removeClass('hidden').on('click.notjs-form', this._cancelChanges);
+        this._findSaveButtons().removeClass('hidden');
+        return this._findCancelButtons().removeClass('hidden');
       };
 
       Form.prototype._hideSaveAndCancel = function() {
-        this._findSaveButtons().addClass('hidden').off('click.notjs-form');
-        return this._findCancelButtons().addClass('hidden').off('click.notjs-form');
+        this._findSaveButtons().addClass('hidden');
+        return this._findCancelButtons().addClass('hidden');
       };
 
       Form.prototype._findSaveButtons = function() {
@@ -512,6 +543,7 @@
           formInput.formInputObject.applyValue(dataObject, formInput.formInputObject.serializeValue());
           whatChanged.push(formInput.attr);
         }
+        this.refresh();
         return this.options.updateCallback(whatChanged);
       };
 
@@ -1406,6 +1438,8 @@
 
         this.loadValue = __bind(this.loadValue, this);
 
+        this.destroy = __bind(this.destroy, this);
+
         this.initialize = __bind(this.initialize, this);
         Text.__super__.constructor.apply(this, arguments);
       }
@@ -1417,6 +1451,10 @@
             return e.stopImmediatePropagation();
           }
         }).focus().select();
+      };
+
+      Text.prototype.destroy = function() {
+        return this.$input.remove();
       };
 
       Text.prototype.loadValue = function(dataObject) {
