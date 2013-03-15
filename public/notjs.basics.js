@@ -165,7 +165,6 @@
             |    var form = new Notjs.basics.Form("#authorEditForm", dataObject, {
             |        updateCallback: function(whatUpdated){ alert("You updated " + whatUpdated + ". I'm telling");}
             |    });
-            |    form.initialize();
             </code>
       
           Produces this:
@@ -321,7 +320,7 @@
         */
 
         this.formInputs = [];
-        return this;
+        return this.initialize();
       }
 
       Form.prototype.initialize = function() {
@@ -808,7 +807,7 @@
             |  <html>
             |  <script>
             |    $(document).ready(function(){
-            |      partials = new notjs.basics.Partials({removePartials: false, hidePartials: true}).initialize()
+            |      partials = new notjs.basics.Partials({removePartials: false, hidePartials: true})
             |      partials.resolve()
             |    });
             |  </script>
@@ -858,7 +857,7 @@
         if (options == null) {
           options = {};
         }
-        return new this(options).initialize().resolve();
+        return new this(options).resolve();
         /*
                 Class method for one shot convienence.  See .resolve instance method
         */
@@ -898,13 +897,10 @@
 
         this.inPagePartials = {};
         this.outstandingExternalRequests = 0;
+        return this.initialize();
       }
 
       Partials.prototype.initialize = function() {
-        /*
-                Initialize should be called inside of a $(document).ready block
-        */
-
         var $partials;
         this.$el = $(this.options.selector);
         $partials = this.$el.find('.not-partial');
@@ -1097,11 +1093,11 @@
       */
 
       Replicator.replicate = function(selector, data, callback) {
-        return new Replicator(selector).initialize().replicate(data, callback);
+        return new Replicator(selector).replicate(data, callback);
         /*
               This class method is convenient, but note that it is effectively one shot only
               as the inner html template is removed.  If you are going to be updating the underlying
-              data and want those changes, you should either contruct and initialize an instance of
+              data and want those changes, you should either contruct an instance of
               notjs.basics.replicator or you should save the return value of this method
         
               see replicate instance method for more information
@@ -1129,12 +1125,10 @@
                 I wonder if coffee doc will pickup my option defaults?  :( no, but scripts/documentor will! :)
         */
 
+        return this.initialize();
       }
 
       Replicator.prototype.initialize = function() {
-        /*
-                call this method in a document.ready block or code path
-        */
         this.$element = $(this.selector);
         this.getTemplate();
         return this;
@@ -1184,7 +1178,7 @@
                 |   <h2>Wherever</h2>
                 |  </div>
                 |  <script>
-                |    repl = new notjs.basics.replicator('#replicationTemplate').initialize()
+                |    repl = new notjs.basics.replicator('#replicationTemplate')
                 |    repl.replicate [1,2,3]
                 |  </script>
                 </code>

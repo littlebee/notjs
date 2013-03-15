@@ -33,11 +33,11 @@ Notjs.namespace 'basics', (x) ->
     The example above will generate one li for each of authors array
     ###
     @replicate: (selector, data, callback) =>
-      new this(selector).initialize().replicate(data, callback)
+      new this(selector).replicate(data, callback)
       ###
       This class method is convenient, but note that it is effectively one shot only
       as the inner html template is removed.  If you are going to be updating the underlying
-      data and want those changes, you should either contruct and initialize an instance of
+      data and want those changes, you should either contruct an instance of
       notjs.basics.replicator or you should save the return value of this method
 
       see replicate instance method for more information
@@ -50,11 +50,9 @@ Notjs.namespace 'basics', (x) ->
       ###
         I wonder if coffee doc will pickup my option defaults?  :( no, but scripts/documentor will! :)
       ###
+      return @initialize()
 
     initialize: () =>
-      ###
-        call this method in a document.ready block or code path
-      ###
       @$element = $(@selector)
       @getTemplate()
       @
@@ -97,7 +95,7 @@ Notjs.namespace 'basics', (x) ->
         |   <h2>Wherever</h2>
         |  </div>
         |  <script>
-        |    repl = new notjs.basics.replicator('#replicationTemplate').initialize()
+        |    repl = new notjs.basics.replicator('#replicationTemplate')
         |    repl.replicate [1,2,3]
         |  </script>
         </code>

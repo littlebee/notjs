@@ -54,14 +54,14 @@
         genre: "Science Fiction",
         wonHugo: false
       }
-      reflectionForm = new Notjs.basics.Form("#reflectionForm", dataObject).initialize()
+      reflectionForm = new Notjs.basics.Form("#reflectionForm", dataObject)
       inputForm = new Notjs.basics.Form('#inputForm', dataObject, {
         updateCallback: function(){
           // since reflectionForm is pointed at the same dataObject as inputForm, this is all you have to do!
           $('#reflect').removeClass('hidden')
           reflectionForm.refresh()
         }
-      }).initialize();
+      })
     })
   </script>
 

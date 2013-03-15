@@ -47,7 +47,7 @@ describe 'notjs.basics.replicator', ->
   # the rows in your collection change completely, the previous replicated section of the dom is replaced
   # with the newly replicated data
   it 'should replicate multiple times per instance', ->
-    replicator = new Notjs.basics.Replicator('#list').initialize()
+    replicator = new Notjs.basics.Replicator('#list')
     for testData in TEST_DATA
       replicator.replicate testData
       _shouldHaveReplicatedFor(testData)

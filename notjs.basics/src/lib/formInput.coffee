@@ -60,7 +60,6 @@ Notjs.namespace 'basics', (x) ->
       See also:   Notjs.basics.FormInput class
       ###
 
-      # slick grid constructs anew each edit session so go for it.
       $input = @initialize()
       @bindStandardKeys($input)
       return $input

@@ -69,7 +69,7 @@
         cancelCallback: function(whatChanged){
           $('#cancelMessage').removeClass('hidden').fadeIn().delay(2000).fadeOut()
         }
-      }).initialize();
+      })
       $select = $('#formModeSelect')
       $select.change(function(){
         inputForm.setFormMode($select.val())

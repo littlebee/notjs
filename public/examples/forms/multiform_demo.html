@@ -78,9 +78,9 @@
       Notjs.basics.Partials.resolve()        // not using external partials
 
       forms = []
-      replicator = new Notjs.basics.Replicator('#authorsList').initialize()
+      replicator = new Notjs.basics.Replicator('#authorsList')
       replicator.replicate(authors, function($newElement, author, index){
-        newForm = new Notjs.basics.Form($newElement.find('.form'), author, {formMode: "inlineEdit"}).initialize()
+        newForm = new Notjs.basics.Form($newElement.find('.form'), author, {formMode: "inlineEdit"})
 
         return true;
       });
@@ -97,7 +97,7 @@
           _.extend(newAuthor, authorDefaults)
           replicator.refresh()
         }
-      }).initialize();
+      })
 
 
     })

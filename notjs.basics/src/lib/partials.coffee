@@ -31,7 +31,7 @@ Notjs.namespace 'basics', (x) ->
       |  <html>
       |  <script>
       |    $(document).ready(function(){
-      |      partials = new notjs.basics.Partials({removePartials: false, hidePartials: true}).initialize()
+      |      partials = new notjs.basics.Partials({removePartials: false, hidePartials: true})
       |      partials.resolve()
       |    });
       |  </script>
@@ -79,7 +79,7 @@ Notjs.namespace 'basics', (x) ->
     ###
 
     @resolve: (options = {}) ->
-      new this(options).initialize().resolve()
+      new this(options).resolve()
       ###
         Class method for one shot convienence.  See .resolve instance method
       ###
@@ -97,11 +97,9 @@ Notjs.namespace 'basics', (x) ->
       ###
       @inPagePartials = {}
       @outstandingExternalRequests = 0
+      return @initialize()
 
     initialize: () =>
-      ###
-        Initialize should be called inside of a $(document).ready block
-      ###
       @$el = $(@options.selector)
       $partials = @$el.find('.not-partial')
       @inPagePartials = _.groupBy($partials, 'id')

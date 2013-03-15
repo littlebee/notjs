@@ -35,7 +35,6 @@ Notjs.namespace 'basics', (x) ->
       |    var form = new Notjs.basics.Form("#authorEditForm", dataObject, {
       |        updateCallback: function(whatUpdated){ alert("You updated " + whatUpdated + ". I'm telling");}
       |    });
-      |    form.initialize();
       </code>
 
     Produces this:
@@ -139,7 +138,7 @@ Notjs.namespace 'basics', (x) ->
       #   formInputObject:  if the input is on display, ref to FormInput object, else null
       @formInputs = []
 
-      return @   # constructor()
+      return @initialize()   # end of constructor()
 
     initialize: () =>
       ###

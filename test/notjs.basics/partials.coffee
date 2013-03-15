@@ -46,7 +46,7 @@ describe 'notjs.partials', ->
 
       beforeEach ->
         $('body').html(INPAGE_HTML)
-        partials = new Notjs.basics.Partials().initialize()
+        partials = new Notjs.basics.Partials()
         partials.resolve()
 
       it 'should resolve first time', ->
@@ -74,25 +74,25 @@ describe 'notjs.partials', ->
         $('body').html(INPAGE_HTML)
 
       it 'should remove partial templates when requested', ->
-        partials = new Notjs.basics.Partials({removePartials: true}).initialize()
+        partials = new Notjs.basics.Partials({removePartials: true})
         partials.resolve()
         $('#authorTemplate').should.be.of.length(0)
 
       it 'should not remove or hide partial templates when requested not to', ->
-        partials = new Notjs.basics.Partials({removePartials: false}).initialize()
+        partials = new Notjs.basics.Partials({removePartials: false})
         partials.resolve()
         $('#authorTemplate').should.be.of.length(1)
         $('#authorTemplate').should.be.visible
 
 
       it 'should not hide partial templates when requested not to', ->
-        partials = new Notjs.basics.Partials({removePartials: false, hidePartials: false}).initialize()
+        partials = new Notjs.basics.Partials({removePartials: false, hidePartials: false})
         partials.resolve()
         $('#authorTemplate').should.be.of.length(1)
         $('#authorTemplate').should.be.visible
 
       it 'should hide partial templates when requested to', ->
-        partials = new Notjs.basics.Partials({removePartials: false, hidePartials: true}).initialize()
+        partials = new Notjs.basics.Partials({removePartials: false, hidePartials: true})
         partials.resolve()
         $('#authorTemplate').should.be.of.length(1)
         $('#authorTemplate').should.not.be.visible
@@ -112,7 +112,7 @@ describe 'notjs.partials', ->
       $('body').html(EXTERNAL_HTML)
 
     it 'should resolve', ->
-      partials = new Notjs.basics.Partials().initialize()
+      partials = new Notjs.basics.Partials()
       partials.resolve onPartialsResolved: () ->
         $('span.external1').should.be.of.length(1)
         $('span.external2').should.be.of.length(1)
