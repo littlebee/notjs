@@ -48,6 +48,9 @@ class Notjs
     invalidArgument: (argumentName) =>
       throw "Invalid Argument: #{argumentName}"
 
+    selectorNotFound: (selector) =>
+      throw "Notjs:  selector not found #{selector.toString()}"
+
 ROOT_NAMESPACE.Notjs = new Notjs()
 
 

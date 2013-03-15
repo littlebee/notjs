@@ -1,0 +1,111 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+  <meta name="viewport" content="width=device-width">
+  <!--<link rel="icon" href="docs/images/favicon.ico" />-->
+  <link rel='stylesheet' type="text/css" href="../examples.css"/>
+  <title>Notjs - simple fullinput form example</title>
+</head>
+<style>
+#formModeSelect {
+  font-size: large;
+}
+</style>
+<body>
+
+  <p>
+    This demonstates Notjs.basics.Form with a list of inline editable forms representing a
+    collection of data,  and a full input form at the top for adding new entries.
+
+    Also demonstrates Notjs.basics.Partials and Notjs.basics.Replicator
+  </p>
+  <br/>
+
+  <div id="authorFormTemplate" class="not-partial">
+    <span class="label">Name:</span> <span data-not_attr="name"></span><br/>
+    <span class="label">Genre:</span> <span class='readonly' data-not_attr="genre"></span> (read only)<br/>
+    <span class="label">Won Hugo Award?</span> <span data-not_attr="wonHugo" data-not_type="Checkbox"></span><br/>
+    <div class="buttons">
+      <button type="button" class="success">Save</button>
+      <button class="cancel">Cancel</button>
+    </div>
+  </div>
+
+  <div id="newAuthorForm" class="form inline" data-not_partial="#authorFormTemplate"></div>
+  <br><br>
+
+  <h3>Current authors:</h3>
+  <div id="authorsList">
+    <div class="form inline" data-not_partial="#authorFormTemplate"></div>
+  </div>
+
+  <div id="changeMessage" class="message hidden">
+    I saw you change <span id="changedAttrs"></span>
+  </div>
+  <div id="cancelMessage" class="message hidden">
+    I see you canceled changes.  Fine, be that way.
+  </div>
+
+  <script src="../../vendor/underscore-1.4.2.min.js"></script>
+  <script src="../../vendor/jquery-1.8.3.js"></script>
+  <script src="../../notjs.basics.js"></script>
+
+  <script>
+    authors =
+    [
+      {
+        name: "Robert Heinlein",
+        genre: "Science Fiction",
+        wonHugo: true
+      },
+      {
+        name: "Frank Herbert",
+        genre: "Science Fiction",
+        wonHugo: true
+      },
+      {
+        name: "Orson Scott Card",
+        genre: "Science Fiction",
+        wonHugo: true
+      },
+      {
+        name: "Olivia Butler",
+        genre: "Science Fiction",
+        wonHugo: false
+      }
+    ]
+
+
+    $(document).ready(function(){
+      Notjs.basics.Partials.resolve()        // not using external partials
+
+      forms = []
+      replicator = new Notjs.basics.Replicator('#authorsList').initialize()
+      replicator.replicate(authors, function($newElement, author, index){
+        newForm = new Notjs.basics.Form($newElement.find('.form'), author, {formMode: "inlineEdit"}).initialize()
+
+        return true;
+      });
+
+      authorDefaults = {
+        name: "",
+        genre: "Science Fiction",
+        wonHugo: false
+      }
+      newAuthor = _.extend({}, authorDefaults)
+      newAuthorForm = new Notjs.basics.Form('#newAuthorForm', newAuthor, {
+        updateCallback: function(whatChanged){
+          authors.push(_.clone(newAuthor))
+          _.extend(newAuthor, authorDefaults)
+          replicator.refresh()
+        }
+      }).initialize();
+
+
+    })
+  </script>
+
+</body>
+</html>

@@ -69,7 +69,7 @@ Notjs.namespace 'basics', (x) ->
       @$element.html("")
       return @$template
 
-    replicate: (array, callback) =>
+    replicate: (@array, @callback) =>
       ###
         this method is passed an <i>array</i> for which <i>callback</i> (also passed) will be called
         once for each element in <i>array</i>.
@@ -128,4 +128,15 @@ Notjs.namespace 'basics', (x) ->
         if !callback || callback($newElement, arrayMember, index)
           @$element.append($newElement)
 
-      @
+      @    # end of replicate()
+
+
+    refresh: () =>
+      ###
+        Called to refresh results of last call to .replicate().  Presumes that the reference to the array
+        and the callback method passed to replicate are the same
+      ###
+      return unless @array? && @callback?
+      @replicate(@array, @callback)
+
+

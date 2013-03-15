@@ -148,6 +148,7 @@ Notjs.namespace 'basics', (x) ->
       Notjs.basics.FormInput object for element found.
       ###
       @$element = $(@selector)
+      Notjs.errors.selectorNotFound(@selector) if @$element.length <= 0
 
       @_initializeFormInputs()
       @_initializeSaveAndCancel()
@@ -250,7 +251,7 @@ Notjs.namespace 'basics', (x) ->
         grid: this
         gridPosition: 0
         position: 0
-        item: dataObject
+        item: @dataObject
         cancelChanges: @_cancelChanges
         commitChanges: @_commitChanges
 
@@ -291,15 +292,15 @@ Notjs.namespace 'basics', (x) ->
     _showSaveAndCancel: () =>
 #      @_findSaveButtons().removeClass('hidden')
 #      @_findCancelButtons().removeClass('hidden')
-      @_findSaveButtons().fadeIn()
-      @_findCancelButtons().fadeIn()
+      @_findSaveButtons().delay(0).fadeIn()
+      @_findCancelButtons().delay(0).fadeIn()
 
 
     _hideSaveAndCancel: () =>
 #      @_findSaveButtons().addClass('hidden')
-      @_findSaveButtons().fadeOut()
 #      @_findCancelButtons().addClass('hidden')
-      @_findCancelButtons().fadeOut()
+      @_findSaveButtons().delay(0).fadeOut()
+      @_findCancelButtons().delay(0).fadeOut()
 
     _focusOnSave: () =>
       @_findSaveButtons().first().focus()
@@ -354,14 +355,16 @@ Notjs.namespace 'basics', (x) ->
       whatChanged = []
       for formInput in formInputs
         continue unless formInput.formInputObject?
-        formInput.formInputObject.applyValue(dataObject, formInput.formInputObject.serializeValue())
+        formInput.formInputObject.applyValue(@dataObject, formInput.formInputObject.serializeValue())
         whatChanged.push formInput.attr
 
+      # had to defer this because it was somehow triggering a second click on the save button
       _.defer @_focusOnSave
-      @refresh()
 
       # TODO : the callback should have the ability to cancel the changes (for validation or whatever)
       @options.updateCallback(whatChanged);
+      @refresh()
+
 
     _cancelChanges: () =>
       @inlineEditing = false

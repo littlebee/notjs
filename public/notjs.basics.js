@@ -71,6 +71,9 @@
       },
       invalidArgument: function(argumentName) {
         throw "Invalid Argument: " + argumentName;
+      },
+      selectorNotFound: function(selector) {
+        throw "Notjs:  selector not found " + (selector.toString());
       }
     };
 
@@ -328,6 +331,9 @@
               Notjs.basics.FormInput object for element found.
         */
         this.$element = $(this.selector);
+        if (this.$element.length <= 0) {
+          Notjs.errors.selectorNotFound(this.selector);
+        }
         this._initializeFormInputs();
         this._initializeSaveAndCancel();
         this.setFormMode(this.options.formMode);
@@ -454,7 +460,7 @@
           grid: this,
           gridPosition: 0,
           position: 0,
-          item: dataObject,
+          item: this.dataObject,
           cancelChanges: this._cancelChanges,
           commitChanges: this._commitChanges
         };
@@ -498,13 +504,13 @@
       };
 
       Form.prototype._showSaveAndCancel = function() {
-        this._findSaveButtons().fadeIn();
-        return this._findCancelButtons().fadeIn();
+        this._findSaveButtons().delay(0).fadeIn();
+        return this._findCancelButtons().delay(0).fadeIn();
       };
 
       Form.prototype._hideSaveAndCancel = function() {
-        this._findSaveButtons().fadeOut();
-        return this._findCancelButtons().fadeOut();
+        this._findSaveButtons().delay(0).fadeOut();
+        return this._findCancelButtons().delay(0).fadeOut();
       };
 
       Form.prototype._focusOnSave = function() {
@@ -574,12 +580,12 @@
           if (formInput.formInputObject == null) {
             continue;
           }
-          formInput.formInputObject.applyValue(dataObject, formInput.formInputObject.serializeValue());
+          formInput.formInputObject.applyValue(this.dataObject, formInput.formInputObject.serializeValue());
           whatChanged.push(formInput.attr);
         }
         _.defer(this._focusOnSave);
-        this.refresh();
-        return this.options.updateCallback(whatChanged);
+        this.options.updateCallback(whatChanged);
+        return this.refresh();
       };
 
       Form.prototype._cancelChanges = function() {
@@ -1108,6 +1114,8 @@
         if (options == null) {
           options = {};
         }
+        this.refresh = __bind(this.refresh, this);
+
         this.replicate = __bind(this.replicate, this);
 
         this.getTemplate = __bind(this.getTemplate, this);
@@ -1146,6 +1154,9 @@
       };
 
       Replicator.prototype.replicate = function(array, callback) {
+        var $newElement, arrayMember, index, _i, _len;
+        this.array = array;
+        this.callback = callback;
         /*
                 this method is passed an <i>array</i> for which <i>callback</i> (also passed) will be called
                 once for each element in <i>array</i>.
@@ -1199,7 +1210,6 @@
                 </code>
         */
 
-        var $newElement, arrayMember, index, _i, _len;
         this.$element.html("");
         for (index = _i = 0, _len = array.length; _i < _len; index = ++_i) {
           arrayMember = array[index];
@@ -1209,6 +1219,17 @@
           }
         }
         return this;
+      };
+
+      Replicator.prototype.refresh = function() {
+        /*
+                Called to refresh results of last call to .replicate().  Presumes that the reference to the array
+                and the callback method passed to replicate are the same
+        */
+        if (!((this.array != null) && (this.callback != null))) {
+          return;
+        }
+        return this.replicate(this.array, this.callback);
       };
 
       return Replicator;
