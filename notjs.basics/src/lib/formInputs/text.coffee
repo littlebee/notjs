@@ -14,11 +14,14 @@ Notjs.namespace 'basics.formInputs', (x) ->
     initialize: () =>
       @$input = $("<INPUT type=text/>")
       .appendTo(@$element)
-      .bind "keydown.nav", (e) =>
+      .on "keydown.nav", (e) =>
         if (e.keyCode == Notjs.keyCode.LEFT || e.keyCode == Notjs.keyCode.RIGHT)
           e.stopImmediatePropagation()
-      .focus()
-      .select()
+
+      _.defer () =>
+        @$input.focus().select()
+
+      @$input
 
     destroy: () =>
       @$input.remove()

@@ -61,7 +61,10 @@ Notjs.namespace 'basics', (x) ->
       ###
 
       # slick grid constructs anew each edit session so go for it.
-      return @initialize()
+      $input = @initialize()
+      @bindStandardKeys($input)
+      return $input
+
 
     initialize: () =>
       ###
@@ -117,5 +120,20 @@ Notjs.namespace 'basics', (x) ->
       return Notjs.deepGet(dataObject, @attr) || ""
 
     setDataObjectValue: (dataObject, value) =>
+      ###
+        does a deep set on the dataobject use data-not_attr as the property path
+      ###
       return Notjs.deepSet(dataObject, @attr, value)
+
+
+    bindStandardKeys: ($input) =>
+      ###
+        Binds escape = cancelChanges
+              enter = commitChanges
+      ###
+      $input.on 'keydown.notjsFormInput', (e) =>
+        switch e.keyCode
+          when Notjs.keyCode.ENTER then @args.commitChanges()
+          when Notjs.keyCode.ESCAPE then @args.cancelChanges()
+
 

@@ -30,6 +30,14 @@ h3 {
     padding: 10px;
 }
 
-.cancel, .success, input[type='submit'] {
+.buttons {
     float: right
+}
+
+.label {
+    font-family: Arial;
+    font-weight: bolder;
+    font-size: 14px;
+    opacity: .4;
+    padding-right: 10px;
 }

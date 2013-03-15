@@ -16,18 +16,10 @@
 <body>
 
   <p>
-    This demostates the different formModes and changing the
+    This demostates Notjs.basics.Form and the different formModes and changing the
     formMode in real time.
-
-    It also uses an inpage partial (Notjs.basics.Partial)
   </p>
   <br/>
-
-  <div id="authorTemplate" class="not-partial">
-    Name: <span data-not_attr="name"></span><br/>
-    Genre: <span class='readonly' data-not_attr="genre"></span> (read only)<br/>
-    Won Hugo Award? <span data-not_attr="wonHugo" data-not_type="Checkbox"></span><br/>
-  </div>
 
   <div>
     <h2 class="inline">Select the form mode:&nbsp;&nbsp;&nbsp;</h2>
@@ -40,14 +32,20 @@
   </div>
 
   <div id="inputForm" class="form inline">
-    <div id="inputFormInputs" data-not_partial="#authorTemplate"></div>
-
-    <button class="cancel">Cancel</button>
-    <button class="success">Save</button>
+    <span class="label">Name:</span> <span data-not_attr="name"></span><br/>
+    <span class="label">Genre:</span> <span class='readonly' data-not_attr="genre"></span> (read only)<br/>
+    <span class="label">Won Hugo Award?</span> <span data-not_attr="wonHugo" data-not_type="Checkbox"></span><br/>
+    <div class="buttons">
+      <button type="button" class="success">Save</button>
+      <button class="cancel">Cancel</button>
+    </div>
   </div>
   <br><br>
   <div id="changeMessage" class="message hidden">
     I saw you change <span id="changedAttrs"></span>
+  </div>
+  <div id="cancelMessage" class="message hidden">
+    I see you canceled changes.  Fine, be that way.
   </div>
 
   <script src="../../vendor/underscore-1.4.2.min.js"></script>
@@ -55,20 +53,21 @@
   <script src="../../notjs.basics.js"></script>
 
   <script>
+    dataObject = {
+      name: "Robert Heinlein",
+      genre: "Science Fiction",
+      wonHugo: true
+    }
 
     $(document).ready(function(){
-      // NOTE:  not using onPartialsResolved option because there are no external partials
-      Notjs.basics.Partials.resolve()
-      dataObject = {
-        name: "Robert Heinlein",
-        genre: "Science Fiction",
-        wonHugo: true
-      }
       inputForm = new Notjs.basics.Form('#inputForm', dataObject, {
         updateCallback: function(whatChanged){
           $changeMessage = $('#changeMessage')
           $('#changedAttrs').html(whatChanged.englishJoin())
           $changeMessage.removeClass('hidden').fadeIn().delay(2000).fadeOut()
+        },
+        cancelCallback: function(whatChanged){
+          $('#cancelMessage').removeClass('hidden').fadeIn().delay(2000).fadeOut()
         }
       }).initialize();
       $select = $('#formModeSelect')

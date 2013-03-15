@@ -90,8 +90,10 @@ Notjs.namespace 'basics', (x) ->
     constructor: (@selector, @dataObject, options = {}) ->
       @options = _.defaults options,
         formMode:          "fullInput"    # See comment below
-        # function(whatChanged) called on update with array of attribute names changed this call
+        # function(whatChanged) - called on update with array of attribute names changed this call
         updateCallback:    @_defaultUpdateCallback
+        # function() - called when changes are canceled
+        cancelCallback:    @_defaultCancelCallback
       ###
       Constructs a new Form object
 
@@ -150,6 +152,7 @@ Notjs.namespace 'basics', (x) ->
       @_initializeFormInputs()
       @_initializeSaveAndCancel()
 
+
       @setFormMode(@options.formMode)
 
       return @
@@ -163,6 +166,7 @@ Notjs.namespace 'basics', (x) ->
 
       @options.formMode = mode
       @inlineEditing = false
+      @switchedToFullInput = false
 
       switch mode
         when "fullInput"
@@ -208,14 +212,19 @@ Notjs.namespace 'basics', (x) ->
 
     _editOnClick: (formInput) =>
       if @options.formMode == "fullInputOnClick"
-        @_showAllInputs()
-        @_showSaveAndCancel()
+        @_switchToFullInput()
       else
         @_startInlineEdit(formInput)
 
 
 
     #######  Input
+
+    _switchToFullInput: () =>
+      return if @switchedToFullInput
+      @switchedToFullInput = true
+      @_showAllInputs()
+      @_showSaveAndCancel()
 
 
     _showAllInputs: () =>
@@ -275,19 +284,28 @@ Notjs.namespace 'basics', (x) ->
 
 
     _initializeSaveAndCancel: () =>
-      @_findSaveButtons().on 'mouseup.notjsForm', @_commitChanges
-      @_findCancelButtons().on 'mouseup.notjsForm', @_cancelChanges
+      @_findSaveButtons().on 'click.notjsForm', @_commitChanges
+      @_findCancelButtons().on 'click.notjsForm', @_cancelChanges
 
 
     _showSaveAndCancel: () =>
-      @_findSaveButtons().removeClass('hidden')
-      @_findCancelButtons().removeClass('hidden')
+#      @_findSaveButtons().removeClass('hidden')
+#      @_findCancelButtons().removeClass('hidden')
+      @_findSaveButtons().fadeIn()
+      @_findCancelButtons().fadeIn()
 
 
     _hideSaveAndCancel: () =>
-      @_findSaveButtons().addClass('hidden')
-      @_findCancelButtons().addClass('hidden')
+#      @_findSaveButtons().addClass('hidden')
+      @_findSaveButtons().fadeOut()
+#      @_findCancelButtons().addClass('hidden')
+      @_findCancelButtons().fadeOut()
 
+    _focusOnSave: () =>
+      @_findSaveButtons().first().focus()
+
+    _focusOnCancel: () =>
+      @_findCancelButtons().first().focus()
 
     _findSaveButtons: () =>
       @$element.find("input[type='submit'], .success")
@@ -295,18 +313,20 @@ Notjs.namespace 'basics', (x) ->
     _findCancelButtons: () =>
       @$element.find(".cancel")
 
-
-
-
-
     _startInlineEdit: (formInput) =>
       return if formInput.$element.hasClass('readonly')
+      return if formInput == @inlineEditing
+      @_commitChanges() if @inlineEditing
+
       @_showInputFor(formInput)
       @_showSaveAndCancel()
       @inlineEditing = formInput
 
 
     _defaultUpdateCallback: () =>
+      # called when the user doesn't provide a updateCallback method on construction.  nbd, nothing to do
+
+    _defaultCancelCallback: () =>
       # called when the user doesn't provide a updateCallback method on construction.  nbd, nothing to do
 
 
@@ -337,9 +357,15 @@ Notjs.namespace 'basics', (x) ->
         formInput.formInputObject.applyValue(dataObject, formInput.formInputObject.serializeValue())
         whatChanged.push formInput.attr
 
+      _.defer @_focusOnSave
       @refresh()
+
+      # TODO : the callback should have the ability to cancel the changes (for validation or whatever)
       @options.updateCallback(whatChanged);
 
     _cancelChanges: () =>
       @inlineEditing = false
       @refresh()    # restores input and display values to unmodified dataObject values
+      @_focusOnCancel()
+      # TODO : the callback should have the ability to cancel the cancel but only if it explicitly returns false
+      @options.cancelCallback()

@@ -225,6 +225,8 @@
 
         this._getClassFor = __bind(this._getClassFor, this);
 
+        this._defaultCancelCallback = __bind(this._defaultCancelCallback, this);
+
         this._defaultUpdateCallback = __bind(this._defaultUpdateCallback, this);
 
         this._startInlineEdit = __bind(this._startInlineEdit, this);
@@ -232,6 +234,10 @@
         this._findCancelButtons = __bind(this._findCancelButtons, this);
 
         this._findSaveButtons = __bind(this._findSaveButtons, this);
+
+        this._focusOnCancel = __bind(this._focusOnCancel, this);
+
+        this._focusOnSave = __bind(this._focusOnSave, this);
 
         this._hideSaveAndCancel = __bind(this._hideSaveAndCancel, this);
 
@@ -251,6 +257,8 @@
 
         this._showAllInputs = __bind(this._showAllInputs, this);
 
+        this._switchToFullInput = __bind(this._switchToFullInput, this);
+
         this._editOnClick = __bind(this._editOnClick, this);
 
         this._removeClickHandlers = __bind(this._removeClickHandlers, this);
@@ -267,7 +275,8 @@
 
         this.options = _.defaults(options, {
           formMode: "fullInput",
-          updateCallback: this._defaultUpdateCallback
+          updateCallback: this._defaultUpdateCallback,
+          cancelCallback: this._defaultCancelCallback
         });
         /*
               Constructs a new Form object
@@ -335,6 +344,7 @@
         }
         this.options.formMode = mode;
         this.inlineEditing = false;
+        this.switchedToFullInput = false;
         switch (mode) {
           case "fullInput":
             this._removeClickHandlers();
@@ -396,11 +406,19 @@
 
       Form.prototype._editOnClick = function(formInput) {
         if (this.options.formMode === "fullInputOnClick") {
-          this._showAllInputs();
-          return this._showSaveAndCancel();
+          return this._switchToFullInput();
         } else {
           return this._startInlineEdit(formInput);
         }
+      };
+
+      Form.prototype._switchToFullInput = function() {
+        if (this.switchedToFullInput) {
+          return;
+        }
+        this.switchedToFullInput = true;
+        this._showAllInputs();
+        return this._showSaveAndCancel();
       };
 
       Form.prototype._showAllInputs = function() {
@@ -475,18 +493,26 @@
       };
 
       Form.prototype._initializeSaveAndCancel = function() {
-        this._findSaveButtons().on('mouseup.notjsForm', this._commitChanges);
-        return this._findCancelButtons().on('mouseup.notjsForm', this._cancelChanges);
+        this._findSaveButtons().on('click.notjsForm', this._commitChanges);
+        return this._findCancelButtons().on('click.notjsForm', this._cancelChanges);
       };
 
       Form.prototype._showSaveAndCancel = function() {
-        this._findSaveButtons().removeClass('hidden');
-        return this._findCancelButtons().removeClass('hidden');
+        this._findSaveButtons().fadeIn();
+        return this._findCancelButtons().fadeIn();
       };
 
       Form.prototype._hideSaveAndCancel = function() {
-        this._findSaveButtons().addClass('hidden');
-        return this._findCancelButtons().addClass('hidden');
+        this._findSaveButtons().fadeOut();
+        return this._findCancelButtons().fadeOut();
+      };
+
+      Form.prototype._focusOnSave = function() {
+        return this._findSaveButtons().first().focus();
+      };
+
+      Form.prototype._focusOnCancel = function() {
+        return this._findCancelButtons().first().focus();
       };
 
       Form.prototype._findSaveButtons = function() {
@@ -501,12 +527,20 @@
         if (formInput.$element.hasClass('readonly')) {
           return;
         }
+        if (formInput === this.inlineEditing) {
+          return;
+        }
+        if (this.inlineEditing) {
+          this._commitChanges();
+        }
         this._showInputFor(formInput);
         this._showSaveAndCancel();
         return this.inlineEditing = formInput;
       };
 
       Form.prototype._defaultUpdateCallback = function() {};
+
+      Form.prototype._defaultCancelCallback = function() {};
 
       Form.prototype._getClassFor = function(type) {
         var current, part, _i, _len, _ref;
@@ -543,13 +577,16 @@
           formInput.formInputObject.applyValue(dataObject, formInput.formInputObject.serializeValue());
           whatChanged.push(formInput.attr);
         }
+        _.defer(this._focusOnSave);
         this.refresh();
         return this.options.updateCallback(whatChanged);
       };
 
       Form.prototype._cancelChanges = function() {
         this.inlineEditing = false;
-        return this.refresh();
+        this.refresh();
+        this._focusOnCancel();
+        return this.options.cancelCallback();
       };
 
       return Form;
@@ -609,7 +646,10 @@
       };
 
       function FormInput(args) {
+        var $input;
         this.args = args;
+        this.bindStandardKeys = __bind(this.bindStandardKeys, this);
+
         this.setDataObjectValue = __bind(this.setDataObjectValue, this);
 
         this.getDataObjectValue = __bind(this.getDataObjectValue, this);
@@ -638,7 +678,9 @@
               See also:   Notjs.basics.FormInput class
         */
 
-        return this.initialize();
+        $input = this.initialize();
+        this.bindStandardKeys($input);
+        return $input;
       }
 
       FormInput.prototype.initialize = function() {
@@ -693,7 +735,27 @@
       };
 
       FormInput.prototype.setDataObjectValue = function(dataObject, value) {
+        /*
+                does a deep set on the dataobject use data-not_attr as the property path
+        */
         return Notjs.deepSet(dataObject, this.attr, value);
+      };
+
+      FormInput.prototype.bindStandardKeys = function($input) {
+        /*
+                Binds escape = cancelChanges
+                      enter = commitChanges
+        */
+
+        var _this = this;
+        return $input.on('keydown.notjsFormInput', function(e) {
+          switch (e.keyCode) {
+            case Notjs.keyCode.ENTER:
+              return _this.args.commitChanges();
+            case Notjs.keyCode.ESCAPE:
+              return _this.args.cancelChanges();
+          }
+        });
       };
 
       return FormInput;
@@ -1364,7 +1426,11 @@
 
 
       Checkbox.formatForDisplay = function(row, cell, value, columnDef, dataContext) {
-        return Checkbox._renderInput(value, true);
+        if (value) {
+          return "Yes";
+        } else {
+          return "No";
+        }
       };
 
       function Checkbox(args) {
@@ -1446,11 +1512,15 @@
 
       Text.prototype.initialize = function() {
         var _this = this;
-        return this.$input = $("<INPUT type=text/>").appendTo(this.$element).bind("keydown.nav", function(e) {
+        this.$input = $("<INPUT type=text/>").appendTo(this.$element).on("keydown.nav", function(e) {
           if (e.keyCode === Notjs.keyCode.LEFT || e.keyCode === Notjs.keyCode.RIGHT) {
             return e.stopImmediatePropagation();
           }
-        }).focus().select();
+        });
+        _.defer(function() {
+          return _this.$input.focus().select();
+        });
+        return this.$input;
       };
 
       Text.prototype.destroy = function() {

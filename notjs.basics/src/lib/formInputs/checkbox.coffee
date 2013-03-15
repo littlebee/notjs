@@ -6,7 +6,7 @@ Notjs.namespace 'basics.formInputs', (x) ->
       presents an <input type='checkbox'...  type input on edit
     ###
     @formatForDisplay: (row, cell, value, columnDef, dataContext) =>
-        @_renderInput value, true
+      if value then "Yes" else "No";
 
     constructor: (args) ->
       super
