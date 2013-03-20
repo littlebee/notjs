@@ -218,7 +218,7 @@ Notjs.namespace 'basics', (x) ->
 
 
 
-    #######  Input
+    #     Input
 
     _switchToFullInput: () =>
       return if @switchedToFullInput
@@ -257,7 +257,7 @@ Notjs.namespace 'basics', (x) ->
       return new formInput.formInputClass args
 
 
-    ######### Display
+    #          Display
 
     _displayDataForAll: () =>
       for formInput in @formInputs

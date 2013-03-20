@@ -611,6 +611,11 @@
       /*
           The FormInput class is an abstract base class for all form input types.
       
+          The documentation here is intended for developers of custom FormInput types.
+          You probably would never directly instantiate a FormInput type, but you can.
+          Most use cases of this class would be indirect through a Notjs.basics.Form
+          instance.
+      
           A specific type of FormInput is instantiated on a DOM element identifying a
           container.  The value of the DOM element ($().html()) is then after controlled
           by the FormInput type.   An outside party (Notjs.basics.Form or Slick.Grid)

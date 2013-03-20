@@ -39,7 +39,7 @@ base.documentorData = [
         ]
       },
       {
-        "id": "dd_32",
+        "id": "dd_31",
         "name": "string.coffee",
         "code": [],
         "comment": [
@@ -47,7 +47,7 @@ base.documentorData = [
         ],
         "methods": [
           {
-            "id": "dd_33",
+            "id": "dd_32",
             "code": [
               "Notjs.addPrototypeUnlessExists String, \"startsWith\", (anotherString) ->"
             ],
@@ -62,7 +62,7 @@ base.documentorData = [
             "name": "String.startsWith(anotherString)"
           },
           {
-            "id": "dd_34",
+            "id": "dd_33",
             "code": [
               "Notjs.addPrototypeUnlessExists String, \"endsWith\", (anotherString) ->"
             ],
@@ -77,7 +77,7 @@ base.documentorData = [
             "name": "String.endsWith(anotherString)"
           },
           {
-            "id": "dd_35",
+            "id": "dd_34",
             "code": [
               "Notjs.addPrototypeUnlessExists String, \"isBlank\", () ->"
             ],
@@ -93,7 +93,7 @@ base.documentorData = [
             "name": "String.isBlank()"
           },
           {
-            "id": "dd_36",
+            "id": "dd_35",
             "code": [
               "Notjs.addPrototypeUnlessExists String, \"trim\", () ->"
             ],
@@ -104,7 +104,7 @@ base.documentorData = [
             "name": "String.trim()"
           },
           {
-            "id": "dd_37",
+            "id": "dd_36",
             "code": [
               "Notjs.addPrototypeUnlessExists String, \"elipsize\",  (maxLength) ->"
             ],
@@ -115,7 +115,7 @@ base.documentorData = [
             "name": "String.elipsize(maxLength)"
           },
           {
-            "id": "dd_38",
+            "id": "dd_37",
             "code": [
               "Notjs.addPrototypeUnlessExists String, \"decamelize\", () ->"
             ],
@@ -130,7 +130,7 @@ base.documentorData = [
             "name": "String.decamelize()"
           },
           {
-            "id": "dd_39",
+            "id": "dd_38",
             "code": [
               "Notjs.addPrototypeUnlessExists String, \"dropCamelize\", () ->"
             ],
@@ -147,7 +147,7 @@ base.documentorData = [
         ]
       },
       {
-        "id": "dd_40",
+        "id": "dd_39",
         "name": "utility.coffee",
         "code": [
           "###"
@@ -321,66 +321,11 @@ base.documentorData = [
             ],
             "shortName": "initialize",
             "name": "basics.Form.initialize"
-          },
-          {
-            "id": "dd_7",
-            "code": [
-              "    _editOnClick: (formInput) =>",
-              "      if @options.formMode == \"fullInputOnClick\"",
-              "        @_switchToFullInput()",
-              "      else",
-              "        @_startInlineEdit(formInput)",
-              "",
-              "",
-              ""
-            ],
-            "comment": [
-              "",
-              "    _switchToFullInput: () =>",
-              "      return if @switchedToFullInput",
-              "      @switchedToFullInput = true",
-              "      @_showAllInputs()",
-              "      @_showSaveAndCancel()",
-              "",
-              "",
-              "    _showAllInputs: () =>",
-              "      for formInput in @formInputs",
-              "        @_showInputFor formInput",
-              "",
-              "",
-              "    _showInputFor: (formInput) =>",
-              "      # css Class 'readonly' overrides",
-              "      if formInput.$element.hasClass('readonly')",
-              "        @_displayDataFor formInput",
-              "      else",
-              "        unless formInput.formInputObject",
-              "          formInput.$element.html(\"\")",
-              "          formInput.formInputObject = @_instantiateFormInputFor(formInput)",
-              "",
-              "        formInput.formInputObject.loadValue(@dataObject)",
-              "",
-              "    _instantiateFormInputFor: (formInput) =>",
-              "      args =",
-              "        container: formInput.$element",
-              "        column: {field: formInput.attr}",
-              "        grid: this",
-              "        gridPosition: 0",
-              "        position: 0",
-              "        item: @dataObject",
-              "        cancelChanges: @_cancelChanges",
-              "        commitChanges: @_commitChanges",
-              "",
-              "      return new formInput.formInputClass args",
-              "",
-              ""
-            ],
-            "shortName": "_editOnClick",
-            "name": "basics.Form._editOnClick"
           }
         ]
       },
       {
-        "id": "dd_8",
+        "id": "dd_7",
         "shortName": "x.FormInput",
         "name": "basics.FormInput",
         "code": [
@@ -388,6 +333,11 @@ base.documentorData = [
         ],
         "comment": [
           "    The FormInput class is an abstract base class for all form input types.",
+          "",
+          "    The documentation here is intended for developers of custom FormInput types.",
+          "    You probably would never directly instantiate a FormInput type, but you can.",
+          "    Most use cases of this class would be indirect through a Notjs.basics.Form",
+          "    instance.",
           "",
           "    A specific type of FormInput is instantiated on a DOM element identifying a",
           "    container.  The value of the DOM element ($().html()) is then after controlled",
@@ -422,7 +372,7 @@ base.documentorData = [
         ],
         "methods": [
           {
-            "id": "dd_9",
+            "id": "dd_8",
             "code": [
               "    @formatForDisplay: (row, cell, value, columnDef, dataContext) =>"
             ],
@@ -434,7 +384,7 @@ base.documentorData = [
             "name": "basics.FormInput.@formatForDisplay"
           },
           {
-            "id": "dd_10",
+            "id": "dd_9",
             "code": [
               "    constructor: (@args) ->",
               "      # I really don't like this argument passing model where optional args and required arguments",
@@ -456,7 +406,7 @@ base.documentorData = [
             "name": "basics.FormInput.constructor"
           },
           {
-            "id": "dd_11",
+            "id": "dd_10",
             "code": [
               "    initialize: () =>"
             ],
@@ -467,7 +417,7 @@ base.documentorData = [
             "name": "basics.FormInput.initialize"
           },
           {
-            "id": "dd_12",
+            "id": "dd_11",
             "code": [
               "    loadValue: (dataObject) =>"
             ],
@@ -479,7 +429,7 @@ base.documentorData = [
             "name": "basics.FormInput.loadValue"
           },
           {
-            "id": "dd_13",
+            "id": "dd_12",
             "code": [
               "    serializeValue: () =>"
             ],
@@ -490,7 +440,7 @@ base.documentorData = [
             "name": "basics.FormInput.serializeValue"
           },
           {
-            "id": "dd_14",
+            "id": "dd_13",
             "code": [
               "    applyValue: (dataObject, value) =>"
             ],
@@ -501,7 +451,7 @@ base.documentorData = [
             "name": "basics.FormInput.applyValue"
           },
           {
-            "id": "dd_15",
+            "id": "dd_14",
             "code": [
               "    destroy: () =>"
             ],
@@ -513,7 +463,7 @@ base.documentorData = [
             "name": "basics.FormInput.destroy"
           },
           {
-            "id": "dd_16",
+            "id": "dd_15",
             "code": [
               "    focus: () =>"
             ],
@@ -524,7 +474,7 @@ base.documentorData = [
             "name": "basics.FormInput.focus"
           },
           {
-            "id": "dd_17",
+            "id": "dd_16",
             "code": [
               "    getDataObjectValue: (dataObject) =>"
             ],
@@ -535,7 +485,7 @@ base.documentorData = [
             "name": "basics.FormInput.getDataObjectValue"
           },
           {
-            "id": "dd_18",
+            "id": "dd_17",
             "code": [
               "    setDataObjectValue: (dataObject, value) =>"
             ],
@@ -546,7 +496,7 @@ base.documentorData = [
             "name": "basics.FormInput.setDataObjectValue"
           },
           {
-            "id": "dd_19",
+            "id": "dd_18",
             "code": [
               "    bindStandardKeys: ($input) =>"
             ],
@@ -560,7 +510,7 @@ base.documentorData = [
         ]
       },
       {
-        "id": "dd_20",
+        "id": "dd_19",
         "shortName": "x.Checkbox",
         "name": "basics.formInputs.Checkbox",
         "code": [
@@ -573,7 +523,7 @@ base.documentorData = [
         "methods": []
       },
       {
-        "id": "dd_21",
+        "id": "dd_20",
         "shortName": "x.Text",
         "name": "basics.formInputs.Text",
         "code": [
@@ -586,7 +536,7 @@ base.documentorData = [
         "methods": []
       },
       {
-        "id": "dd_22",
+        "id": "dd_21",
         "shortName": "x.Partials",
         "name": "basics.Partials",
         "code": [
@@ -670,7 +620,7 @@ base.documentorData = [
         ],
         "methods": [
           {
-            "id": "dd_23",
+            "id": "dd_22",
             "code": [
               "    @resolve: (options = {}) ->",
               "      new this(options).resolve()"
@@ -682,7 +632,7 @@ base.documentorData = [
             "name": "basics.Partials.@resolve"
           },
           {
-            "id": "dd_24",
+            "id": "dd_23",
             "code": [
               "    constructor: (options = {}) ->",
               "      @options = _.defaults options,",
@@ -699,7 +649,7 @@ base.documentorData = [
             "name": "basics.Partials.constructor"
           },
           {
-            "id": "dd_25",
+            "id": "dd_24",
             "code": [
               "    resolve: (options={}) =>",
               "      options = _.defaults options,",
@@ -741,7 +691,7 @@ base.documentorData = [
         ]
       },
       {
-        "id": "dd_26",
+        "id": "dd_25",
         "shortName": "x.Replicator",
         "name": "basics.Replicator",
         "code": [
@@ -780,7 +730,7 @@ base.documentorData = [
         ],
         "methods": [
           {
-            "id": "dd_27",
+            "id": "dd_26",
             "code": [
               "    @replicate: (selector, data, callback) =>",
               "      new this(selector).replicate(data, callback)"
@@ -798,7 +748,7 @@ base.documentorData = [
             "name": "basics.Replicator.@replicate"
           },
           {
-            "id": "dd_28",
+            "id": "dd_27",
             "code": [
               "    constructor: (@selector, options={}) ->",
               "      @options = _.defaults options,",
@@ -811,7 +761,7 @@ base.documentorData = [
             "name": "basics.Replicator.constructor"
           },
           {
-            "id": "dd_29",
+            "id": "dd_28",
             "code": [
               "    getTemplate: () =>"
             ],
@@ -823,7 +773,7 @@ base.documentorData = [
             "name": "basics.Replicator.getTemplate"
           },
           {
-            "id": "dd_30",
+            "id": "dd_29",
             "code": [
               "    replicate: (@array, @callback) =>"
             ],
@@ -883,7 +833,7 @@ base.documentorData = [
             "name": "basics.Replicator.replicate"
           },
           {
-            "id": "dd_31",
+            "id": "dd_30",
             "code": [
               "    refresh: () =>"
             ],
@@ -897,7 +847,7 @@ base.documentorData = [
         ]
       },
       {
-        "id": "dd_41",
+        "id": "dd_40",
         "shortName": "Notjs",
         "name": "Notjs",
         "code": [
@@ -910,7 +860,7 @@ base.documentorData = [
         ],
         "methods": [
           {
-            "id": "dd_42",
+            "id": "dd_41",
             "code": [
               "  namespace: (target, name, block) ->"
             ],
@@ -924,7 +874,7 @@ base.documentorData = [
             "name": "Notjs.namespace"
           },
           {
-            "id": "dd_43",
+            "id": "dd_42",
             "code": [
               "  globalNamespace: () =>"
             ],
@@ -935,7 +885,7 @@ base.documentorData = [
             "name": "Notjs.globalNamespace"
           },
           {
-            "id": "dd_44",
+            "id": "dd_43",
             "code": [
               "  addPrototypeUnlessExists: (klass, protoName, method) ->"
             ],
