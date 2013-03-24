@@ -8,6 +8,7 @@ base.documentorData = [
         "id": "dd_1",
         "name": "array.coffee",
         "code": [],
+        "commentStartIndex": 1,
         "comment": [
           "  javascript Array class extensions and monkeys"
         ],
@@ -42,6 +43,7 @@ base.documentorData = [
         "id": "dd_31",
         "name": "string.coffee",
         "code": [],
+        "commentStartIndex": 1,
         "comment": [
           "  javascript String class extensions and monkeys"
         ],
@@ -149,25 +151,66 @@ base.documentorData = [
       {
         "id": "dd_39",
         "name": "utility.coffee",
-        "code": [
-          "###"
-        ],
+        "code": "",
+        "commentStartIndex": 0,
         "comment": [
-          "",
-          "",
-          "# I really wanted to extend Object.prototype and add the methods but jQuery clone and",
-          "# other things break if you modify Object like that see,",
-          "# <a href=\"http://stackoverflow.com/questions/9138161/javascript-clone-function-breaks-with-jquery\"> this stack overflow </a>",
-          "",
-          "Notjs.deepGet = (object, pathToAttribute) ->"
+          "  Notjs Utility methods"
         ],
-        "methods": []
+        "methods": [
+          {
+            "id": "dd_40",
+            "code": [
+              "Notjs.deepGet = (object, pathToAttribute) ->"
+            ],
+            "comment": [
+              "    gets the value of a nested member of this object.",
+              "",
+              "    example:",
+              "    <code>",
+              "        var data = {",
+              "           sayulita: {",
+              "             fun: true,",
+              "             surf: true,",
+              "             weather: {",
+              "               high: 90,",
+              "               low: function(){ return 70; }",
+              "             }",
+              "           }",
+              "         }",
+              "        Notjs.deepGet(data, &#39;weather.high&#39;)   # will return 90",
+              "    </code>",
+              "",
+              "    There is no limit to the depth, also functions may be employed anywhere along the path.",
+              "    From the former example:",
+              "    <code>",
+              "        Notjs.deepGet(data, &#39;weather.low&#39;)   # will call the function associated with &#39;low&#39; which returns 70",
+              "    </code>",
+              ""
+            ],
+            "shortName": "Notjs.deepGet",
+            "name": "Notjs.deepGet(object, pathToAttribute)"
+          },
+          {
+            "id": "dd_41",
+            "code": [
+              "Notjs.deepSet = (object, pathToAttribute, value) ->"
+            ],
+            "comment": [
+              "    Performs a deep set on the the value of a attributed nested within this object",
+              "",
+              "    See Notjs.deepGet() above for examples.  Any value that can be fetched with deepGet",
+              "    can be set wih deepSet()"
+            ],
+            "shortName": "Notjs.deepSet",
+            "name": "Notjs.deepSet(object, pathToAttribute, value)"
+          }
+        ]
       }
     ],
     "classes": [
       {
         "id": "dd_4",
-        "shortName": "x.Form",
+        "shortName": "basics.Form",
         "name": "basics.Form",
         "code": [
           "  class x.Form"
@@ -307,7 +350,7 @@ base.documentorData = [
               "      See also:   Notjs.basics.FormInput class"
             ],
             "shortName": "constructor",
-            "name": "basics.Form.constructor"
+            "name": "basics.Form.constructor(@selector, @dataObject, options = {})"
           },
           {
             "id": "dd_6",
@@ -320,13 +363,13 @@ base.documentorData = [
               "      Notjs.basics.FormInput object for element found."
             ],
             "shortName": "initialize",
-            "name": "basics.Form.initialize"
+            "name": "basics.Form.initialize()"
           }
         ]
       },
       {
         "id": "dd_7",
-        "shortName": "x.FormInput",
+        "shortName": "basics.FormInput",
         "name": "basics.FormInput",
         "code": [
           "  class x.FormInput"
@@ -381,7 +424,7 @@ base.documentorData = [
               "        without allowing user input"
             ],
             "shortName": "@formatForDisplay",
-            "name": "basics.FormInput.@formatForDisplay"
+            "name": "basics.FormInput.@formatForDisplay(row, cell, value, columnDef, dataContext)"
           },
           {
             "id": "dd_9",
@@ -403,7 +446,7 @@ base.documentorData = [
               "      See also:   Notjs.basics.FormInput class"
             ],
             "shortName": "constructor",
-            "name": "basics.FormInput.constructor"
+            "name": "basics.FormInput.constructor(@args)"
           },
           {
             "id": "dd_10",
@@ -414,7 +457,7 @@ base.documentorData = [
               "      Creates the dom elements within @$element that will take input from the user"
             ],
             "shortName": "initialize",
-            "name": "basics.FormInput.initialize"
+            "name": "basics.FormInput.initialize()"
           },
           {
             "id": "dd_11",
@@ -426,7 +469,7 @@ base.documentorData = [
               "        the input element and update input UI"
             ],
             "shortName": "loadValue",
-            "name": "basics.FormInput.loadValue"
+            "name": "basics.FormInput.loadValue(dataObject)"
           },
           {
             "id": "dd_12",
@@ -437,7 +480,7 @@ base.documentorData = [
               "        returns the current value of user input"
             ],
             "shortName": "serializeValue",
-            "name": "basics.FormInput.serializeValue"
+            "name": "basics.FormInput.serializeValue()"
           },
           {
             "id": "dd_13",
@@ -448,7 +491,7 @@ base.documentorData = [
               "        called to update the attribute in dataObject with the value passed"
             ],
             "shortName": "applyValue",
-            "name": "basics.FormInput.applyValue"
+            "name": "basics.FormInput.applyValue(dataObject, value)"
           },
           {
             "id": "dd_14",
@@ -460,7 +503,7 @@ base.documentorData = [
               "        initialize"
             ],
             "shortName": "destroy",
-            "name": "basics.FormInput.destroy"
+            "name": "basics.FormInput.destroy()"
           },
           {
             "id": "dd_15",
@@ -471,7 +514,7 @@ base.documentorData = [
               "        should set focus to first input control if any"
             ],
             "shortName": "focus",
-            "name": "basics.FormInput.focus"
+            "name": "basics.FormInput.focus()"
           },
           {
             "id": "dd_16",
@@ -482,7 +525,7 @@ base.documentorData = [
               "        gets the value from the dataObject for the associated attribute"
             ],
             "shortName": "getDataObjectValue",
-            "name": "basics.FormInput.getDataObjectValue"
+            "name": "basics.FormInput.getDataObjectValue(dataObject)"
           },
           {
             "id": "dd_17",
@@ -493,7 +536,7 @@ base.documentorData = [
               "        does a deep set on the dataobject use data-not_attr as the property path"
             ],
             "shortName": "setDataObjectValue",
-            "name": "basics.FormInput.setDataObjectValue"
+            "name": "basics.FormInput.setDataObjectValue(dataObject, value)"
           },
           {
             "id": "dd_18",
@@ -505,13 +548,13 @@ base.documentorData = [
               "              enter = commitChanges"
             ],
             "shortName": "bindStandardKeys",
-            "name": "basics.FormInput.bindStandardKeys"
+            "name": "basics.FormInput.bindStandardKeys($input)"
           }
         ]
       },
       {
         "id": "dd_19",
-        "shortName": "x.Checkbox",
+        "shortName": "basics.formInputs.Checkbox",
         "name": "basics.formInputs.Checkbox",
         "code": [
           "  class x.Checkbox extends Notjs.basics.FormInput"
@@ -524,7 +567,7 @@ base.documentorData = [
       },
       {
         "id": "dd_20",
-        "shortName": "x.Text",
+        "shortName": "basics.formInputs.Text",
         "name": "basics.formInputs.Text",
         "code": [
           "  class x.Text extends Notjs.basics.FormInput"
@@ -537,7 +580,7 @@ base.documentorData = [
       },
       {
         "id": "dd_21",
-        "shortName": "x.Partials",
+        "shortName": "basics.Partials",
         "name": "basics.Partials",
         "code": [
           "  class x.Partials"
@@ -629,7 +672,7 @@ base.documentorData = [
               "        Class method for one shot convienence.  See .resolve instance method"
             ],
             "shortName": "@resolve",
-            "name": "basics.Partials.@resolve"
+            "name": "basics.Partials.@resolve(options = {})"
           },
           {
             "id": "dd_23",
@@ -646,7 +689,7 @@ base.documentorData = [
               "        Constructs a new Partials object"
             ],
             "shortName": "constructor",
-            "name": "basics.Partials.constructor"
+            "name": "basics.Partials.constructor(options = {})"
           },
           {
             "id": "dd_24",
@@ -686,13 +729,13 @@ base.documentorData = [
               "            </code>"
             ],
             "shortName": "resolve",
-            "name": "basics.Partials.resolve"
+            "name": "basics.Partials.resolve(options={})"
           }
         ]
       },
       {
         "id": "dd_25",
-        "shortName": "x.Replicator",
+        "shortName": "basics.Replicator",
         "name": "basics.Replicator",
         "code": [
           "  class x.Replicator"
@@ -745,7 +788,7 @@ base.documentorData = [
               ""
             ],
             "shortName": "@replicate",
-            "name": "basics.Replicator.@replicate"
+            "name": "basics.Replicator.@replicate(selector, data, callback)"
           },
           {
             "id": "dd_27",
@@ -758,7 +801,7 @@ base.documentorData = [
               "        I wonder if coffee doc will pickup my option defaults?  :( no, but scripts/documentor will! :)"
             ],
             "shortName": "constructor",
-            "name": "basics.Replicator.constructor"
+            "name": "basics.Replicator.constructor(@selector, options={})"
           },
           {
             "id": "dd_28",
@@ -770,7 +813,7 @@ base.documentorData = [
               "        selector passed on construction)"
             ],
             "shortName": "getTemplate",
-            "name": "basics.Replicator.getTemplate"
+            "name": "basics.Replicator.getTemplate()"
           },
           {
             "id": "dd_29",
@@ -830,7 +873,7 @@ base.documentorData = [
               "        </code>"
             ],
             "shortName": "replicate",
-            "name": "basics.Replicator.replicate"
+            "name": "basics.Replicator.replicate(@array, @callback)"
           },
           {
             "id": "dd_30",
@@ -842,12 +885,12 @@ base.documentorData = [
               "        and the callback method passed to replicate are the same"
             ],
             "shortName": "refresh",
-            "name": "basics.Replicator.refresh"
+            "name": "basics.Replicator.refresh()"
           }
         ]
       },
       {
-        "id": "dd_40",
+        "id": "dd_42",
         "shortName": "Notjs",
         "name": "Notjs",
         "code": [
@@ -860,7 +903,7 @@ base.documentorData = [
         ],
         "methods": [
           {
-            "id": "dd_41",
+            "id": "dd_43",
             "code": [
               "  namespace: (target, name, block) ->"
             ],
@@ -871,10 +914,10 @@ base.documentorData = [
               "              namespace to global namespace"
             ],
             "shortName": "namespace",
-            "name": "Notjs.namespace"
+            "name": "Notjs.namespace(target, name, block)"
           },
           {
-            "id": "dd_42",
+            "id": "dd_44",
             "code": [
               "  globalNamespace: () =>"
             ],
@@ -882,10 +925,10 @@ base.documentorData = [
               "      returns the object representing the global namespace (window in browser and global in node.js"
             ],
             "shortName": "globalNamespace",
-            "name": "Notjs.globalNamespace"
+            "name": "Notjs.globalNamespace()"
           },
           {
-            "id": "dd_43",
+            "id": "dd_45",
             "code": [
               "  addPrototypeUnlessExists: (klass, protoName, method) ->"
             ],
@@ -899,7 +942,7 @@ base.documentorData = [
               "        });"
             ],
             "shortName": "addPrototypeUnlessExists",
-            "name": "Notjs.addPrototypeUnlessExists"
+            "name": "Notjs.addPrototypeUnlessExists(klass, protoName, method)"
           }
         ]
       }
@@ -971,6 +1014,7 @@ base.documentorData = [
           "  see --help output for options",
           "\"\"\""
         ],
+        "commentStartIndex": 57,
         "comment": [
           "",
           "  Generates public/documentorData.js which is used for Notjs API docs.",

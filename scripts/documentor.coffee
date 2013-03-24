@@ -101,7 +101,7 @@ moduleData =
   "methods": []
 
 monkeyRegex = /^Notjs\.addPrototypeUnlessExists\s*\(?(\w*)\,\s*\"(\w*)\"\,\s*(\([^)]*\)).*/
-methodRegex = /^\s*((this\.|\@)?\w*)\s*\:\s*\(.*\).*/
+methodRegex = /^\s*((this\.|\@)*[\w\.]*)\s*[\:\=]\s*\((.*)\).*/
 classRegex = /^\s*class\s*([\w\.]*)\s*(extends.*)?\s*$/
 blockCommentRegex = /^\s*\#\#\#.*/
 htmlEncodedRegex = /^\s*\|.*/
@@ -143,9 +143,12 @@ processFile = (file) =>
     currentFile =
       id: _.uniqueId("dd_")
       name:    file.replace(/^.*[\\\/]/, '')
-      code:    lines.slice(0, commentStartIndex - 1)
+      code:    if commentStartIndex <= 0 then "" else lines.slice(0, commentStartIndex - 1)
+      commentStartIndex: commentStartIndex
       comment: getComment()
       methods: []
+    console.log 'creating file comment'
+    console.log currentFile
     moduleData.files.push currentFile
 
   createClassComment = () ->
@@ -157,7 +160,7 @@ processFile = (file) =>
       nameMatch[1]
     currentClass =
       id: _.uniqueId("dd_")
-      shortName: nameMatch[1]
+      shortName: name
       name:    name
       code:    lines.slice(lastClassIndex, commentStartIndex)
       comment: getComment()
@@ -178,8 +181,8 @@ processFile = (file) =>
       method.name = method.shortName + monkeyMatch[3]
     else
       method.shortName = nameMatch[1]
-      method.name = if currentClass then "#{currentClass.name}.#{nameMatch[1]}" else nameMatch[1]
-
+      className = if currentClass then currentClass.name + "." else ""
+      method.name = "#{className}#{nameMatch[1]}(#{nameMatch[3]})"
     if currentClass
       currentClass.methods.push method
     else if currentFile
@@ -190,8 +193,10 @@ processFile = (file) =>
 
   lines = fs.readFileSync(file).toString().split("\n");
   for string, lineNumber in lines
-    continue unless string
-    continue if commentStartIndex? && !string.match(blockCommentRegex)
+    continue unless string?
+    console.log "#{lineNumber}:  #{string}"
+    continue if commentStartIndex != null && !string.match(blockCommentRegex)
+    console.log "doing match"
     match = string.match(namespaceRegex)
     if match
       currentNamespace = match[1]
@@ -201,9 +206,12 @@ processFile = (file) =>
     else if string.match(methodRegex) || string.match(monkeyRegex)
       lastMethodIndex = lineNumber
     else if string.match(blockCommentRegex)
-      if !commentStartIndex
+      console.log "matched block bomment. commentStartIndex: #{commentStartIndex}"
+      if commentStartIndex == null
         commentStartIndex = lineNumber
       else
+        console.log "closing comment"
+        console.log [lastClassIndex, lastMethodIndex, fileCommentFound]
         # are we ending a file comment...
         if !lastMethodIndex && !lastClassIndex && !fileCommentFound
           createFileComment()

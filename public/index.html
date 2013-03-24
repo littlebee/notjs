@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="chrome=1" />
@@ -105,23 +105,50 @@
     </p>
 
     <h2 id="introduction">Introduction</h2>
-    <p><b>Not = No Templates</b></p>
+    <p><b>Not = No Templates, please</b></p>
     <p>
       Notjs is a set of components that enhance and simplify development of rich, RESTful web pages without
       the need for server or client side template rendering.
     </p>
+
     <p>
-      That is not to say that there are no templates, nor is it fair to say that the components generate
-      a lot of html DOM elements.  I think that all HTML belongs together as much as possible and all content should also
-      be together.  Using the Notjs components, that content and HTML can reside in static HTML files and be served
-      like any of your other static assets.  That means you can localize and edge cache your templates on a CDN.
+      <h3 style="display: inline">
+        DISCLAIMER: As of March 23, 2013, currently in early alpha, potentially buggy development phase.
+      </h3>&nbsp;&nbsp;I have a full time job that is not funding this project, so, well, I'm working on it, already, gosh. :)
+      I would love and appreciate any help or suggestions with development.  Please watch us on
+      <a href="https://github.com/bee-hub/notjs">Github</a> for release annoucements.  Wiki etc.  Also check
+      back here for an updated disclaimer and release announcments.
+    </p><p>
+      <b><i>Question:</i>&nbsp;&nbsp;&nbsp;&nbsp; What do you against html templating?</b><br>
+      <b><i>Answer:</i></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; I have used a lot of different templating frameworks and systems
+      over the years, Rails, PHP, Underscore.js templates, Javascript Templates, .Net, Java Server Pages,
+      Active Server Pages....  They all have the same basic flaw - unless care is taken to make them completely
+      logicless, they force you to put your view logic in two places or completely mix concerns and embed your
+      layout, display and static content with your view logic.  Imagine dissecting a .php template written by someone
+      else that has a bunch of script tags littered on it and even some direct data access, and you will be in the
+      mindset that inspired this project.
+    </p><p>
+      I don't have anything against the lot of templating solutions I've used and I even find simple solutions
+      like underscore.js templates to still be  extremely useful.   But, for the most part, HTML 5 and custom
+      data- attributes plus super fast DOM manipulation provided by jQuery makes these templates unnecessary.
+      If only I had a few powerful bricks....
+    </p><p>
+      Separating view layout and static content from logic that injects dynamic data has big benefits.  Since it
+      effectively turns your templates into static html files, they can be localized and edge cached on a CDN.
+      There is no need for a bundle of templates nor is it necessary for the client to parse the files or
+      alternatively have the server recompile the template making the whole template effectively dynamic.
+      Directly injecting a number of dynamic datum into the DOM should in most cases be faster than having to
+      parse every template in it's entirety to do string substitutions. And since you don't need an application
+      server or framework.  Most of the Notjs.basics examples will run just fine from the local file system via
+      a file:// url.  This documentation you are reading, for example, can be opened and debugged from the local
+      file system.
     </p><p>
       Notjs tries to not generate excessive amounts of html, the components will generate DOM elements mostly
       from HTML5 elements in the page that you are using the Notjs components on.  We will additionally
-      favor the adding and removing of classes to elements instead of adding style attributes to DOM elements so
-      that you can style your page, your way, using css.  These principles are just guidelines, the only way the resizer
-      component can work is to update the height and width via the tag style, but I'll try to avoid it as a
-      general practice.
+      favor the adding and removing of css classes to elements instead of adding style attributes to DOM elements so
+      that you can style your page, your way, using whatever flavor of css you like.  These principles are just
+      guidelines, the only way the resizer  component can work is to update the height and width via the tag style,
+      but I'll try to avoid it as a general practice.
     </p>
     <h4>Where to Start?</h4>
     <p>
@@ -210,7 +237,7 @@
       console.log("injectData")
       console.log($el.html())
       $el.find(selectorPrefix + "short-link").attr('href', '#' + obj.id).html(obj.shortName||obj.name)
-      $el.find(selectorPrefix + "name").html(obj.name)
+      $el.find(selectorPrefix + "name").html(obj.shortName)
       $el.find(selectorPrefix + "bookmark").attr('id', obj.id)
       if( obj.code )
         $el.find(selectorPrefix + "code").html(obj.code.join('\n   '))

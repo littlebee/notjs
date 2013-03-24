@@ -91,8 +91,9 @@ task 'docs', 'collect API docs from srcs and create or update public/documentorD
   invoke 'build'
   fsx.deleteSync(DOCUMENTOR_DATA)
   for docTarget in DOCUMENTATION_TARGETS
-    console.log 'collecting api docs for ' + docTarget.name
-    execSync "scripts/documentor.coffee #{docTarget.srcDir} -n #{docTarget.name} -o public/documentorData.js"
+    cmd = "scripts/documentor.coffee #{docTarget.srcDir} -n #{docTarget.name} -o public/documentorData.js"
+    console.log "collecting api docs for #{docTarget.name}...   (#{cmd})"
+    execSync cmd
 
 task 'deploy', 'deploy public/* and demo rest server components to public notjs.org VPS', ->
   invoke 'build'
