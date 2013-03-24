@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+  <meta name="viewport" content="width=device-width">
+  <!--<link rel="icon" href="docs/images/favicon.ico" />-->
+  <link rel='stylesheet' type="text/css" href="examples.css"/>
+  <title>Notjs - simple fullinput form example</title>
+</head>
+<style>
+  #formModeSelect {
+    font-size: large;
+  }
+</style>
+<body>
+
+<p>
+  This is a test to verify jsdom is correctly loading jquery and script tags on page are being run
+</p>
+<br/>
+
+If everything works, you should see a message here:  <h2 id="msg"></h2>
+
+<script src="http://notjs.org/vendor/jquery-1.8.3.min.js"></script>
+<script>
+  var checkpoint1 = true
+  var checkpoint2 = false
+  $(document).ready(function(){
+    var checkpoint2 = true
+    $('#msg').html("It works, it works, it works!")
+  })
+</script>
+
+</body>
+</html>
