@@ -12,7 +12,7 @@ Notjs.namespace 'basics.formInputs', (x) ->
       super
 
     initialize: () =>
-      @$input = $("<INPUT type=text/>")
+      @$input = $("<INPUT type='text'/>")
       .appendTo(@$element)
       .on "keydown.nav", (e) =>
         if (e.keyCode == Notjs.keyCode.LEFT || e.keyCode == Notjs.keyCode.RIGHT)

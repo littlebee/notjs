@@ -1532,7 +1532,7 @@
 
       Text.prototype.initialize = function() {
         var _this = this;
-        this.$input = $("<INPUT type=text/>").appendTo(this.$element).on("keydown.nav", function(e) {
+        this.$input = $("<INPUT type='text'/>").appendTo(this.$element).on("keydown.nav", function(e) {
           if (e.keyCode === Notjs.keyCode.LEFT || e.keyCode === Notjs.keyCode.RIGHT) {
             return e.stopImmediatePropagation();
           }
